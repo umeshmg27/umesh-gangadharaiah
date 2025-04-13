@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/umesh-gangadharaiah/static/css/main.60b39a65.css",
+    "main.js": "/umesh-gangadharaiah/static/js/main.dc4fe5e7.js",
+    "static/js/453.4be91208.chunk.js": "/umesh-gangadharaiah/static/js/453.4be91208.chunk.js",
+    "static/media/mock04.png": "/umesh-gangadharaiah/static/media/mock04.f7b5679efade992a078c.png",
+    "static/media/bg-light.png": "/umesh-gangadharaiah/static/media/bg-light.bac0efb485244a522981.png",
+    "static/media/mock05.png": "/umesh-gangadharaiah/static/media/mock05.4faafa70d200d1519a34.png",
+    "static/media/bg-dark.png": "/umesh-gangadharaiah/static/media/bg-dark.f420c6b8458af72de935.png",
+    "static/media/umesh-ug.jpg": "/umesh-gangadharaiah/static/media/umesh-ug.e076fd91f5a132a13ae6.jpg",
+    "index.html": "/umesh-gangadharaiah/index.html",
+    "main.60b39a65.css.map": "/umesh-gangadharaiah/static/css/main.60b39a65.css.map",
+    "main.dc4fe5e7.js.map": "/umesh-gangadharaiah/static/js/main.dc4fe5e7.js.map",
+    "453.4be91208.chunk.js.map": "/umesh-gangadharaiah/static/js/453.4be91208.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.60b39a65.css",
+    "static/js/main.dc4fe5e7.js"
+  ]
+}
