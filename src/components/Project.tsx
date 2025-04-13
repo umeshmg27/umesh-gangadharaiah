@@ -47,7 +47,7 @@ const projects = [
     {
         title: "ND- AlphaX",
         description: "Part of Desigin team, developing a key product feature that would shape the future of datacenter networking.",
-        image: "/react-portfolio-template/assets/images/data-center.png",
+        image: "/my-portfolio/assets/images/data-center.png",
         href: "#"
       },
     {
@@ -59,7 +59,7 @@ const projects = [
     {
       title: "Unified Backup and Restore - Cisco Nexus Dashboard",
       description: "Designed and implemented a clean backup and restore workflow for Cisco’s Unified Product Suite, covering NDO, NDI, and NDFC. Leveraged Kubernetes ConfigMaps to communicate real-time status between services during backup and restore operations. Performed extensive validation of backup archives to ensure integrity and consistency across product configurations. Utilized Golang goroutines to enable concurrent restore tasks, allowing seamless and efficient parallel recovery of components from a single backup source—significantly improving resilience and reducing recovery time in production environments.",
-      image: "/react-portfolio-template/assets/images/restore.png",
+      image: "/my-portfolio/assets/images/restore.png",
       href: "#"
     },
     {
@@ -77,7 +77,7 @@ const projects = [
     {
       title: "Codeshift - CI/CD Platform",
       description: "Developed a Continuous Delivery platform to deploy internal applications with FastAPI and React. Created REST APIs for VM and resource allocation, reducing manual deployment effort by 70%.",
-      image: "/react-portfolio-template/assets/images/codeshift.png",
+      image: "/my-portfolio/assets/images/codeshift.png",
       href: "#"
     },
     {
@@ -95,25 +95,25 @@ const projects = [
     {
       title: "UCS Config Tool",
       description: "Proposed and built a tool to automate UCS server configurations. Enabled configuration of banners, DNS, SNMP, logs, etc., and generated formatted reports for customers using React and Python.",
-      image:"/react-portfolio-template/assets/images/config.png",
+      image:"/my-portfolio/assets/images/config.png",
       href: "#"
     },
     {
       title: "Dementia Detection via EEG (IEEE)",
       description: "Co-authored and published a research paper on dementia detection through EEG analysis. Presented at IEEE conference with promising accuracy using early-stage patient data.",
-      image: "/react-portfolio-template/assets/images/ieee.png",
+      image: "/my-portfolio/assets/images/ieee.png",
       href: "https://ieeexplore.ieee.org/document/9641661"
     },
     {
       title: "Flikrify",
       description: "Lead Backend Developer for a cross-platform social app focused on simplifying group communication. Designed and launched in 5 months using Golang, Redis, ArangoDB, and GenAI. Live on Android, iOS, and MacOS.",
-      image:"/react-portfolio-template/assets/images/flikr.png",
+      image:"/my-portfolio/assets/images/flikr.png",
       href: "https://play.google.com/store/apps/details?id=live.flikr.walle&pcampaignid=web_share"
     },
     {
       title: "Telegram as Data Storage",
       description: "Personal project that uses Telegram chats as an ad-hoc storage service. Designed as a lightweight backup system for data dump using Telegram APIs and automation.",
-      image: "/react-portfolio-template/assets/images/telegram.png",
+      image: "/my-portfolio/assets/images/telegram.png",
       href: "https://github.com/umeshmg27/Telegram-as-Data-Storage"
     },
   ];
