@@ -1,8 +1,8 @@
 {
-  "name": "my-portfolio",
+  "name": "umesh-gangadharaiah",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://umeshmg27.github.io/my-portfolio",
+  "homepage": "https://umeshmg27.github.io/umesh-gangadharaiah",
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@emotion/react": "^11.11.4",
@@ -60,6 +60,7 @@
   },
   "devDependencies": {
     "@types/react-alice-carousel": "^1.15.3",
-    "@types/react-vertical-timeline-component": "^3.3.6"
+    "@types/react-vertical-timeline-component": "^3.3.6",
+    "gh-pages": "^6.3.0"
   }
 }

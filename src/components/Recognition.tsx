@@ -99,7 +99,7 @@ const Recognition: React.FC = () => {
   const [innovation_recognitions, setInnovation_Recognitions] = useState<RecognitionCardProps[]>([]);
   
   useEffect(() => {
-    fetch("/my-portfolio/assets/json/mentorandteam.json")
+    fetch("/umesh-gangadharaiah/assets/json/mentorandteam.json")
   .then((res) => res.json())
   .then((data:RecognitionCardProps[]) => {
     const mentorship = data.filter((item: RecognitionCardProps) => item.Identity === "Mentorship");
