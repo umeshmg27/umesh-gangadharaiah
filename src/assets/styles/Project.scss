@@ -19,6 +19,27 @@
     text-decoration: underline;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
 }
+
+.project p {
+    max-height: 4.5em; /* Approx. 3 lines */
+    overflow: hidden;
+    position: relative;
+    transition: max-height 0.3s ease;
+    cursor: pointer;
+  
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* limit to 3 lines */
+    
+    white-space: normal;
+    text-overflow: ellipsis;
+  }
+  
+  .project p:hover {
+    max-height: 100vh;
+    -webkit-line-clamp: unset;
+  }
+  
   
 .zoom {
     border-radius: 5px;
@@ -47,3 +68,18 @@
         }
     }
 }
+
+.project-img-wrapper {
+    background-color: #fff;
+    padding: 8px;
+    border-radius: 8px;
+    display: inline-block;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .project-img-wrapper {
+      background-color: #1a1a1a; // matches your dark background
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.1);
+    }
+  }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect,useState } from 'react';
 import mock01 from '../assets/images/mock01.png';
 import mock02 from '../assets/images/mock02.png';
 import mock03 from '../assets/images/mock03.png';
@@ -10,65 +10,112 @@ import mock08 from '../assets/images/mock08.png';
 import mock09 from '../assets/images/mock09.png';
 import mock10 from '../assets/images/mock10.png';
 import '../assets/styles/Project.scss';
+import { Height } from '@mui/icons-material';
+
+
 
 function Project() {
-    return(
-    <div className="projects-container" id="projects">
-        <h1>Personal Projects</h1>
-        <div className="projects-grid">
-            <div className="project">
-                <a href="https://www.filmate.club/" target="_blank" rel="noreferrer"><img src={mock10} className="zoom" alt="thumbnail" width="100%"/></a>
-                <a href="https://www.filmate.club/" target="_blank" rel="noreferrer"><h2>Filmate AI</h2></a>
-                <p>Developed movie finder app with semantic search and sentiment analysis using OpenAI GPT-3.5 Turbo, Qdrant, React, and Flask.</p>
+   
+    return (
+        <div className="projects-container" id="projects">
+      <h1>Projects</h1>
+      <div className="projects-grid">
+        {projects.map((project, index) => (
+          <div className="project" key={index}>
+            <div className="project-img-wrapper">
+              <a href={project.href} target="_blank" rel="noreferrer">
+                <img src={project.image} className="zoom" alt="thumbnail" width="100%" style={{height: "25rem"}}/>
+              </a>
             </div>
-            <div className="project">
-                <a href="https://yujisatojr.itch.io/highspeedchase" target="_blank" rel="noreferrer"><img src={mock09} className="zoom" alt="thumbnail" width="100%"/></a>
-                <a href="https://yujisatojr.itch.io/highspeedchase" target="_blank" rel="noreferrer"><h2>High Speed Chase</h2></a>
-                <p>Designed, developed, and launched a 3D multiplayer racing game with C# and Unity. This is available on Itch.io for gamers worldwide to enjoy.</p>
-            </div>
-            <div className="project">
-                <a href="https://yujisatojr.itch.io/spacecraft" target="_blank" rel="noreferrer"><img src={mock08} className="zoom" alt="thumbnail" width="100%"/></a>
-                <a href="https://yujisatojr.itch.io/spacecraft" target="_blank" rel="noreferrer"><h2>Astro Raiders</h2></a>
-                <p>Developed and released a 2D shooting game with C# and Unity. This project is hosted on the Itch.io public marketplace.</p>
-            </div>
-            <div className="project">
-                <a href="https://www.datumlearn.com/" target="_blank" rel="noreferrer"><img src={mock07} className="zoom" alt="thumbnail" width="100%"/></a>
-                <a href="https://www.datumlearn.com/" target="_blank" rel="noreferrer"><h2>Datum: Integrated Learning Platform</h2></a>
-                <p>This is an online educational platform that provides high-quality, data science-focused learning resources in the Japanese language. I created the entire platform from scratch using Ruby on Rails.</p>
-            </div>
-            <div className="project">
-                <a href="http://www.wemanage.jp/" target="_blank" rel="noreferrer"><img src={mock06} className="zoom" alt="thumbnail" width="100%"/></a>
-                <a href="http://www.wemanage.jp/" target="_blank" rel="noreferrer"><h2>WeManage: Real Estate Asset Management</h2></a>
-                <p>This mobile application allows realtors in Japan to securely manage their property information and view future income predictions. This app is built with Ruby on Rails and JavaScript.</p>
-            </div>
-            <div className="project">
-                <a href="https://www.byuh.edu/covid-19-case-management" target="_blank" rel="noreferrer"><img src={mock05} className="zoom" alt="thumbnail" width="100%"/></a>
-                <a href="https://www.byuh.edu/covid-19-case-management" target="_blank" rel="noreferrer"><h2>COVID-19 Case Management</h2></a>
-                <p>Built official charts for COVID/vaccination tracking for an educational institution using JavaScript and the Google Sheets API v4. The dashboard served the university's leadership in their decision-making processes.</p>
-            </div>
-            <div className="project">
-                <a href="https://github.com/yujisatojr/multi-reg-analysis" target="_blank" rel="noreferrer"><img src={mock04} className="zoom" alt="thumbnail" width="100%"/></a>
-                <a href="https://github.com/yujisatojr/multi-reg-analysis" target="_blank" rel="noreferrer"><h2>Multiple Regression Property Analysis</h2></a>
-                <p>Analyzed the real estate market in Japan and predicted property prices by implementing statistical methods such as OLS and multi-regression analysis. This project leveraged Python and various libraries such as Pandas, NumPy, Matplotlib, and Scikit-Learn.</p>
-            </div>
-            <div className="project">
-                <a href="https://holokai.byuh.edu/programs-of-study" target="_blank" rel="noreferrer"><img src={mock03} className="zoom" alt="thumbnail" width="100%"/></a>
-                <a href="https://holokai.byuh.edu/programs-of-study" target="_blank" rel="noreferrer"><h2>Programs of Study</h2></a>
-                <p>Designed and developed a custom component for a CMS-based platform (e.g., 'Brightspot') using Java, Handlebars, and LESS. University students can find their majors of interest through this module.</p>
-            </div>
-            <div className="project">
-                <a href="https://hookele.byuh.edu/transfer-evaluation-guidelines-and-matrix" target="_blank" rel="noreferrer"><img src={mock02} className="zoom" alt="thumbnail" width="100%"/></a>
-                <a href="https://hookele.byuh.edu/transfer-evaluation-guidelines-and-matrix" target="_blank" rel="noreferrer"><h2>Transfer Evaluation Matrix</h2></a>
-                <p>Created an interactive CSV table generator with Java, Handlebars, and LESS. This project helps transfer students to quickly identify eligible credits.</p>
-            </div>
-            <div className="project">
-                <a href="https://github.com/yujisatojr/submeowrine" target="_blank" rel="noreferrer"><img src={mock01} className="zoom" alt="thumbnail" width="100%"/></a>
-                <a href="https://github.com/yujisatojr/submeowrine" target="_blank" rel="noreferrer"><h2>Submeowrine</h2></a>
-                <p>Developed and released an Android mobile application using Java and Android Studio that runs a 2D shooting game.</p>
-            </div>
-        </div>
+            <a href={project.href} target="_blank" rel="noreferrer">
+              <h2>{project.title}</h2>
+            </a>
+            <p>
+                {project.description}
+            </p>
+            
+          </div>
+        ))}
+      </div>
+     
+
     </div>
     );
 }
+
+const projects = [
+    {
+        title: "ND- AlphaX",
+        description: "Part of Desigin team, developing a key product feature that would shape the future of datacenter networking.",
+        image: "/react-portfolio-template/assets/images/data-center.png",
+        href: "#"
+      },
+    {
+      title: "NDO - Search & Explore Feature",
+      description: "Designed and implemented an advanced Search & Explore feature for Cisco NDO's configurable policy objects while leading a team of two. Engineered efficient indexing strategies across multiple MongoDB collections to enable high-speed autocomplete and deep object retrieval. Optimized query execution by extending search capabilities across three distinct collections with unified logic. Conducted extensive scalability testing with datasets of over 50,000 policy objects, consistently achieving retrieval times under one second, ensuring robust performance in production-scale environments.",
+      image: "https://www.cisco.com/c/dam/en/us/td/i/500001-600000/500001-510000/adoc-ndi-651/ndi-search-explore.jpg",
+      href: "#"
+    },
+    {
+      title: "Unified Backup and Restore - Cisco Nexus Dashboard",
+      description: "Designed and implemented a clean backup and restore workflow for Cisco’s Unified Product Suite, covering NDO, NDI, and NDFC. Leveraged Kubernetes ConfigMaps to communicate real-time status between services during backup and restore operations. Performed extensive validation of backup archives to ensure integrity and consistency across product configurations. Utilized Golang goroutines to enable concurrent restore tasks, allowing seamless and efficient parallel recovery of components from a single backup source—significantly improving resilience and reducing recovery time in production environments.",
+      image: "/react-portfolio-template/assets/images/restore.png",
+      href: "#"
+    },
+    {
+      title: "Cisco NDO - Simplified L4L7 Service Chaining",
+      description: "Part of the development team focused on simplifying L4-L7 service chaining across sites using Cisco's Nexus Dashboard Orchestrator (NDO). Worked on validating user configurations and converting them into APIC Managed Object (MO) API requests. Contributed significantly to two distinct microservices within the NDO ecosystem, ensuring seamless orchestration and integration.",
+      image: "https://www.cisco.com/c/dam/en/us/products/collateral/cloud-systems-management/multi-site-orchestrator/nb-06-mso-so-cte-en.docx/_jcr_content/renditions/nb-06-mso-so-cte-en_0.png",
+      href: "https://www.cisco.com/c/dam/en/us/products/collateral/cloud-systems-management/multi-site-orchestrator/nb-06-mso-so-cte-en.docx/_jcr_content/renditions/nb-06-mso-so-cte-en_0.png"
+    },
+    {
+      title: "Cisco ACI - Advanced PBR Features",
+      description: "Contributed to feature development of Service Graphs in ACI, including Symmetric, Intra-VRF, and Location-Aware PBR. Delivered scalable and secure traffic redirection solutions integrated with firewalls and load balancers.",
+      image: "https://www.cisco.com/c/dam/en/us/solutions/collateral/data-center-virtualization/application-centric-infrastructure/white-paper-c11-743107.docx/_jcr_content/renditions/white-paper-c11-743107_11.png",
+      href: "https://www.cisco.com/c/dam/en/us/solutions/collateral/data-center-virtualization/application-centric-infrastructure/white-paper-c11-743107.docx/_jcr_content/renditions/white-paper-c11-743107_11.png"
+    },
+    {
+      title: "Codeshift - CI/CD Platform",
+      description: "Developed a Continuous Delivery platform to deploy internal applications with FastAPI and React. Created REST APIs for VM and resource allocation, reducing manual deployment effort by 70%.",
+      image: "/react-portfolio-template/assets/images/codeshift.png",
+      href: "#"
+    },
+    {
+      title: "Resource Allocation Manager (RAM)",
+      description: "Designed and developed RAM—an internal tool for project staffing. Reduced overhead tasks by 40% and cut allocation time by 60%. Awarded Bronze Stevie for innovation in HR software.",
+      image: mock05,
+      href: "#"
+    },
+    {
+      title: "Kollect & CURI - Internal Knowledge Bot",
+      description: "Led a 5-person team to build a chatbot that parses internal Webex threads and indexes team knowledge. Integrated with MongoDB, Docker, and webhooks to track team queries efficiently.",
+      image: mock04,
+      href: "#"
+    },
+    {
+      title: "UCS Config Tool",
+      description: "Proposed and built a tool to automate UCS server configurations. Enabled configuration of banners, DNS, SNMP, logs, etc., and generated formatted reports for customers using React and Python.",
+      image:"/react-portfolio-template/assets/images/config.png",
+      href: "#"
+    },
+    {
+      title: "Dementia Detection via EEG (IEEE)",
+      description: "Co-authored and published a research paper on dementia detection through EEG analysis. Presented at IEEE conference with promising accuracy using early-stage patient data.",
+      image: "/react-portfolio-template/assets/images/ieee.png",
+      href: "https://ieeexplore.ieee.org/document/9641661"
+    },
+    {
+      title: "Flikrify",
+      description: "Lead Backend Developer for a cross-platform social app focused on simplifying group communication. Designed and launched in 5 months using Golang, Redis, ArangoDB, and GenAI. Live on Android, iOS, and MacOS.",
+      image:"/react-portfolio-template/assets/images/flikr.png",
+      href: "https://play.google.com/store/apps/details?id=live.flikr.walle&pcampaignid=web_share"
+    },
+    {
+      title: "Telegram as Data Storage",
+      description: "Personal project that uses Telegram chats as an ad-hoc storage service. Designed as a lightweight backup system for data dump using Telegram APIs and automation.",
+      image: "/react-portfolio-template/assets/images/telegram.png",
+      href: "https://github.com/umeshmg27/Telegram-as-Data-Storage"
+    },
+  ];
 
 export default Project;

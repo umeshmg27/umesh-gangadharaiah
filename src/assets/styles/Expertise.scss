@@ -11,7 +11,7 @@
   
 .skills-container .skills-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     grid-gap: 50px;
 }
   
@@ -34,6 +34,25 @@
     svg {
         height: 15px !important;
     }
+}
+
+/* Styling the chip links */
+.chip-link {
+    text-decoration: none;  /* Remove underline from link */
+    color: inherit;  /* Inherit text color from the chip */
+}
+
+/* Hover effect for the chip (background color changes to light purple) */
+.chip-link:hover .chip {
+    background-color: #5f5fb9;  /* Light purple color on hover (Lavender) */
+    color: #6a4c9c;  /* Darker purple color for text on hover */
+    text-decoration: underline; /* Underline text on hover */
+    
+}
+
+/* Optional: Style the chip hover effect directly (if needed) */
+.chip:hover {
+    background-color: #444; /* Darker background on hover */
 }
 
 .flex-chips {

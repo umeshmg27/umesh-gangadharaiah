@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import '../assets/styles/Contact.scss';
-// import emailjs from '@emailjs/browser';
+import emailjs from '@emailjs/browser';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
@@ -35,11 +35,11 @@ function Contact() {
     //   };
 
     //   console.log(templateParams);
-    //   emailjs.send('service_id', 'template_id', templateParams, 'api_key').then(
-    //     (response) => {
+    //   emailjs.send('service_tnhcvia', 'template_8yatare', templateParams, 'kbbmQWHjbQUFEwFQ4').then(
+    //     (response: any) => {
     //       console.log('SUCCESS!', response.status, response.text);
     //     },
-    //     (error) => {
+    //     (error: any) => {
     //       console.log('FAILED...', error);
     //     },
     //   );

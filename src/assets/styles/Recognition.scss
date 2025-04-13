@@ -1,0 +1,57 @@
+.recognition-container {
+    padding: 5% 8%;
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+  
+    .recognition-category {
+      margin-bottom: 3rem;
+       
+      h2 {
+        margin-bottom: 1rem;
+      }
+  
+      .embla {
+        overflow: hidden;
+        width: 100%;
+      }
+      
+      .embla__container {
+        display: flex;
+        margin-left: "2rem";
+        margin-right: "2rem";
+        gap: 1rem; /* Optional spacing between slides */
+      }
+      
+      .embla__slide {
+        flex: 0 0 40%; /* adjust width as needed */
+        min-width: 0;
+        margin-left: "2rem";
+        margin-right: "2rem";
+      }
+  
+      .recognition-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        margin-left: "2rem";
+        margin-right: "2rem";
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .recognition-container {
+      padding: 5%;
+    }
+  
+    .embla__container {
+      gap: 0.75rem;
+    }
+  
+    .recognition-card {
+      max-width: 100% !important;
+    }
+  }
+  
