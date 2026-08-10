@@ -6,7 +6,7 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import ImpactSummary from "./components/ImpactSummary";
 import ProjectExplorer from "./components/ProjectExplorer";
-import Recognition from "./components/Recognition";
+import RecognitionGallery from "./components/RecognitionGallery";
 import "./index.scss";
 import "./styles/tokens.css";
 import "./styles/global.css";
@@ -21,7 +21,7 @@ export default function App() {
         <ExpertiseSection />
         <CareerTimeline />
         <ProjectExplorer />
-        <Recognition />
+        <RecognitionGallery />
         <Contact />
       </main>
       <Footer />

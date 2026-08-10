@@ -34,7 +34,7 @@ async function renderPortfolio() {
   return fetchSpy;
 }
 
-test("renders the semantic shell without dropping the five legacy sections", async () => {
+test("renders the semantic shell with all five primary sections", async () => {
   const fetchSpy = await renderPortfolio();
 
   expect(screen.getByRole("banner")).toBeInTheDocument();
@@ -73,10 +73,7 @@ test("renders the semantic shell without dropping the five legacy sections", asy
       (section) => section.id,
     ),
   ).toEqual(["expertise", "experience", "projects", "recognition", "contact"]);
-  expect(fetchSpy).toHaveBeenCalledTimes(1);
-  expect(fetchSpy).toHaveBeenCalledWith(
-    "/umesh-gangadharaiah/assets/json/mentorandteam.json",
-  );
+  expect(fetchSpy).not.toHaveBeenCalled();
 });
 
 test("renders typed hero actions, safe named social links, and the fallback portrait", async () => {
