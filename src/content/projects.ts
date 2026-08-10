@@ -5,7 +5,7 @@ export const projects = [
     id: "nd-alphax",
     title: "ND- AlphaX",
     description:
-      "Part of Desigin team, developing a key product feature that would shape the future of datacenter networking.",
+      "Part of the design team, developing a key product feature that would shape the future of data center networking.",
     image: {
       kind: "local",
       alt: "ND- AlphaX",

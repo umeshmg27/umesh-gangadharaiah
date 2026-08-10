@@ -84,12 +84,12 @@ export const recognitions = [
   },
   {
     id: "srid-010424",
-    title: "Thanks you for excellent work on Restore feature",
+    title: "Thank you for excellent work on Restore feature",
     description:
       "Thanks a lot Umesh for all your excellent work on the Unified Backup Restore Feature. You are always responsible and strive to complete your work well and on time. You played a crucial role in delivering the feature on time with high quality. Thank you for going above and beyond to help us achieve our goal. Looking forward to many more collaboration!",
     image: recognitionImage(
       "srid-010424",
-      "Thanks you for excellent work on Restore feature",
+      "Thank you for excellent work on Restore feature",
       1600,
       1167,
     ),
@@ -98,12 +98,12 @@ export const recognitions = [
   },
   {
     id: "rohi-100324",
-    title: "Thanks you for excellent work on Backup & Restore feature",
+    title: "Thank you for excellent work on Backup & Restore feature",
     description:
       "Hi Umesh, Thanks for your excellent contribution towards the Unified Backup Restore feature for Congo. You dived deep into it even without being asked and became a major contributor. I appreciate all the hard work, sincerity. Please keep up the good work",
     image: recognitionImage(
       "rohi-100324",
-      "Thanks you for excellent work on Backup & Restore feature",
+      "Thank you for excellent work on Backup & Restore feature",
       1600,
       1160,
     ),
@@ -158,12 +158,12 @@ export const recognitions = [
   },
   {
     id: "pal-050723",
-    title: "Congratulations for winning 2023 Asia-Pacific Stevie Bronze award",
+    title: "Congratulations on winning 2023 Asia-Pacific Stevie Bronze award",
     description:
       "Congratulations for winning 2023 Asia-Pacific Stevie Bronze award for Resource Allocation Manager-Simplifying Resource Allocation and Management with end-to-end(E2E) Automated Dashboard. Thank you for raising the benchmark of automation & innovation excellence. Continue to shine with the incredible work! Best Pallavi",
     image: recognitionImage(
       "pal-050723",
-      "Congratulations for winning 2023 Asia-Pacific Stevie Bronze award",
+      "Congratulations on winning 2023 Asia-Pacific Stevie Bronze award",
       1600,
       1162,
     ),
@@ -220,55 +220,55 @@ export const recognitions = [
   },
   {
     id: "ash-290922",
-    title: "Innovation : Internal Tool",
+    title: "Innovation: Internal Tool",
     description:
       "Thanks Umesh and Arjun for your great contribution towards BAT (BOM Assist Tool). Your deep Code development and testing skills has given final shape to BAT tool which is consumable by CX DC Team and will helped create accurate BOM during ordering in future. Keep up your good work !",
-    image: recognitionImage("ash-290922", "Innovation : Internal Tool", 1600, 1155),
+    image: recognitionImage("ash-290922", "Innovation: Internal Tool", 1600, 1155),
     tags: ["Innovation", "Team Player"],
     category: "Innovation",
   },
   {
     id: "ana-230922",
-    title: "Innovation : Internal Tool",
+    title: "Innovation: Internal Tool",
     description:
       "Dear Team, Thank you for the great support in helping us build the IDP demand form for APJC CXC. Your contribution and dedication in working with the operations team is greatly appreciated. It is always a pleasure to collaborate with professionals like you who help automate various tasks as part of the larger program or initiative. Wish you all the best for a great career in Cisco! Thanks Anand Iyer",
-    image: recognitionImage("ana-230922", "Innovation : Internal Tool", 1600, 1153),
+    image: recognitionImage("ana-230922", "Innovation: Internal Tool", 1600, 1153),
     tags: ["Innovation", "Team Player"],
     category: "Innovation",
   },
   {
     id: "pra-140622",
-    title: "Innovation : Internal Tool",
+    title: "Innovation: Internal Tool",
     description:
       "Thank you for the work down towards Resource Allocation Manager (RAM) Tool. This will help solve a real business challenge and help provide insights on skills availability, demand and forecast on utilization. This will also integrate with Skills Heatmap initiative by sharing insights on the skills in demand.",
-    image: recognitionImage("pra-140622", "Innovation : Internal Tool", 1600, 1163),
+    image: recognitionImage("pra-140622", "Innovation: Internal Tool", 1600, 1163),
     tags: ["Innovation", "Team Player"],
     category: "Innovation",
   },
   {
     id: "mad-260522",
-    title: "Innovation : Internal Tool",
+    title: "Innovation: Internal Tool",
     description:
       "Thank you for your relentless efforts in these 8 weeks working on DC Lab 2.0 build. Your effort in streamlining the lab top logies, revamping the physical connectivity, streamlining the booking process by building the lab portal, and playbook creation in networking and compute space is truly commendable. Keep up the good work! Looking forward to your continued support.",
-    image: recognitionImage("mad-260522", "Innovation : Internal Tool", 1600, 1161),
+    image: recognitionImage("mad-260522", "Innovation: Internal Tool", 1600, 1161),
     tags: ["Innovation", "Team Player"],
     category: "Innovation",
   },
   {
     id: "mad-230422",
-    title: "Innovation : Internal Tool",
+    title: "Innovation: Internal Tool",
     description:
       "Umesh, Ever since you joined our team as an ET, your contribution to our team and customers has been phenomenal. Truly appreciate the efforts you put in towards team-building initiatives. Your effort in automating the 13-week forecast view as a part of the demand planning initiative is commendable. The positive work attitude you have inspires the team. Thank you for everything that you do for our team and our customers. Keep up the brilliant spirit!.",
-    image: recognitionImage("mad-230422", "Innovation : Internal Tool", 1600, 1157),
+    image: recognitionImage("mad-230422", "Innovation: Internal Tool", 1600, 1157),
     tags: ["Innovation", "Team Player"],
     category: "Innovation",
   },
   {
     id: "yogi-070422",
-    title: "Innovation : Internal Tool",
+    title: "Innovation: Internal Tool",
     description:
       "Thank you so much for your contributions to Codeshift till date, with your invaluable efforts we have been able to take it from an Idea to a functional platform in very short time!",
-    image: recognitionImage("yogi-070422", "Innovation : Internal Tool", 1600, 1159),
+    image: recognitionImage("yogi-070422", "Innovation: Internal Tool", 1600, 1159),
     tags: ["Innovation", "Team Player"],
     category: "Innovation",
     highlightOrder: 2,

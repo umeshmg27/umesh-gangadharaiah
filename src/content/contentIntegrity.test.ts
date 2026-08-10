@@ -182,9 +182,9 @@ describe("typed portfolio content", () => {
     });
   });
 
-  it("preserves project prose exactly before the isolated copy cleanup", () => {
+  it("preserves project prose with only the approved ND-AlphaX cleanup", () => {
     expect(sha256(projects.map(({ title, description }) => ({ title, description })))).toBe(
-      "2b3fe307e0815abe6ff08795bae672c828530ed652c701e89baa3c32eed33d31",
+      "d655a4093749f15a99408b07c7a7f6d002b7737f1a42fbc5e90be0c8881935c3",
     );
     expect(
       projects.map(({ image }) =>
@@ -243,7 +243,7 @@ describe("typed portfolio content", () => {
       "9cc28e43b9d0cca80e30827b930df8a15b1cd0d3ecdff8fa1781680b2efb2b7b",
     );
     expect(sha256(recognitions.map(({ title }) => title))).toBe(
-      "4490430788ce617fe8638f987119d9b818f5feebcf369c27f815e43e2b835982",
+      "53d92fc57cb4c4448e11423635974baeb48fd0a7bd6dd7cc9e8067064227067f",
     );
     expect(
       sha256(
@@ -264,7 +264,7 @@ describe("typed portfolio content", () => {
   it("preserves expertise copy, labels, and both publication URLs", () => {
     expect(
       sha256(expertiseAreas.map(({ title, description }) => ({ title, description }))),
-    ).toBe("f2a1093725e4c85631f54dd144efbae0848db2561a4557723a3e48ca9ca24c98");
+    ).toBe("d02711c59aeebcc51a363899fe2470596dbfd8e1a425db83745acf629256106c");
 
     const publicationUrls = expertiseAreas.flatMap(({ items }) =>
       items.flatMap((item) => ("url" in item ? [item.url] : [])),
@@ -301,15 +301,15 @@ describe("typed portfolio content", () => {
         { label: "Streamlit" },
       ],
       [
-        { label: "Sonar Cube" },
+        { label: "SonarQube" },
         { label: "Docker" },
         { label: "Kubernetes" },
         { label: "Linux" },
       ],
       [
-        { label: "VsCode" },
-        { label: "PostMan" },
-        { label: "PProf" },
+        { label: "VS Code" },
+        { label: "Postman" },
+        { label: "pprof" },
         { label: "Hugging Face" },
         { label: "LlamaIndex" },
         { label: "Streamlit" },
@@ -324,7 +324,7 @@ describe("typed portfolio content", () => {
         role: "Software Engineer III",
         organization: "Cisco Systems",
         location: "IN",
-        period: "Aug,2024 - present",
+        period: "Aug 2024 – Present",
         summary: "Network Backend development, GenAI/LLM, Mentorship and Feature owner",
         technologies: [],
         highlights: [],
@@ -334,7 +334,7 @@ describe("typed portfolio content", () => {
         role: "Software Engineer II",
         organization: "Cisco Systems",
         location: "IN",
-        period: "Aug,2022 - July,2024",
+        period: "Aug 2022 – Jul 2024",
         technologies: ["Golang", "Docker", "Microservices", "APIC", "Graph Algorithms"],
         highlights: [
           "Integrated L4-L7 service graphs into NDO for simplified workflows",
@@ -349,7 +349,7 @@ describe("typed portfolio content", () => {
         role: "Staff Engineer Intern",
         organization: "Cisco Systems",
         location: "IN",
-        period: "Aug,2021 - July,2022",
+        period: "Aug 2021 – Jul 2022",
         technologies: ["React", "Python", "FastAPI", "Docker"],
         highlights: [
           "Built Resource Allocation Manager (RAM) for staffing automation",
@@ -362,7 +362,7 @@ describe("typed portfolio content", () => {
         role: "Intern",
         organization: "Cisco Systems",
         location: "IN",
-        period: "Jan,2021 - July,2021",
+        period: "Jan 2021 – Jul 2021",
         technologies: [
           "Infrastructure Automation",
           "Internal Tooling",

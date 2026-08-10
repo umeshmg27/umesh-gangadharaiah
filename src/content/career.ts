@@ -6,7 +6,7 @@ export const careerEntries = [
     role: "Software Engineer III",
     organization: "Cisco Systems",
     location: "IN",
-    period: "Aug,2024 - present",
+    period: "Aug 2024 – Present",
     summary: "Network Backend development, GenAI/LLM, Mentorship and Feature owner",
     technologies: [],
     highlights: [],
@@ -16,7 +16,7 @@ export const careerEntries = [
     role: "Software Engineer II",
     organization: "Cisco Systems",
     location: "IN",
-    period: "Aug,2022 - July,2024",
+    period: "Aug 2022 – Jul 2024",
     technologies: ["Golang", "Docker", "Microservices", "APIC", "Graph Algorithms"],
     highlights: [
       "Integrated L4-L7 service graphs into NDO for simplified workflows",
@@ -31,7 +31,7 @@ export const careerEntries = [
     role: "Staff Engineer Intern",
     organization: "Cisco Systems",
     location: "IN",
-    period: "Aug,2021 - July,2022",
+    period: "Aug 2021 – Jul 2022",
     technologies: ["React", "Python", "FastAPI", "Docker"],
     highlights: [
       "Built Resource Allocation Manager (RAM) for staffing automation",
@@ -44,7 +44,7 @@ export const careerEntries = [
     role: "Intern",
     organization: "Cisco Systems",
     location: "IN",
-    period: "Jan,2021 - July,2021",
+    period: "Jan 2021 – Jul 2021",
     technologies: [
       "Infrastructure Automation",
       "Internal Tooling",
