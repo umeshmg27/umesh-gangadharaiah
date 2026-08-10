@@ -174,7 +174,7 @@ Run with npm 11.3.0:
 ```bash
 npm uninstall react-scripts gh-pages
 npm install --save-exact lucide-react@1.27.0
-npm install --save-dev --save-exact vite@8.1.5 @vitejs/plugin-react@6.0.4 typescript@6.0.3 @types/node@24.13.3 vitest@4.1.10 jsdom@30.0.1 @testing-library/react@16.3.2 @testing-library/dom@10.4.1 @testing-library/user-event@14.6.1 @testing-library/jest-dom@7.0.0 eslint@9.39.5 @eslint/js@9.39.5 typescript-eslint@8.65.0 eslint-plugin-react-hooks@7.1.1 eslint-plugin-react-refresh@0.5.3 eslint-plugin-jsx-a11y@6.10.2 globals@17.7.0
+npm install --save-dev --save-exact vite@8.1.5 @vitejs/plugin-react@6.0.4 typescript@6.0.3 @types/node@24.13.3 vitest@4.1.10 jsdom@29.1.1 @testing-library/react@16.3.2 @testing-library/dom@10.4.1 @testing-library/user-event@14.6.1 @testing-library/jest-dom@7.0.0 eslint@9.39.5 @eslint/js@9.39.5 typescript-eslint@8.65.0 eslint-plugin-react-hooks@7.1.1 eslint-plugin-react-refresh@0.5.3 eslint-plugin-jsx-a11y@6.10.2 globals@17.7.0
 ```
 
 Removing CRA before TypeScript 6 avoids CRA's obsolete TypeScript peer range;
