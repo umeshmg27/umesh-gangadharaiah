@@ -362,21 +362,38 @@ versions, and these pre-deploy gates in order:
 3. `npm run test`.
 4. `npm run build`.
 
-Only a successful build job may publish `dist` to the existing `gh-pages`
-branch through the locked `gh-pages` package and the repository-provided
-`GITHUB_TOKEN`. The workflow needs only read access by default and scoped
-`contents: write` access for the deploy job. The Vite base path and canonical
-URL both target the existing repository Pages location. The workflow does not
-require a runtime server or private content.
+Only a successful build job may publish a candidate `dist` tree to the existing
+`gh-pages` branch through the locked `gh-pages` package and the
+repository-provided `GITHUB_TOKEN`. The workflow needs only read access by
+default and scoped `contents: write` access for the candidate-publish job. It
+records the source commit in a generated `pages-build.txt` marker. The Vite
+base path and canonical URL both target the existing repository Pages location.
+The workflow does not require a runtime server or private content.
 
-After deployment, a smoke job requests the published URL and asserts the site
-title, canonical URL, Open Graph tags, application root, and one local asset.
-This post-deploy check cannot gate a deployment that has already occurred; a
-failure marks the workflow and handoff incomplete. Recovery is a normal revert
-of the source commit followed by a fresh deployment. The workflow records the
-previous `gh-pages` commit before publishing so maintainers can identify the
-last known-good static tree; it does not force-push or automatically rewrite
-history.
+GitHub does not start a branch-based Pages build for a commit pushed by a
+workflow's `GITHUB_TOKEN`. After the candidate workflow succeeds, a repository
+maintainer with a verified GitHub email triggers publication in the web UI:
+
+1. Open the repository's Code tab and select the `gh-pages` branch.
+2. Open `pages-build.txt`, select Edit, append the current UTC timestamp, and
+   commit directly to `gh-pages`. If branch protection requires a pull request,
+   propose the edit and merge that pull request instead.
+3. Open Actions, select `pages build and deployment`, and wait for the new run
+   to succeed.
+4. Open Settings, select Pages, and use Visit site.
+
+The human-authored marker commit triggers the existing branch-based Pages build
+without a deploy token or Pages-source setting change. It does not alter the
+application bundle.
+
+After publication, `npm run smoke:pages` requests the published URL and asserts
+the site title, canonical URL, Open Graph tags, application root, and one local
+asset. This post-deploy check cannot gate a deployment that has already
+occurred; a failure marks the handoff incomplete. Recovery is a normal revert
+of the source commit followed by a fresh candidate publication and manual
+trigger. The candidate workflow records the previous `gh-pages` commit before
+publishing so maintainers can identify the last known-good static tree; it does
+not force-push or automatically rewrite history.
 
 Deployment is not considered complete until the published URL loads the new
 bundle directly, assets resolve from the repository subpath, section links work,
@@ -409,6 +426,8 @@ and the share metadata is present in the served HTML.
   long page or a multi-route case-study system.
 - Use the page hierarchy, architecture, visual direction, interaction model,
   error handling, and verification approach described above.
+- Preserve branch-based Pages publishing and use the documented human-authored
+  `pages-build.txt` marker commit to trigger each production build.
 
 ## Open Questions
 
