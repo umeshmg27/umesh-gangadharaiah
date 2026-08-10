@@ -1,90 +1,90 @@
 export type RecognitionCategory = "Innovation" | "Mentorship" | "Leadership";
 
 export type LocalImageAsset = {
-  kind: "local";
-  alt: string;
-  fallbackSrc: string;
-  sources: readonly {
-    src: string;
-    width: number;
-    type: "image/webp";
+  readonly kind: "local";
+  readonly alt: string;
+  readonly fallbackSrc: string;
+  readonly sources: readonly {
+    readonly src: string;
+    readonly width: number;
+    readonly type: "image/webp";
   }[];
-  width: number;
-  height: number;
+  readonly width: number;
+  readonly height: number;
 };
 
 export type RemoteImageAsset = {
-  kind: "remote";
-  alt: string;
-  src: string;
-  width: number;
-  height: number;
+  readonly kind: "remote";
+  readonly alt: string;
+  readonly src: string;
+  readonly width: number;
+  readonly height: number;
 };
 
 export type ImageAsset = LocalImageAsset | RemoteImageAsset;
 
 export type Project = {
-  id: string;
-  title: string;
-  description: string;
-  image: ImageAsset;
-  publicUrl?: string;
-  featuredOrder?: 1 | 2 | 3 | 4;
+  readonly id: string;
+  readonly title: string;
+  readonly description: string;
+  readonly image: ImageAsset;
+  readonly publicUrl?: string;
+  readonly featuredOrder?: 1 | 2 | 3 | 4;
 };
 
 export type Recognition = {
-  id: string;
-  title: string;
-  description: string;
-  tags: readonly string[];
-  category: RecognitionCategory;
-  image: LocalImageAsset;
-  highlightOrder?: 1 | 2 | 3 | 4 | 5 | 6;
+  readonly id: string;
+  readonly title: string;
+  readonly description: string;
+  readonly tags: readonly string[];
+  readonly category: RecognitionCategory;
+  readonly image: LocalImageAsset;
+  readonly highlightOrder?: 1 | 2 | 3 | 4 | 5 | 6;
 };
 
 export type CareerEntry = {
-  id: string;
-  role: string;
-  organization: string;
-  location: string;
-  period: string;
-  summary?: string;
-  technologies: readonly string[];
-  highlights: readonly string[];
+  readonly id: string;
+  readonly role: string;
+  readonly organization: string;
+  readonly location: string;
+  readonly period: string;
+  readonly summary?: string;
+  readonly technologies: readonly string[];
+  readonly highlights: readonly string[];
 };
 
 export type Profile = {
-  name: string;
-  givenName: string;
-  familyName: string;
-  role: string;
-  specialization: string;
-  githubUrl: string;
-  linkedinUrl: string;
-  canonicalUrl: string;
-  portrait: LocalImageAsset;
-  heroActions: readonly {
-    label: string;
-    href: "#projects" | "#contact";
+  readonly name: string;
+  readonly givenName: string;
+  readonly familyName: string;
+  readonly role: string;
+  readonly specialization: string;
+  readonly githubUrl: string;
+  readonly linkedinUrl: string;
+  readonly canonicalUrl: string;
+  readonly portrait: LocalImageAsset;
+  readonly heroActions: readonly {
+    readonly label: string;
+    readonly href: "#projects" | "#contact";
   }[];
 };
 
 export type ImpactMetric = {
-  id: string;
-  value: string;
-  label: string;
-  sourceRecordId: string;
+  readonly id: string;
+  readonly value: string;
+  readonly label: string;
+  readonly sourceRecordId: string;
 };
 
 export type ExpertiseItem = {
-  label: string;
-  url?: string;
+  readonly label: string;
+  readonly url?: string;
 };
 
 export type ExpertiseArea = {
-  id: string;
-  title: string;
-  description: string;
-  itemsLabel: string;
-  items: readonly ExpertiseItem[];
+  readonly id: string;
+  readonly title: string;
+  readonly description: string;
+  readonly itemsLabel: string;
+  readonly items: readonly ExpertiseItem[];
 };

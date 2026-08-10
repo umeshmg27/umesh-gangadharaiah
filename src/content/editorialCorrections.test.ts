@@ -2,9 +2,15 @@
 
 import { createHash } from "node:crypto";
 
+import expectedKollectCuriFallbackSrc from "../assets/images/mock04.png";
+import expectedResourceAllocationManagerFallbackSrc from "../assets/images/mock05.png";
+import expectedPortraitFallbackSrc from "../assets/images/umesh-ug.jpg";
+
 import { careerEntries } from "./career";
 import { expertiseAreas } from "./expertise";
 import { impactMetrics } from "./impact";
+import type { LocalImageAsset } from "./models";
+import { profile } from "./profile";
 import { projects } from "./projects";
 import { recognitions } from "./recognitions";
 
@@ -12,7 +18,42 @@ function sha256(value: unknown): string {
   return createHash("sha256").update(JSON.stringify(value)).digest("hex");
 }
 
+function portableLocalPath(image: LocalImageAsset): string {
+  if (image.fallbackSrc === expectedPortraitFallbackSrc) return "import:umesh-ug.jpg";
+  if (image.fallbackSrc === expectedResourceAllocationManagerFallbackSrc) {
+    return "import:mock05.png";
+  }
+  if (image.fallbackSrc === expectedKollectCuriFallbackSrc) return "import:mock04.png";
+  expect(image.fallbackSrc.startsWith(import.meta.env.BASE_URL)).toBe(true);
+  return image.fallbackSrc.slice(import.meta.env.BASE_URL.length);
+}
+
 describe("approved editorial corrections", () => {
+  it("keeps the complete public profile outside the editorial allowlist", () => {
+    expect(profile).toEqual({
+      name: "Umesh Gangadharaiah",
+      givenName: "Umesh",
+      familyName: "Gangadharaiah",
+      role: "Backend Engineer",
+      specialization: "Distributed Systems & Infrastructure",
+      githubUrl: "https://github.com/umeshmg27",
+      linkedinUrl: "https://www.linkedin.com/in/umeshmg/",
+      canonicalUrl: "https://umeshmg27.github.io/umesh-gangadharaiah/",
+      portrait: {
+        kind: "local",
+        alt: "Umesh Gangadharaiah",
+        fallbackSrc: expectedPortraitFallbackSrc,
+        sources: [],
+        width: 800,
+        height: 800,
+      },
+      heroActions: [
+        { label: "View Work", href: "#projects" },
+        { label: "Contact", href: "#contact" },
+      ],
+    });
+  });
+
   it("uses only the approved tool-label capitalization", () => {
     expect(expertiseAreas.map(({ items }) => items.map(({ label }) => label))).toEqual([
       ["Golang", "Python", "C++", "MongoDB", "Redis"],
@@ -146,14 +187,43 @@ describe("approved editorial corrections", () => {
     );
     expect(
       sha256(
-        recognitions.map(({ id, tags, category, image }) => ({
-          id,
-          tags,
-          category,
-          path: image.fallbackSrc,
+        recognitions.map((recognition) => ({
+          id: recognition.id,
+          description: recognition.description,
+          tags: recognition.tags,
+          category: recognition.category,
+          imagePath: portableLocalPath(recognition.image),
+          imageSources: recognition.image.sources,
+          imageWidth: recognition.image.width,
+          imageHeight: recognition.image.height,
+          highlightOrder:
+            "highlightOrder" in recognition ? recognition.highlightOrder : null,
         })),
       ),
-    ).toBe("1dfe01b37de37a2db7b8865677b5f801c24ebb7c53a4e0db67f77d315c7666e8");
+    ).toBe("5c01b08d4d09d1c11f391d970291e23a258442ef27f0c0c09ebd1bb08e1621d5");
+    expect(
+      sha256(
+        projects.map((project) => ({
+          id: project.id,
+          title: project.title,
+          description: project.id === "nd-alphax" ? null : project.description,
+          image:
+            project.image.kind === "local"
+              ? {
+                  kind: project.image.kind,
+                  alt: project.image.alt,
+                  path: portableLocalPath(project.image),
+                  sources: project.image.sources,
+                  width: project.image.width,
+                  height: project.image.height,
+                }
+              : project.image,
+          featuredOrder:
+            "featuredOrder" in project ? project.featuredOrder : null,
+          publicUrl: "publicUrl" in project ? project.publicUrl : null,
+        })),
+      ),
+    ).toBe("82dd01b27e6d5e87de7d2a4c0d80d5f1dbc9dde68baca0770f4354293500c0f1");
     expect(
       sha256(projects.slice(1).map(({ title, description }) => ({ title, description }))),
     ).toBe("f7491975cac441bfa13d5900ca9c6ba02b494f91f6254166fdfa25c2d26be8f5");
@@ -184,12 +254,40 @@ describe("approved editorial corrections", () => {
       },
     ]);
     expect(
-      expertiseAreas.flatMap(({ items }) =>
-        items.flatMap((item) => ("url" in item ? [item.url] : [])),
-      ),
+      expertiseAreas.map(({ id, title, itemsLabel, items }) => ({
+        id,
+        title,
+        itemsLabel,
+        publicationUrls: items.flatMap((item) => ("url" in item ? [item.url] : [])),
+      })),
     ).toEqual([
-      "https://www.tdcommons.org/dpubs_series/7086/",
-      "https://www.tdcommons.org/dpubs_series/7085/",
+      {
+        id: "backend-systems",
+        title: "Backend Engineer - Distributed Systems & Infrastructure",
+        itemsLabel: "Tech stack:",
+        publicationUrls: [],
+      },
+      {
+        id: "generative-ai",
+        title: "Exploring Generative AI & LLMs",
+        itemsLabel: "Tech stack & Papers:",
+        publicationUrls: [
+          "https://www.tdcommons.org/dpubs_series/7086/",
+          "https://www.tdcommons.org/dpubs_series/7085/",
+        ],
+      },
+      {
+        id: "devops-automation",
+        title: "DevOps & Automation",
+        itemsLabel: "Tech stack:",
+        publicationUrls: [],
+      },
+      {
+        id: "engineering-tools",
+        title: "Tools",
+        itemsLabel: "Tech stack:",
+        publicationUrls: [],
+      },
     ]);
   });
 });

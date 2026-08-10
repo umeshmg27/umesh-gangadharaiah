@@ -1,19 +1,23 @@
 import type { LocalImageAsset, Recognition } from "./models";
 
+function publicRecognitionAsset(relativePath: string): string {
+  return `${import.meta.env.BASE_URL}${relativePath}`;
+}
+
 function recognitionImage(
   id: string,
   title: string,
   width: number,
   height: number,
-): LocalImageAsset {
+) {
   return {
     kind: "local",
     alt: `Recognition: ${title}`,
-    fallbackSrc: `/assets/images/recognition/${id}.jpeg`,
+    fallbackSrc: publicRecognitionAsset(`assets/images/recognition/${id}.jpeg`),
     sources: [],
     width,
     height,
-  };
+  } as const satisfies LocalImageAsset;
 }
 
 export const recognitions = [

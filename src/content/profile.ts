@@ -1,3 +1,5 @@
+import portraitFallbackSrc from "../assets/images/umesh-ug.jpg";
+
 import type { Profile } from "./models";
 
 export const profile = {
@@ -12,7 +14,7 @@ export const profile = {
   portrait: {
     kind: "local",
     alt: "Umesh Gangadharaiah",
-    fallbackSrc: "/src/assets/images/umesh-ug.jpg",
+    fallbackSrc: portraitFallbackSrc,
     sources: [],
     width: 800,
     height: 800,

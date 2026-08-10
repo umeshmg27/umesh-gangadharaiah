@@ -1,4 +1,11 @@
+import kollectCuriFallbackSrc from "../assets/images/mock04.png";
+import resourceAllocationManagerFallbackSrc from "../assets/images/mock05.png";
+
 import type { Project } from "./models";
+
+function publicProjectAsset(relativePath: string): string {
+  return `${import.meta.env.BASE_URL}${relativePath}`;
+}
 
 export const projects = [
   {
@@ -9,7 +16,7 @@ export const projects = [
     image: {
       kind: "local",
       alt: "ND- AlphaX",
-      fallbackSrc: "/assets/images/data-center.png",
+      fallbackSrc: publicProjectAsset("assets/images/data-center.png"),
       sources: [],
       width: 1920,
       height: 1080,
@@ -23,7 +30,7 @@ export const projects = [
     image: {
       kind: "local",
       alt: "NDO Search & Explore feature",
-      fallbackSrc: "/assets/images/search-and-explore.jpg",
+      fallbackSrc: publicProjectAsset("assets/images/search-and-explore.jpg"),
       sources: [],
       width: 2048,
       height: 2048,
@@ -38,7 +45,7 @@ export const projects = [
     image: {
       kind: "local",
       alt: "Unified Backup and Restore - Cisco Nexus Dashboard",
-      fallbackSrc: "/assets/images/restore.png",
+      fallbackSrc: publicProjectAsset("assets/images/restore.png"),
       sources: [],
       width: 1920,
       height: 1080,
@@ -80,7 +87,7 @@ export const projects = [
     image: {
       kind: "local",
       alt: "Codeshift - CI/CD Platform",
-      fallbackSrc: "/assets/images/codeshift.png",
+      fallbackSrc: publicProjectAsset("assets/images/codeshift.png"),
       sources: [],
       width: 1920,
       height: 1080,
@@ -94,7 +101,7 @@ export const projects = [
     image: {
       kind: "local",
       alt: "Resource Allocation Manager (RAM)",
-      fallbackSrc: "/src/assets/images/mock05.png",
+      fallbackSrc: resourceAllocationManagerFallbackSrc,
       sources: [],
       width: 1700,
       height: 1120,
@@ -109,7 +116,7 @@ export const projects = [
     image: {
       kind: "local",
       alt: "Kollect & CURI - Internal Knowledge Bot",
-      fallbackSrc: "/src/assets/images/mock04.png",
+      fallbackSrc: kollectCuriFallbackSrc,
       sources: [],
       width: 1700,
       height: 1120,
@@ -123,7 +130,7 @@ export const projects = [
     image: {
       kind: "local",
       alt: "UCS Config Tool",
-      fallbackSrc: "/assets/images/config.png",
+      fallbackSrc: publicProjectAsset("assets/images/config.png"),
       sources: [],
       width: 1920,
       height: 1080,
@@ -137,7 +144,7 @@ export const projects = [
     image: {
       kind: "local",
       alt: "Dementia Detection via EEG (IEEE)",
-      fallbackSrc: "/assets/images/ieee.png",
+      fallbackSrc: publicProjectAsset("assets/images/ieee.png"),
       sources: [],
       width: 1920,
       height: 1080,
@@ -151,7 +158,7 @@ export const projects = [
     image: {
       kind: "local",
       alt: "Flikrify",
-      fallbackSrc: "/assets/images/flikr.png",
+      fallbackSrc: publicProjectAsset("assets/images/flikr.png"),
       sources: [],
       width: 1920,
       height: 1080,
@@ -165,7 +172,7 @@ export const projects = [
     image: {
       kind: "local",
       alt: "Telegram as Data Storage",
-      fallbackSrc: "/assets/images/telegram.png",
+      fallbackSrc: publicProjectAsset("assets/images/telegram.png"),
       sources: [],
       width: 1920,
       height: 1080,
