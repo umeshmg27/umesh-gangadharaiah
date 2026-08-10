@@ -185,8 +185,9 @@ hosted at the existing GitHub Pages repository path.
   package, unused imports, and stale template test after equivalent behavior is
   covered by the new implementation.
 - Use GitHub Actions to install, test, build, and deploy the generated static
-  output to the repository's existing `gh-pages` branch. This preserves the
-  current publishing model and does not require a GitHub Pages settings change.
+  output directly to GitHub Pages from the repository's current default branch,
+  `master`. Pull requests may validate the build, but no feature branch may
+  publish a Pages deployment.
 
 No runtime server is required. The only external runtime operation remains the
 existing EmailJS form submission.
@@ -353,7 +354,10 @@ Manual and browser verification includes:
 
 ## Deployment
 
-A GitHub Actions workflow runs on pushes to `master` and by manual dispatch. It
+A GitHub Actions Pages workflow runs on pushes to the current default branch,
+`master`, and by manual dispatch. A job-level branch guard and the
+`github-pages` environment both restrict production deployment to `master`.
+Feature branches and pull requests never publish Pages artifacts. The workflow
 uses `actions/checkout@v6`, `actions/setup-node@v6`, the pinned Node and npm
 versions, and these pre-deploy gates in order:
 
@@ -362,38 +366,36 @@ versions, and these pre-deploy gates in order:
 3. `npm run test`.
 4. `npm run build`.
 
-Only a successful build job may publish a candidate `dist` tree to the existing
-`gh-pages` branch through the locked `gh-pages` package and the
-repository-provided `GITHUB_TOKEN`. The workflow needs only read access by
-default and scoped `contents: write` access for the candidate-publish job. It
-records the source commit in a generated `pages-build.txt` marker. The Vite
-base path and canonical URL both target the existing repository Pages location.
-The workflow does not require a runtime server or private content.
+Only a successful build job may upload `dist` with
+`actions/upload-pages-artifact` and publish it with `actions/deploy-pages`.
+The deploy job receives only `contents: read`, `pages: write`, and
+`id-token: write`; it uses the `github-pages` environment and does not write to
+any Git branch. The Vite base path and canonical URL both target the existing
+repository Pages location. The workflow does not require a runtime server,
+deploy token, or private content.
 
-GitHub does not start a branch-based Pages build for a commit pushed by a
-workflow's `GITHUB_TOKEN`. After the candidate workflow succeeds, a repository
-maintainer with a verified GitHub email triggers publication in the web UI:
+One repository setting changes from branch publishing to first-party Actions
+publishing: Settings → Pages → Build and deployment → Source → GitHub Actions.
+After the workflow exists on `master`, a maintainer can trigger or rerun the
+production build entirely in the web UI:
 
-1. Open the repository's Code tab and select the `gh-pages` branch.
-2. Open `pages-build.txt`, select Edit, append the current UTC timestamp, and
-   commit directly to `gh-pages`. If branch protection requires a pull request,
-   propose the edit and merge that pull request instead.
-3. Open Actions, select `pages build and deployment`, and wait for the new run
-   to succeed.
-4. Open Settings, select Pages, and use Visit site.
+1. Open the repository and select Actions.
+2. Select **Deploy portfolio to Pages**.
+3. Select **Run workflow**, choose `master`, and confirm **Run workflow**.
+4. Wait for both the build and deploy jobs to succeed.
+5. Open Settings → Pages → Visit site.
 
-The human-authored marker commit triggers the existing branch-based Pages build
-without a deploy token or Pages-source setting change. It does not alter the
-application bundle.
+The workflow also deploys after a successful push to `master`; manual dispatch
+provides the requested UI-controlled rerun. A defensive job condition prevents
+a manually selected non-`master` ref from publishing.
 
 After publication, `npm run smoke:pages` requests the published URL and asserts
 the site title, canonical URL, Open Graph tags, application root, and one local
 asset. This post-deploy check cannot gate a deployment that has already
 occurred; a failure marks the handoff incomplete. Recovery is a normal revert
-of the source commit followed by a fresh candidate publication and manual
-trigger. The candidate workflow records the previous `gh-pages` commit before
-publishing so maintainers can identify the last known-good static tree; it does
-not force-push or automatically rewrite history.
+of the source commit followed by a successful `master` deployment or manual
+rerun. Git history remains the rollback record, and the workflow does not
+create, force-push, or rewrite a deployment branch.
 
 Deployment is not considered complete until the published URL loads the new
 bundle directly, assets resolve from the repository subpath, section links work,
@@ -426,8 +428,8 @@ and the share metadata is present in the served HTML.
   long page or a multi-route case-study system.
 - Use the page hierarchy, architecture, visual direction, interaction model,
   error handling, and verification approach described above.
-- Preserve branch-based Pages publishing and use the documented human-authored
-  `pages-build.txt` marker commit to trigger each production build.
+- Publish Pages only from the current default `master` branch through the
+  first-party GitHub Pages Actions flow; do not create per-branch deployments.
 
 ## Open Questions
 
