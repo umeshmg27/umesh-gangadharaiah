@@ -1,5 +1,5 @@
-import Contact from "./components/Contact";
 import CareerTimeline from "./components/CareerTimeline";
+import ContactForm from "./components/ContactForm";
 import ExpertiseSection from "./components/ExpertiseSection";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -22,7 +22,7 @@ export default function App() {
         <CareerTimeline />
         <ProjectExplorer />
         <RecognitionGallery />
-        <Contact />
+        <ContactForm />
       </main>
       <Footer />
     </>
