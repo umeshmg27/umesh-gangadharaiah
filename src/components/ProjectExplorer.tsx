@@ -1,0 +1,134 @@
+import { type ChangeEvent, useRef, useState } from "react";
+
+import type { Project } from "../content/models";
+import { projects } from "../content/projects";
+import { filterProjects } from "../projects/filterProjects";
+import ProjectCard from "./ProjectCard";
+import styles from "./ProjectExplorer.module.css";
+
+type ProjectExplorerState = {
+  archiveOpen: boolean;
+  query: string;
+  expandedIds: ReadonlySet<string>;
+};
+
+const projectRecords: readonly Project[] = projects;
+const featuredProjects = projectRecords
+  .filter((project) => project.featuredOrder !== undefined)
+  .sort(
+    (left, right) =>
+      (left.featuredOrder ?? Number.POSITIVE_INFINITY) -
+      (right.featuredOrder ?? Number.POSITIVE_INFINITY),
+  );
+
+function projectCountText(count: number, archiveOpen: boolean): string {
+  if (!archiveOpen) return `Showing ${count} featured projects.`;
+  return `Showing ${count} ${count === 1 ? "project" : "projects"}.`;
+}
+
+export default function ProjectExplorer() {
+  const [state, setState] = useState<ProjectExplorerState>(() => ({
+    archiveOpen: false,
+    query: "",
+    expandedIds: new Set<string>(),
+  }));
+  const archiveControlRef = useRef<HTMLButtonElement>(null);
+  const visibleProjects = state.archiveOpen
+    ? filterProjects(projectRecords, state.query)
+    : featuredProjects;
+
+  function toggleArchive(): void {
+    if (state.archiveOpen) archiveControlRef.current?.focus();
+
+    setState((current) => ({
+      ...current,
+      archiveOpen: !current.archiveOpen,
+      query: current.archiveOpen ? "" : current.query,
+    }));
+  }
+
+  function updateQuery(event: ChangeEvent<HTMLInputElement>): void {
+    setState((current) => ({ ...current, query: event.target.value }));
+  }
+
+  function toggleDetails(projectId: string): void {
+    setState((current) => {
+      const expandedIds = new Set(current.expandedIds);
+
+      if (expandedIds.has(projectId)) expandedIds.delete(projectId);
+      else expandedIds.add(projectId);
+
+      return { ...current, expandedIds };
+    });
+  }
+
+  return (
+    <section
+      aria-labelledby="projects-heading"
+      className={styles.section}
+      id="projects"
+    >
+      <div className={styles.sectionHeader}>
+        <div>
+          <p className={styles.eyebrow}>Selected work</p>
+          <h2 className={styles.heading} id="projects-heading">
+            Projects
+          </h2>
+        </div>
+
+        <button
+          aria-controls="project-results"
+          aria-expanded={state.archiveOpen}
+          className={styles.archiveControl}
+          onClick={toggleArchive}
+          ref={archiveControlRef}
+          type="button"
+        >
+          {state.archiveOpen
+            ? "Show featured projects"
+            : `View all ${projectRecords.length} projects`}
+        </button>
+      </div>
+
+      {state.archiveOpen ? (
+        <div className={styles.searchControls}>
+          <label className={styles.searchLabel} htmlFor="project-search">
+            Search projects
+          </label>
+          <input
+            aria-describedby="project-search-description"
+            className={styles.searchInput}
+            id="project-search"
+            onChange={updateQuery}
+            type="search"
+            value={state.query}
+          />
+          <p className={styles.searchDescription} id="project-search-description">
+            Search project titles and descriptions.
+          </p>
+        </div>
+      ) : null}
+
+      <p className={styles.resultCount}>
+        {projectCountText(visibleProjects.length, state.archiveOpen)}
+      </p>
+
+      <div id="project-results">
+        {visibleProjects.length > 0 ? (
+          <div className={styles.grid}>
+            {visibleProjects.map((project) => (
+              <ProjectCard
+                expanded={state.expandedIds.has(project.id)}
+                key={project.id}
+                onToggle={toggleDetails}
+                project={project}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className={styles.emptyState}>No projects match your search.</p>
+        )}
+      </div>
+    </section>
+  );
+}

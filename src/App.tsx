@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import ImpactSummary from "./components/ImpactSummary";
-import Project from "./components/Project";
+import ProjectExplorer from "./components/ProjectExplorer";
 import Recognition from "./components/Recognition";
 import "./index.scss";
 import "./styles/tokens.css";
@@ -20,7 +20,7 @@ export default function App() {
         <ImpactSummary />
         <ExpertiseSection />
         <CareerTimeline />
-        <Project />
+        <ProjectExplorer />
         <Recognition />
         <Contact />
       </main>
