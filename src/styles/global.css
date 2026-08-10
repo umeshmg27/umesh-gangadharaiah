@@ -1,0 +1,94 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-canvas);
+  scroll-behavior: smooth;
+}
+
+html[data-theme] body {
+  min-width: 20rem;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+html[data-theme] #root {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  color: var(--color-text);
+}
+
+html[data-theme] :where(a, button, h1, h2, h3, h4, h5, label, p) {
+  color: inherit;
+  font-family: inherit;
+}
+
+a {
+  color: var(--color-accent-strong);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(a, button, input, textarea, select):focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+main {
+  display: block;
+  overflow: clip;
+}
+
+#expertise,
+#experience,
+#projects,
+#recognition,
+#contact {
+  scroll-margin-top: calc(var(--header-height) + 1.5rem);
+}
+
+/* Temporary compatibility while Tasks 6–9 replace retained legacy sections. */
+html[data-theme="light"] .skills-container svg,
+html[data-theme="light"] .flex-chips .chip-title {
+  color: var(--color-text);
+}
+
+html[data-theme="light"] .vertical-timeline span,
+html[data-theme="light"] .vertical-timeline-element-date {
+  color: var(--color-text-muted);
+}
+
+html[data-theme="light"] .vertical-timeline-element-icon .svg-inline--fa {
+  color: var(--color-accent-contrast);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

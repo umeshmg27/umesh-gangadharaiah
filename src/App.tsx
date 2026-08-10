@@ -1,46 +1,30 @@
-import React, {useState, useEffect} from "react";
-import {
-  Main,
-  Timeline,
-  Expertise,
-  Project,
-  Contact,
-  Navigation,
-  Footer,
-} from "./components";
-import FadeIn from './components/FadeIn';
-import './index.scss';
+import Contact from "./components/Contact";
+import Expertise from "./components/Expertise";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+import ImpactSummary from "./components/ImpactSummary";
+import Project from "./components/Project";
 import Recognition from "./components/Recognition";
+import Timeline from "./components/Timeline";
+import "./index.scss";
+import "./styles/tokens.css";
+import "./styles/global.css";
 
-function App() {
-    const [mode, setMode] = useState<string>('dark');
-
-    const handleModeChange = () => {
-        if (mode === 'dark') {
-            setMode('light');
-        } else {
-            setMode('dark');
-        }
-    }
-
-    useEffect(() => {
-        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
-      }, []);
-
-    return (
-    <div className={`main-container ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`}>
-        <Navigation parentToChild={{mode}} modeChange={handleModeChange}/>
-        <FadeIn transitionDuration={700}>
-            <Main/>
-            <Expertise/>
-            <Timeline/>
-            <Project/>
-            <Recognition/>
-            <Contact/>
-        </FadeIn>
-        <Footer />
-    </div>
-    );
+export default function App() {
+  return (
+    <>
+      <Header />
+      <main id="main-content" tabIndex={-1}>
+        <Hero />
+        <ImpactSummary />
+        <Expertise />
+        <Timeline />
+        <Project />
+        <Recognition />
+        <Contact />
+      </main>
+      <Footer />
+    </>
+  );
 }
-
-export default App;

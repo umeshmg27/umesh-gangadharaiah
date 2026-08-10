@@ -16,7 +16,6 @@ const legacyMigrationFiles = [
   'src/components/RecognitionModel.tsx',
   'src/components/Contact.tsx',
   'src/components/FadeIn.tsx',
-  'src/components/Footer.tsx',
   'src/components/index.js',
 ];
 

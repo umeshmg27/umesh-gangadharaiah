@@ -3,6 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script data-theme-initializer>
+      (() => {
+        const storageKey = "portfolio-theme";
+        let storedTheme = null;
+        let prefersLight = false;
+
+        try {
+          storedTheme = window.localStorage.getItem(storageKey);
+        } catch {
+          storedTheme = null;
+        }
+
+        try {
+          prefersLight =
+            typeof window.matchMedia === "function" &&
+            window.matchMedia("(prefers-color-scheme: light)").matches;
+        } catch {
+          prefersLight = false;
+        }
+
+        const theme =
+          storedTheme === "dark" || storedTheme === "light"
+            ? storedTheme
+            : prefersLight
+              ? "light"
+              : "dark";
+
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
     <title>Umesh Gangadharaiah</title>
   </head>
   <body>
