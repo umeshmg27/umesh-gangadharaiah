@@ -1,12 +1,13 @@
 .section {
-  width: min(100%, var(--page-max-width));
+  width: min(calc(100% - 2 * var(--page-gutter)), var(--content-max));
   margin: 0 auto;
-  padding: var(--section-space) var(--space-page);
+  padding: var(--section-space) 0;
 }
 
 .sectionHeader {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
+  flex-direction: column;
   justify-content: space-between;
   gap: 1.5rem;
 }
@@ -32,7 +33,7 @@
 .filterButton {
   min-height: 44px;
   padding: 0.7rem 1rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-control-border);
   border-radius: var(--radius-small);
   background: transparent;
   color: var(--color-text);
@@ -68,6 +69,12 @@
   box-shadow: inset 0 0 0 1px var(--color-accent);
 }
 
+.filterButton[aria-pressed="true"]:focus-visible {
+  box-shadow:
+    inset 0 0 0 1px var(--color-accent),
+    var(--focus-ring);
+}
+
 .resultCount {
   margin: 1.5rem 0 0;
   color: var(--color-text-muted);
@@ -82,21 +89,13 @@
   gap: clamp(1rem, 2.5vw, 1.5rem);
 }
 
-@media (min-width: 40rem) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (min-width: 64rem) {
+  .sectionHeader {
+    align-items: flex-end;
+    flex-direction: row;
+  }
+
   .grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 50rem) {
-  .sectionHeader {
-    align-items: flex-start;
-    flex-direction: column;
   }
 }

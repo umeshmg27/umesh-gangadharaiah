@@ -48,10 +48,9 @@ test("provides one named primary navigation with the five stable destinations", 
     screen.getByRole("link", { name: "Umesh Gangadharaiah home" }),
   ).toHaveTextContent("Umesh Gangadharaiah");
 
-  const navigation = screen.getByRole("navigation", {
-    name: "Primary navigation",
-  });
-  const links = within(navigation).getAllByRole("link");
+  const navigation = screen.getByRole("navigation", { hidden: true });
+  expect(navigation).toHaveAttribute("aria-label", "Primary navigation");
+  const links = within(navigation).getAllByRole("link", { hidden: true });
 
   expect(links).toHaveLength(5);
   expect(
@@ -62,9 +61,9 @@ test("provides one named primary navigation with the five stable destinations", 
 test("exposes named menu and theme controls with 44px CSS targets", () => {
   render(<Header />);
 
-  expect(
-    screen.getByRole("navigation", { name: "Primary navigation" }),
-  ).toHaveAttribute("data-open", "false");
+  const navigation = screen.getByRole("navigation", { hidden: true });
+  expect(navigation).toHaveAttribute("aria-label", "Primary navigation");
+  expect(navigation).toHaveAttribute("data-open", "false");
 
   expect(getMobileMenuButton("Open navigation")).toHaveAttribute(
     "aria-expanded",
@@ -87,13 +86,16 @@ test("exposes named menu and theme controls with 44px CSS targets", () => {
     /\.brand\s*\{[^}]*grid-column:\s*1;[^}]*grid-row:\s*1;/s,
   );
   expect(headerCss).toMatch(
-    /\.navigation\s*\{[^}]*grid-column:\s*2;[^}]*grid-row:\s*1;/s,
+    /\.navigation\s*\{[^}]*grid-column:\s*1\s*\/\s*-1;[^}]*grid-row:\s*2;/s,
   );
   expect(headerCss).toMatch(
-    /\.controls\s*\{[^}]*grid-column:\s*3;[^}]*grid-row:\s*1;/s,
+    /\.controls\s*\{[^}]*grid-column:\s*2;[^}]*grid-row:\s*1;/s,
   );
   expect(headerCss).toMatch(
-    /@media \(max-width: 52rem\)[\s\S]*\.navigation\s*\{[^}]*grid-row:\s*2;/,
+    /@media \(min-width: 64rem\)[\s\S]*\.navigation,\s*\.navigation\[data-open="false"\]\s*\{[^}]*grid-column:\s*2;[^}]*grid-row:\s*1;/,
+  );
+  expect(headerCss).toMatch(
+    /@media \(min-width: 64rem\)[\s\S]*\.controls\s*\{[^}]*grid-column:\s*3;/,
   );
   expect(headerCss).toMatch(
     /\.navigation\[data-open="false"\]\s*\{[^}]*display:\s*none;/s,

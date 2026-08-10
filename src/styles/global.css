@@ -10,12 +10,14 @@ html {
 }
 
 html[data-theme] body {
-  min-width: 20rem;
+  width: 100%;
+  min-width: 0;
   min-height: 100vh;
   margin: 0;
   background: var(--color-canvas);
   color: var(--color-text);
   font-family: var(--font-sans);
+  font-size: 1rem !important;
   line-height: 1.6;
   text-rendering: optimizeLegibility;
 }
@@ -27,8 +29,11 @@ html[data-theme] #root {
 }
 
 html[data-theme] :where(a, button, h1, h2, h3, h4, h5, label, p) {
-  color: inherit;
   font-family: inherit;
+}
+
+html[data-theme] :where(h1, h2, h3, h4, h5, label, p) {
+  color: inherit;
 }
 
 a {
@@ -46,21 +51,31 @@ a {
 }
 
 :where(a, button, input, textarea, select):focus-visible {
-  outline: 3px solid var(--color-focus);
+  outline: 0.125rem solid transparent;
   outline-offset: 3px;
+  box-shadow: var(--focus-ring);
 }
 
 main {
   display: block;
-  overflow: clip;
+  min-width: 0;
 }
 
-#expertise,
-#experience,
-#projects,
-#recognition,
-#contact {
-  scroll-margin-top: calc(var(--header-height) + 1.5rem);
+.page-shell {
+  width: min(calc(100% - 2 * var(--page-gutter)), var(--content-max));
+  margin-inline: auto;
+}
+
+:where(main, section, article, header, footer, nav, div, ul, ol, li) {
+  min-width: 0;
+}
+
+:where(h1, h2, h3, h4, h5, h6, p, a, button, label, li) {
+  overflow-wrap: anywhere;
+}
+
+section[id] {
+  scroll-margin-top: calc(var(--header-height) + 1rem);
 }
 
 /* Temporary compatibility while Tasks 6–9 replace retained legacy sections. */

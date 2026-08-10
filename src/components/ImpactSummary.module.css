@@ -1,7 +1,7 @@
 .section {
-  width: min(100%, var(--page-max-width));
+  width: min(calc(100% - 2 * var(--page-gutter)), var(--content-max));
   margin: 0 auto;
-  padding: var(--section-space) var(--space-page);
+  padding: var(--section-space) 0;
 }
 
 .eyebrow {
@@ -22,7 +22,7 @@
 
 .metrics {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
   margin: 2rem 0 0;
   padding: 0;
   border-top: 1px solid var(--color-border);
@@ -38,10 +38,6 @@
   gap: 0.25rem;
 }
 
-.metric + .metric {
-  border-left: 1px solid var(--color-border);
-}
-
 .value {
   color: var(--color-text);
   font-size: clamp(1.5rem, 3vw, 2.35rem);
@@ -54,27 +50,6 @@
   font-size: 0.9rem;
 }
 
-@media (max-width: 48rem) {
-  .metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .metric:nth-child(3) {
-    border-left: 0;
-  }
-
-  .metric:nth-child(n + 3) {
-    border-top: 1px solid var(--color-border);
-  }
-}
-
-@media (max-width: 28rem) {
-  .metrics {
-    grid-template-columns: 1fr;
-  }
-
-  .metric + .metric {
-    border-top: 1px solid var(--color-border);
-    border-left: 0;
-  }
+.metric {
+  border: 1px solid var(--color-border);
 }

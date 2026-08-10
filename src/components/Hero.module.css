@@ -1,15 +1,15 @@
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(16rem, 0.8fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  width: min(100%, var(--page-max-width));
-  min-height: calc(100svh - var(--header-height));
+  width: min(calc(100% - 2 * var(--page-gutter)), var(--content-max));
   margin: 0 auto;
-  padding: clamp(3.5rem, 8vw, 7rem) var(--space-page);
+  padding: var(--section-space) 0;
   gap: clamp(2.5rem, 8vw, 7rem);
 }
 
 .content {
+  min-width: 0;
   max-width: 47rem;
 }
 
@@ -27,9 +27,10 @@
   max-width: 12ch;
   margin: 0;
   color: var(--color-text);
-  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-size: clamp(3rem, 6vw, 5.5rem);
   line-height: 0.95;
   letter-spacing: -0.065em;
+  overflow-wrap: anywhere;
 }
 
 .specialization {
@@ -50,6 +51,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: 44px;
   min-height: 44px;
   padding: 0.7rem 1.15rem;
   border: 1px solid var(--color-accent);
@@ -87,6 +89,8 @@
 .socialLinks a {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  min-width: 44px;
   min-height: 44px;
   color: var(--color-text-muted);
   font-size: 0.95rem;
@@ -94,8 +98,9 @@
 }
 
 .portraitFrame {
-  width: min(100%, 25rem);
-  justify-self: end;
+  grid-row: 1;
+  width: min(78vw, 20rem);
+  justify-self: start;
   padding: clamp(0.5rem, 2vw, 1rem);
   border: 1px solid var(--color-border);
   border-radius: clamp(1.25rem, 4vw, 2.5rem);
@@ -110,15 +115,20 @@
   object-position: center 20%;
 }
 
-@media (max-width: 46rem) {
+@media (min-width: 46rem) {
+  .portraitFrame {
+    width: min(100%, 25rem);
+  }
+}
+
+@media (min-width: 64rem) {
   .hero {
-    grid-template-columns: 1fr;
-    min-height: auto;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    min-height: calc(100svh - var(--header-height));
   }
 
   .portraitFrame {
-    grid-row: 1;
-    width: min(78vw, 20rem);
-    justify-self: start;
+    grid-column: 2;
+    justify-self: end;
   }
 }

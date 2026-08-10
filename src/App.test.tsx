@@ -38,9 +38,11 @@ test("renders the semantic shell with all five primary sections", async () => {
   const fetchSpy = await renderPortfolio();
 
   expect(screen.getByRole("banner")).toBeInTheDocument();
-  expect(
-    screen.getByRole("navigation", { name: "Primary navigation" }),
-  ).toBeInTheDocument();
+  const primaryNavigation = screen.getByRole("navigation", { hidden: true });
+  expect(primaryNavigation).toHaveAttribute(
+    "aria-label",
+    "Primary navigation",
+  );
   const mainLandmark = screen.getByRole("main");
   expect(mainLandmark).toHaveAttribute("id", "main-content");
   expect(mainLandmark).toHaveAttribute("tabindex", "-1");
@@ -361,13 +363,12 @@ test("renders all career entries as one complete ordered timeline", async () => 
 
 test("keeps all five navigation destinations as real anchors", async () => {
   await renderPortfolio();
-  const navigation = screen.getByRole("navigation", {
-    name: "Primary navigation",
-  });
+  const navigation = screen.getByRole("navigation", { hidden: true });
+  expect(navigation).toHaveAttribute("aria-label", "Primary navigation");
 
   expect(
     within(navigation)
-      .getAllByRole("link")
+      .getAllByRole("link", { hidden: true })
       .map((link) => link.getAttribute("href")),
   ).toEqual([
     "#expertise",

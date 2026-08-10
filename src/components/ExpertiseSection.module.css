@@ -1,7 +1,7 @@
 .section {
-  width: min(100%, var(--page-max-width));
+  width: min(calc(100% - 2 * var(--page-gutter)), var(--content-max));
   margin: 0 auto;
-  padding: var(--section-space) var(--space-page);
+  padding: var(--section-space) 0;
 }
 
 .heading {
@@ -13,7 +13,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
   margin-top: 2rem;
   gap: clamp(1rem, 2.5vw, 1.5rem);
 }
@@ -81,6 +81,7 @@
 
 .externalLink {
   min-height: 44px;
+  border-color: var(--color-control-border);
   color: var(--color-accent-strong);
   font-weight: 700;
   text-decoration: none;
@@ -94,10 +95,4 @@
 .externalLink:hover {
   border-color: var(--color-accent);
   background: var(--color-canvas);
-}
-
-@media (max-width: 50rem) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
 }

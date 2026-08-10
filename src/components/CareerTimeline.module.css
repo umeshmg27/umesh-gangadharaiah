@@ -1,7 +1,7 @@
 .section {
-  width: min(100%, var(--page-max-width));
+  width: min(calc(100% - 2 * var(--page-gutter)), var(--content-max));
   margin: 0 auto;
-  padding: var(--section-space) var(--space-page);
+  padding: var(--section-space) 0;
 }
 
 .heading {
@@ -41,6 +41,7 @@
 
 .entryHeader {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
@@ -67,7 +68,7 @@
 }
 
 .period {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   color: var(--color-text-muted);
   font-family: var(--font-mono);
   font-size: 0.82rem;
@@ -124,14 +125,12 @@
   color: var(--color-accent);
 }
 
-@media (max-width: 42rem) {
-  .timeline {
-    padding-left: 2rem;
-  }
-
+@media (min-width: 48rem) {
   .entryHeader {
-    flex-direction: column;
-    gap: 0.5rem;
+    flex-direction: row;
   }
 
+  .period {
+    flex: 0 0 auto;
+  }
 }
