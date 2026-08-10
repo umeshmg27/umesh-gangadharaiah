@@ -2,9 +2,9 @@
 
 import { createHash } from "node:crypto";
 
-import expectedKollectCuriFallbackSrc from "../assets/images/mock04.png";
-import expectedResourceAllocationManagerFallbackSrc from "../assets/images/mock05.png";
-import expectedPortraitFallbackSrc from "../assets/images/umesh-ug.jpg";
+import expectedPortrait320Src from "../assets/portfolio/portrait/umesh-gangadharaiah-320.webp";
+import expectedPortrait640Src from "../assets/portfolio/portrait/umesh-gangadharaiah-640.webp";
+import expectedPortraitFallbackSrc from "../assets/portfolio/portrait/umesh-gangadharaiah.jpg";
 
 import { careerEntries } from "./career";
 import { expertiseAreas } from "./expertise";
@@ -19,11 +19,6 @@ function sha256(value: unknown): string {
 }
 
 function portableLocalPath(image: LocalImageAsset): string {
-  if (image.fallbackSrc === expectedPortraitFallbackSrc) return "import:umesh-ug.jpg";
-  if (image.fallbackSrc === expectedResourceAllocationManagerFallbackSrc) {
-    return "import:mock05.png";
-  }
-  if (image.fallbackSrc === expectedKollectCuriFallbackSrc) return "import:mock04.png";
   expect(image.fallbackSrc.startsWith(import.meta.env.BASE_URL)).toBe(true);
   return image.fallbackSrc.slice(import.meta.env.BASE_URL.length);
 }
@@ -43,7 +38,10 @@ describe("approved editorial corrections", () => {
         kind: "local",
         alt: "Umesh Gangadharaiah",
         fallbackSrc: expectedPortraitFallbackSrc,
-        sources: [],
+        sources: [
+          { src: expectedPortrait320Src, width: 320, type: "image/webp" },
+          { src: expectedPortrait640Src, width: 640, type: "image/webp" },
+        ],
         width: 800,
         height: 800,
       },
@@ -200,7 +198,7 @@ describe("approved editorial corrections", () => {
             "highlightOrder" in recognition ? recognition.highlightOrder : null,
         })),
       ),
-    ).toBe("5c01b08d4d09d1c11f391d970291e23a258442ef27f0c0c09ebd1bb08e1621d5");
+    ).toBe("00201627a559b481d3419b413dd84522ac8403af0edc073e3ebe9f054ed9976e");
     expect(
       sha256(
         projects.map((project) => ({
@@ -223,7 +221,7 @@ describe("approved editorial corrections", () => {
           publicUrl: "publicUrl" in project ? project.publicUrl : null,
         })),
       ),
-    ).toBe("82dd01b27e6d5e87de7d2a4c0d80d5f1dbc9dde68baca0770f4354293500c0f1");
+    ).toBe("ab9095470911937ace5b6a0941fb1f8152d40398f6468c7dcc8320ead6219190");
     expect(
       sha256(projects.slice(1).map(({ title, description }) => ({ title, description }))),
     ).toBe("f7491975cac441bfa13d5900ca9c6ba02b494f91f6254166fdfa25c2d26be8f5");

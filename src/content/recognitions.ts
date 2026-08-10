@@ -1,7 +1,15 @@
 import type { LocalImageAsset, Recognition } from "./models";
 
-function publicRecognitionAsset(relativePath: string): string {
-  return `${import.meta.env.BASE_URL}${relativePath}`;
+const recognitionAssetUrls = import.meta.glob<string>(
+  "../assets/portfolio/recognitions/*.{jpeg,webp}",
+  { eager: true, import: "default", query: "?url" },
+);
+
+function recognitionAsset(fileName: string): string {
+  const asset =
+    recognitionAssetUrls[`../assets/portfolio/recognitions/${fileName}`];
+  if (!asset) throw new Error(`Missing imported recognition asset: ${fileName}`);
+  return asset;
 }
 
 function recognitionImage(
@@ -13,8 +21,19 @@ function recognitionImage(
   return {
     kind: "local",
     alt: `Recognition: ${title}`,
-    fallbackSrc: publicRecognitionAsset(`assets/images/recognition/${id}.jpeg`),
-    sources: [],
+    fallbackSrc: recognitionAsset(`${id}.jpeg`),
+    sources: [
+      {
+        src: recognitionAsset(`${id}-480.webp`),
+        width: 480,
+        type: "image/webp",
+      },
+      {
+        src: recognitionAsset(`${id}-960.webp`),
+        width: 960,
+        type: "image/webp",
+      },
+    ],
     width,
     height,
   } as const satisfies LocalImageAsset;

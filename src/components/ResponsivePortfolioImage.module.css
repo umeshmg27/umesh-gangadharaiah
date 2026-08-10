@@ -8,3 +8,26 @@
   max-width: 100%;
   height: auto;
 }
+
+.fallback {
+  display: grid;
+  width: 100%;
+  max-width: 100%;
+  place-content: center;
+  gap: 0.35rem;
+  padding: 1rem;
+  border: 1px dashed var(--color-border);
+  background: var(--color-surface-raised);
+  color: var(--color-text-muted);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.fallbackStatus {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.fallbackAlt {
+  font-size: 0.875rem;
+}

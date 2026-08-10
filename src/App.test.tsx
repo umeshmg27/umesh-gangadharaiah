@@ -102,8 +102,17 @@ test("renders typed hero actions, safe named social links, and the fallback port
   const portrait = within(hero).getByRole("img", {
     name: "Umesh Gangadharaiah",
   });
-  expect(portrait.closest("picture")).not.toBeNull();
-  expect(portrait.closest("picture")?.querySelectorAll("source")).toHaveLength(0);
+  const picture = portrait.closest("picture");
+  const sources = picture?.querySelectorAll("source[type='image/webp']");
+  expect(picture).not.toBeNull();
+  expect(sources).toHaveLength(1);
+  expect(sources?.[0]).toHaveAttribute(
+    "srcset",
+    expect.stringMatching(
+      /umesh-gangadharaiah-320\.webp 320w, .*umesh-gangadharaiah-640\.webp 640w/u,
+    ),
+  );
+  expect(sources?.[0]).toHaveAttribute("sizes", "(max-width: 46rem) 78vw, 25rem");
   expect(portrait).toHaveAttribute("width", "800");
   expect(portrait).toHaveAttribute("height", "800");
   expect(portrait).toHaveAttribute("loading", "eager");

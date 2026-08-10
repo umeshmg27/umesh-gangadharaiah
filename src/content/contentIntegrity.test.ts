@@ -2,9 +2,9 @@
 
 import { createHash } from "node:crypto";
 
-import expectedKollectCuriFallbackSrc from "../assets/images/mock04.png";
-import expectedResourceAllocationManagerFallbackSrc from "../assets/images/mock05.png";
-import expectedPortraitFallbackSrc from "../assets/images/umesh-ug.jpg";
+import expectedPortrait320Src from "../assets/portfolio/portrait/umesh-gangadharaiah-320.webp";
+import expectedPortrait640Src from "../assets/portfolio/portrait/umesh-gangadharaiah-640.webp";
+import expectedPortraitFallbackSrc from "../assets/portfolio/portrait/umesh-gangadharaiah.jpg";
 
 import { careerEntries } from "./career";
 import { expertiseAreas } from "./expertise";
@@ -112,6 +112,37 @@ function relativeToBase(assetPath: string): string {
   return assetPath.slice(import.meta.env.BASE_URL.length);
 }
 
+function expectedResponsiveSources(
+  directory: "projects" | "recognitions",
+  id: string,
+  widths: readonly number[],
+) {
+  return widths.map((width) => ({
+    src: publicAssetPath(`src/assets/portfolio/${directory}/${id}-${width}.webp`),
+    width,
+    type: "image/webp",
+  }));
+}
+
+function expectedLocalProjectImage(
+  id: string,
+  fallbackExtension: "jpg" | "png",
+  alt: string,
+  width: number,
+  height: number,
+) {
+  return {
+    kind: "local",
+    alt,
+    fallbackSrc: publicAssetPath(
+      `src/assets/portfolio/projects/${id}.${fallbackExtension}`,
+    ),
+    sources: expectedResponsiveSources("projects", id, [640, 960]),
+    width,
+    height,
+  };
+}
+
 function expectedRecognitionImage(
   id: string,
   title: string,
@@ -121,8 +152,8 @@ function expectedRecognitionImage(
   return {
     id,
     alt: `Recognition: ${title}`,
-    path: `assets/images/recognition/${id}.jpeg`,
-    sources: [],
+    path: `src/assets/portfolio/recognitions/${id}.jpeg`,
+    sources: expectedResponsiveSources("recognitions", id, [480, 960]),
     width: 1600,
     height,
     highlightOrder,
@@ -144,7 +175,10 @@ describe("typed portfolio content", () => {
         kind: "local",
         alt: "Umesh Gangadharaiah",
         fallbackSrc: expectedPortraitFallbackSrc,
-        sources: [],
+        sources: [
+          { src: expectedPortrait320Src, width: 320, type: "image/webp" },
+          { src: expectedPortrait640Src, width: 640, type: "image/webp" },
+        ],
         width: 800,
         height: 800,
       },
@@ -277,36 +311,33 @@ describe("typed portfolio content", () => {
     expect(projects.map(({ id, image }) => ({ id, image }))).toEqual([
       {
         id: "nd-alphax",
-        image: {
-          kind: "local",
-          alt: "ND- AlphaX",
-          fallbackSrc: publicAssetPath("assets/images/data-center.png"),
-          sources: [],
-          width: 1920,
-          height: 1080,
-        },
+        image: expectedLocalProjectImage(
+          "nd-alphax",
+          "png",
+          "ND- AlphaX",
+          1920,
+          1080,
+        ),
       },
       {
         id: "ndo-search-explore",
-        image: {
-          kind: "local",
-          alt: "NDO Search & Explore feature",
-          fallbackSrc: publicAssetPath("assets/images/search-and-explore.jpg"),
-          sources: [],
-          width: 2048,
-          height: 2048,
-        },
+        image: expectedLocalProjectImage(
+          "ndo-search-explore",
+          "jpg",
+          "NDO Search & Explore feature",
+          2048,
+          2048,
+        ),
       },
       {
         id: "nexus-dashboard-unified-backup-restore",
-        image: {
-          kind: "local",
-          alt: "Unified Backup and Restore - Cisco Nexus Dashboard",
-          fallbackSrc: publicAssetPath("assets/images/restore.png"),
-          sources: [],
-          width: 1920,
-          height: 1080,
-        },
+        image: expectedLocalProjectImage(
+          "nexus-dashboard-unified-backup-restore",
+          "png",
+          "Unified Backup and Restore - Cisco Nexus Dashboard",
+          1920,
+          1080,
+        ),
       },
       {
         id: "ndo-l4l7-service-chaining",
@@ -330,80 +361,73 @@ describe("typed portfolio content", () => {
       },
       {
         id: "codeshift-cicd-platform",
-        image: {
-          kind: "local",
-          alt: "Codeshift - CI/CD Platform",
-          fallbackSrc: publicAssetPath("assets/images/codeshift.png"),
-          sources: [],
-          width: 1920,
-          height: 1080,
-        },
+        image: expectedLocalProjectImage(
+          "codeshift-cicd-platform",
+          "png",
+          "Codeshift - CI/CD Platform",
+          1920,
+          1080,
+        ),
       },
       {
         id: "resource-allocation-manager",
-        image: {
-          kind: "local",
-          alt: "Resource Allocation Manager (RAM)",
-          fallbackSrc: expectedResourceAllocationManagerFallbackSrc,
-          sources: [],
-          width: 1700,
-          height: 1120,
-        },
+        image: expectedLocalProjectImage(
+          "resource-allocation-manager",
+          "png",
+          "Resource Allocation Manager (RAM)",
+          1700,
+          1120,
+        ),
       },
       {
         id: "kollect-curi-knowledge-bot",
-        image: {
-          kind: "local",
-          alt: "Kollect & CURI - Internal Knowledge Bot",
-          fallbackSrc: expectedKollectCuriFallbackSrc,
-          sources: [],
-          width: 1700,
-          height: 1120,
-        },
+        image: expectedLocalProjectImage(
+          "kollect-curi-knowledge-bot",
+          "png",
+          "Kollect & CURI - Internal Knowledge Bot",
+          1700,
+          1120,
+        ),
       },
       {
         id: "ucs-config-tool",
-        image: {
-          kind: "local",
-          alt: "UCS Config Tool",
-          fallbackSrc: publicAssetPath("assets/images/config.png"),
-          sources: [],
-          width: 1920,
-          height: 1080,
-        },
+        image: expectedLocalProjectImage(
+          "ucs-config-tool",
+          "png",
+          "UCS Config Tool",
+          1920,
+          1080,
+        ),
       },
       {
         id: "dementia-detection-ieee",
-        image: {
-          kind: "local",
-          alt: "Dementia Detection via EEG (IEEE)",
-          fallbackSrc: publicAssetPath("assets/images/ieee.png"),
-          sources: [],
-          width: 1920,
-          height: 1080,
-        },
+        image: expectedLocalProjectImage(
+          "dementia-detection-ieee",
+          "png",
+          "Dementia Detection via EEG (IEEE)",
+          1920,
+          1080,
+        ),
       },
       {
         id: "flikrify",
-        image: {
-          kind: "local",
-          alt: "Flikrify",
-          fallbackSrc: publicAssetPath("assets/images/flikr.png"),
-          sources: [],
-          width: 1920,
-          height: 1080,
-        },
+        image: expectedLocalProjectImage(
+          "flikrify",
+          "png",
+          "Flikrify",
+          1920,
+          1080,
+        ),
       },
       {
         id: "telegram-data-storage",
-        image: {
-          kind: "local",
-          alt: "Telegram as Data Storage",
-          fallbackSrc: publicAssetPath("assets/images/telegram.png"),
-          sources: [],
-          width: 1920,
-          height: 1080,
-        },
+        image: expectedLocalProjectImage(
+          "telegram-data-storage",
+          "png",
+          "Telegram as Data Storage",
+          1920,
+          1080,
+        ),
       },
     ]);
   });
@@ -694,7 +718,7 @@ describe("typed portfolio content", () => {
     }
   });
 
-  it("resolves every transitional local asset through the configured Vite base", () => {
+  it("uses imported optimized assets for every active local image", () => {
     const baseUrl = import.meta.env.BASE_URL;
     const localImages = [
       profile.portrait,
@@ -702,41 +726,40 @@ describe("typed portfolio content", () => {
       ...recognitions.map(({ image }) => image),
     ];
 
+    expect(localImages).toHaveLength(36);
     for (const image of localImages) {
       expect(image.fallbackSrc.startsWith(baseUrl)).toBe(true);
-      expect(image.sources).toEqual([]);
+      expect(image.fallbackSrc).toContain("src/assets/portfolio/");
+      expect(image.fallbackSrc).not.toContain("/umesh-gangadharaiah/");
+      expect(image.sources).toHaveLength(2);
+      expect(image.sources.every(({ src }) => src.startsWith(baseUrl))).toBe(true);
+      expect(image.sources.every(({ src }) => src.endsWith(".webp"))).toBe(true);
+      expect(image.sources.every(({ type }) => type === "image/webp")).toBe(true);
     }
 
-    const publicProjectFallbacks = projects.flatMap(({ id, image }) =>
-      image.kind === "local" &&
-      !["resource-allocation-manager", "kollect-curi-knowledge-bot"].includes(id)
-        ? [image.fallbackSrc]
-        : [],
-    );
-    expect(
-      publicProjectFallbacks.every((src) => src.startsWith(`${baseUrl}assets/images/`)),
-    ).toBe(true);
-    expect(
-      recognitions.every(({ image }) =>
-        image.fallbackSrc.startsWith(`${baseUrl}assets/images/recognition/`),
-      ),
-    ).toBe(true);
-
     expect(profile.portrait.fallbackSrc).toBe(expectedPortraitFallbackSrc);
+    expect(profile.portrait.sources.map(({ width }) => width)).toEqual([320, 640]);
     expect(
-      projects.find(({ id }) => id === "resource-allocation-manager")?.image,
-    ).toMatchObject({ fallbackSrc: expectedResourceAllocationManagerFallbackSrc });
-    expect(projects.find(({ id }) => id === "kollect-curi-knowledge-bot")?.image).toMatchObject({
-      fallbackSrc: expectedKollectCuriFallbackSrc,
-    });
-    expect(expectedPortraitFallbackSrc.startsWith("/assets/")).toBe(false);
-    expect(expectedResourceAllocationManagerFallbackSrc.startsWith("/assets/")).toBe(false);
-    expect(expectedKollectCuriFallbackSrc.startsWith("/assets/")).toBe(false);
+      projects.flatMap(({ image }) =>
+        image.kind === "local" ? [image.sources.map(({ width }) => width)] : [],
+      ),
+    ).toEqual(Array.from({ length: 10 }, () => [640, 960]));
+    expect(
+      recognitions.map(({ image }) => image.sources.map(({ width }) => width)),
+    ).toEqual(Array.from({ length: 25 }, () => [480, 960]));
   });
 
-  it("composes public asset fallbacks with a non-root configured base", async () => {
+  it("keeps imported asset records independent of runtime base-string changes", async () => {
     const configuredBase = "/portable-preview/";
     const repositoryBase = new URL(profile.canonicalUrl).pathname;
+    const currentLocalReferences = [
+      profile.portrait,
+      ...projects.flatMap(({ image }) => (image.kind === "local" ? [image] : [])),
+      ...recognitions.map(({ image }) => image),
+    ].map(({ fallbackSrc, sources }) => ({
+      fallbackSrc,
+      sources: sources.map(({ src }) => src),
+    }));
 
     expect(configuredBase).not.toBe(import.meta.env.BASE_URL);
     expect(configuredBase).not.toBe(repositoryBase);
@@ -744,32 +767,32 @@ describe("typed portfolio content", () => {
     vi.resetModules();
 
     try {
-      const [{ projects: basedProjects }, { recognitions: basedRecognitions }] =
-        await Promise.all([import("./projects"), import("./recognitions")]);
-      const publicProjectFallbacks = basedProjects.flatMap(({ id, image }) =>
-        image.kind === "local" &&
-        !["resource-allocation-manager", "kollect-curi-knowledge-bot"].includes(id)
-          ? [image.fallbackSrc]
-          : [],
-      );
-
-      expect(
-        publicProjectFallbacks.every((src) =>
-          src.startsWith(`${configuredBase}assets/images/`),
+      const [basedProfileModule, basedProjectsModule, basedRecognitionsModule] =
+        await Promise.all([
+          import("./profile"),
+          import("./projects"),
+          import("./recognitions"),
+        ]);
+      const basedLocalReferences = [
+        basedProfileModule.profile.portrait,
+        ...basedProjectsModule.projects.flatMap(({ image }) =>
+          image.kind === "local" ? [image] : [],
         ),
-      ).toBe(true);
-      expect(
-        basedRecognitions.every(({ image }) =>
-          image.fallbackSrc.startsWith(`${configuredBase}assets/images/recognition/`),
-        ),
-      ).toBe(true);
+        ...basedRecognitionsModule.recognitions.map(({ image }) => image),
+      ].map(({ fallbackSrc, sources }) => ({
+        fallbackSrc,
+        sources: sources.map(({ src }) => src),
+      }));
 
-      const publicFallbacks = [
-        ...publicProjectFallbacks,
-        ...basedRecognitions.map(({ image }) => image.fallbackSrc),
-      ];
-      expect(publicFallbacks.some((src) => src.startsWith("/assets/"))).toBe(false);
-      expect(publicFallbacks.some((src) => src.startsWith(repositoryBase))).toBe(false);
+      expect(basedLocalReferences).toEqual(currentLocalReferences);
+      expect(
+        basedLocalReferences
+          .flatMap(({ fallbackSrc, sources }) => [
+            fallbackSrc,
+            ...sources,
+          ])
+          .every((src) => !src.includes(repositoryBase)),
+      ).toBe(true);
     } finally {
       vi.unstubAllEnvs();
       vi.resetModules();

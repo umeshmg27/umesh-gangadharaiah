@@ -1,0 +1,482 @@
+{
+  "remoteProjects": [
+    {
+      "id": "ndo-l4l7-service-chaining",
+      "src": "https://www.cisco.com/c/dam/en/us/products/collateral/cloud-systems-management/multi-site-orchestrator/nb-06-mso-so-cte-en.docx/_jcr_content/renditions/nb-06-mso-so-cte-en_0.png"
+    },
+    {
+      "id": "aci-advanced-pbr",
+      "src": "https://www.cisco.com/c/dam/en/us/solutions/collateral/data-center-virtualization/application-centric-infrastructure/white-paper-c11-743107.docx/_jcr_content/renditions/white-paper-c11-743107_11.png"
+    }
+  ],
+  "assets": [
+    {
+      "id": "profile-portrait",
+      "recordType": "portrait",
+      "source": "src/assets/images/umesh-ug.jpg",
+      "fallback": "src/assets/portfolio/portrait/umesh-gangadharaiah.jpg",
+      "sha256": "2576ce5671e3752828b168106fc1f7d36ff79f350ba5dc37e837c587040256fd",
+      "width": 800,
+      "height": 800,
+      "variants": [
+        { "path": "src/assets/portfolio/portrait/umesh-gangadharaiah-320.webp", "width": 320 },
+        { "path": "src/assets/portfolio/portrait/umesh-gangadharaiah-640.webp", "width": 640 }
+      ]
+    },
+    {
+      "id": "nd-alphax",
+      "recordType": "project",
+      "source": "public/assets/images/data-center.png",
+      "fallback": "src/assets/portfolio/projects/nd-alphax.png",
+      "sha256": "fde11962630fd99b091511f5511d939ec3c421b15067627461fc42f2427ec122",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        { "path": "src/assets/portfolio/projects/nd-alphax-640.webp", "width": 640 },
+        { "path": "src/assets/portfolio/projects/nd-alphax-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "ndo-search-explore",
+      "recordType": "project",
+      "source": "public/assets/images/search-and-explore.jpg",
+      "fallback": "src/assets/portfolio/projects/ndo-search-explore.jpg",
+      "sha256": "1e514fae0496593d5d49fad1210ba7b4c59d1c49ea163d1053c797c7c22b795f",
+      "width": 2048,
+      "height": 2048,
+      "variants": [
+        { "path": "src/assets/portfolio/projects/ndo-search-explore-640.webp", "width": 640 },
+        { "path": "src/assets/portfolio/projects/ndo-search-explore-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "nexus-dashboard-unified-backup-restore",
+      "recordType": "project",
+      "source": "public/assets/images/restore.png",
+      "fallback": "src/assets/portfolio/projects/nexus-dashboard-unified-backup-restore.png",
+      "sha256": "eb68a73a7e105c10f56319082432aac6741128849f39b39b687ac46c46f45aed",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        { "path": "src/assets/portfolio/projects/nexus-dashboard-unified-backup-restore-640.webp", "width": 640 },
+        { "path": "src/assets/portfolio/projects/nexus-dashboard-unified-backup-restore-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "codeshift-cicd-platform",
+      "recordType": "project",
+      "source": "public/assets/images/codeshift.png",
+      "fallback": "src/assets/portfolio/projects/codeshift-cicd-platform.png",
+      "sha256": "c05b36c5ebead8b1386dc9935fa795aa2cc7514f8aee8d1a2c35a40fcfdf8cf6",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        { "path": "src/assets/portfolio/projects/codeshift-cicd-platform-640.webp", "width": 640 },
+        { "path": "src/assets/portfolio/projects/codeshift-cicd-platform-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "resource-allocation-manager",
+      "recordType": "project",
+      "source": "src/assets/images/mock05.png",
+      "fallback": "src/assets/portfolio/projects/resource-allocation-manager.png",
+      "sha256": "7e2ccfe77233069b333dfa538475220f55d651c45da2509e60473307ff0ab9e4",
+      "width": 1700,
+      "height": 1120,
+      "variants": [
+        { "path": "src/assets/portfolio/projects/resource-allocation-manager-640.webp", "width": 640 },
+        { "path": "src/assets/portfolio/projects/resource-allocation-manager-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "kollect-curi-knowledge-bot",
+      "recordType": "project",
+      "source": "src/assets/images/mock04.png",
+      "fallback": "src/assets/portfolio/projects/kollect-curi-knowledge-bot.png",
+      "sha256": "707d3df2d7ecb898ce5b4eaf59c27208305ae72b277e4b87586ea8657775df03",
+      "width": 1700,
+      "height": 1120,
+      "variants": [
+        { "path": "src/assets/portfolio/projects/kollect-curi-knowledge-bot-640.webp", "width": 640 },
+        { "path": "src/assets/portfolio/projects/kollect-curi-knowledge-bot-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "ucs-config-tool",
+      "recordType": "project",
+      "source": "public/assets/images/config.png",
+      "fallback": "src/assets/portfolio/projects/ucs-config-tool.png",
+      "sha256": "5090fe62b9c5e777305eb530c288060b989526f7b29b5f87cb1ae92db30c3794",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        { "path": "src/assets/portfolio/projects/ucs-config-tool-640.webp", "width": 640 },
+        { "path": "src/assets/portfolio/projects/ucs-config-tool-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "dementia-detection-ieee",
+      "recordType": "project",
+      "source": "public/assets/images/ieee.png",
+      "fallback": "src/assets/portfolio/projects/dementia-detection-ieee.png",
+      "sha256": "b29297af58515b798aafbbb662bffa7f24fc707daa96908a26bcb04ba4c305e8",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        { "path": "src/assets/portfolio/projects/dementia-detection-ieee-640.webp", "width": 640 },
+        { "path": "src/assets/portfolio/projects/dementia-detection-ieee-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "flikrify",
+      "recordType": "project",
+      "source": "public/assets/images/flikr.png",
+      "fallback": "src/assets/portfolio/projects/flikrify.png",
+      "sha256": "18c84d1d13ac8223dda57145d81426f7dcc5105e067c0aa860382fd2b1fb2038",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        { "path": "src/assets/portfolio/projects/flikrify-640.webp", "width": 640 },
+        { "path": "src/assets/portfolio/projects/flikrify-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "telegram-data-storage",
+      "recordType": "project",
+      "source": "public/assets/images/telegram.png",
+      "fallback": "src/assets/portfolio/projects/telegram-data-storage.png",
+      "sha256": "5ae4bf439a3ea45c87a771bed51369b37173c13e0aff737eeaa6f5ecece066f1",
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        { "path": "src/assets/portfolio/projects/telegram-data-storage-640.webp", "width": 640 },
+        { "path": "src/assets/portfolio/projects/telegram-data-storage-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "priyanka-181224",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/priyanka-181224.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/priyanka-181224.jpeg",
+      "sha256": "561bbf14a27d27237ddf72ea1b811c51b1ecf70084ec02bb5e6d689ae19b35ed",
+      "width": 1600,
+      "height": 1158,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/priyanka-181224-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/priyanka-181224-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "damo-211224",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/damo-211224.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/damo-211224.jpeg",
+      "sha256": "6b4d51977dcf472c7731849dbc42ae0ec5d84433219971416081badb10b0e7d2",
+      "width": 1600,
+      "height": 1166,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/damo-211224-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/damo-211224-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "srid-181024",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/srid-181024.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/srid-181024.jpeg",
+      "sha256": "9f8250a43e1082d6aba77fa94c6bf472a5a1bb604a7dcebd5001f123191a1669",
+      "width": 1600,
+      "height": 1153,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/srid-181024-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/srid-181024-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "alfan-141124",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/alfan-141124.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/alfan-141124.jpeg",
+      "sha256": "732ce4f1b93ac307b036b7f67e1e49a8b7c6f4ceab17cf1014b984f091992f37",
+      "width": 1600,
+      "height": 1163,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/alfan-141124-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/alfan-141124-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "rohi-171024",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/rohi-171024.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/rohi-171024.jpeg",
+      "sha256": "fd661f42423682bfd82642c2bfd8c38f00005dd5464a95cef249fc7c0c48d235",
+      "width": 1600,
+      "height": 1158,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/rohi-171024-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/rohi-171024-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "atul-180724",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/atul-180724.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/atul-180724.jpeg",
+      "sha256": "06c9cc7e48f6183a1bbd2e7b8570c46f1e3afdf79c6d5620e9a741e420811243",
+      "width": 1600,
+      "height": 1159,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/atul-180724-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/atul-180724-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "rohi-110624",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/rohi-110624.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/rohi-110624.jpeg",
+      "sha256": "5c09b3de04c119ff1b647b4dbd2182fa579f10c88baa83609cbfb511abd8f1a1",
+      "width": 1600,
+      "height": 1152,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/rohi-110624-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/rohi-110624-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "srid-010424",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/srid-010424.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/srid-010424.jpeg",
+      "sha256": "de566309655f63ef30187b5780a2a0f31d38e76831d15b2efb8941e56e8a8565",
+      "width": 1600,
+      "height": 1167,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/srid-010424-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/srid-010424-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "rohi-100324",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/rohi-100324.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/rohi-100324.jpeg",
+      "sha256": "ed19fdfdc3489c5a7a8091bb5257aedd8add2953216cce5b7f9aa76e6478b36f",
+      "width": 1600,
+      "height": 1160,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/rohi-100324-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/rohi-100324-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "maru-181023",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/maru-181023.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/maru-181023.jpeg",
+      "sha256": "ef0d87118aed24783c6e8de577bd51bec51b061dc008f68b67d0125fa3eb28b4",
+      "width": 1600,
+      "height": 1159,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/maru-181023-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/maru-181023-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "moulie-120723",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/moulie-120723.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/moulie-120723.jpeg",
+      "sha256": "79a80404b7886d35b2a04ea227c13d27f0b4970712f63c5d2a17f2fdec410f5c",
+      "width": 1600,
+      "height": 1159,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/moulie-120723-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/moulie-120723-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "ara-290923",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/ara-290923.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/ara-290923.jpeg",
+      "sha256": "39406838896839bfd54cb096724703bd152419a0b06f4214c0c66d86e28997d7",
+      "width": 1600,
+      "height": 1156,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/ara-290923-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/ara-290923-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "rohi-270923",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/rohi-270923.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/rohi-270923.jpeg",
+      "sha256": "029fc04302771af3c857e02fb0ff57f52322662340ef7ea49f7ce27214c5d325",
+      "width": 1600,
+      "height": 1162,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/rohi-270923-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/rohi-270923-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "mou-120723",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/mou-120723.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/mou-120723.jpeg",
+      "sha256": "79a80404b7886d35b2a04ea227c13d27f0b4970712f63c5d2a17f2fdec410f5c",
+      "width": 1600,
+      "height": 1159,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/mou-120723-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/mou-120723-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "pal-050723",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/pal-050723.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/pal-050723.jpeg",
+      "sha256": "a672b735235b727ed249d7f6d7ec9e6e4c4a9d70d93ae28c6147480593ecc6ff",
+      "width": 1600,
+      "height": 1162,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/pal-050723-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/pal-050723-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "ara-020723",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/ara-020723.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/ara-020723.jpeg",
+      "sha256": "f02af8256dd355e1a241ba08c192c822151f65466116b0b8d2f778d86b55b4c8",
+      "width": 1600,
+      "height": 1156,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/ara-020723-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/ara-020723-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "rohi-030523",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/rohi-030523.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/rohi-030523.jpeg",
+      "sha256": "c9c382bb28a2be6c1770578e4c92df00522004a58450de85438f4af3d191591d",
+      "width": 1600,
+      "height": 1158,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/rohi-030523-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/rohi-030523-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "pra-080323",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/pra-080323.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/pra-080323.jpeg",
+      "sha256": "7a7baafd5bf6c3d715648323687880c9fdb29d0689fece75e6218ed62be60688",
+      "width": 1600,
+      "height": 1159,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/pra-080323-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/pra-080323-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "rohi-240123",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/rohi-240123.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/rohi-240123.jpeg",
+      "sha256": "700c67fe28021645eeeef1a6d386068874be98c547b76a25e34e1bb6df580998",
+      "width": 1600,
+      "height": 1163,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/rohi-240123-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/rohi-240123-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "ash-290922",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/ash-290922.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/ash-290922.jpeg",
+      "sha256": "5f441503670c1409826d90ca823c3a984a1ef15a5c28d3b87677cf2d94f4370c",
+      "width": 1600,
+      "height": 1155,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/ash-290922-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/ash-290922-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "ana-230922",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/ana-230922.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/ana-230922.jpeg",
+      "sha256": "c55e4acd1ef27cee9f1ee4420aba2ad3ae68f5b1aac7eec298c534a230e7d325",
+      "width": 1600,
+      "height": 1153,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/ana-230922-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/ana-230922-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "pra-140622",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/pra-140622.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/pra-140622.jpeg",
+      "sha256": "90d38f9c9333f77baf0d72be0afa6a329b1ce0d995305dd3b51ccf201512d42f",
+      "width": 1600,
+      "height": 1163,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/pra-140622-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/pra-140622-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "mad-260522",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/mad-260522.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/mad-260522.jpeg",
+      "sha256": "43bee2b42e14ab9d2643b72e55b1ba68dc468440fd757e12dc4d546ff16024f9",
+      "width": 1600,
+      "height": 1161,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/mad-260522-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/mad-260522-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "mad-230422",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/mad-230422.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/mad-230422.jpeg",
+      "sha256": "ce1b48eef30282ca8f091c5bfe23b3c1ff075e98881fc533eac5e2a9408f468d",
+      "width": 1600,
+      "height": 1157,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/mad-230422-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/mad-230422-960.webp", "width": 960 }
+      ]
+    },
+    {
+      "id": "yogi-070422",
+      "recordType": "recognition",
+      "source": "public/assets/images/recognition/yogi-070422.jpeg",
+      "fallback": "src/assets/portfolio/recognitions/yogi-070422.jpeg",
+      "sha256": "6ad140d64b6d7cd5e647bdd6c7bf5c76046c64a88064d4dd552054aee34af98f",
+      "width": 1600,
+      "height": 1159,
+      "variants": [
+        { "path": "src/assets/portfolio/recognitions/yogi-070422-480.webp", "width": 480 },
+        { "path": "src/assets/portfolio/recognitions/yogi-070422-960.webp", "width": 960 }
+      ]
+    }
+  ]
+}
