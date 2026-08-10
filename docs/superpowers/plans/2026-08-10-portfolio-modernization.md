@@ -47,11 +47,12 @@ dfa8adac8f2ae19e162a5564a5feda2ed09266c6061f5eed7984d42de6f7f773  public/assets/
 ### Root and tooling
 
 - Modify: `package.json`, `package-lock.json`, `tsconfig.json`, `README.md`
-- Create: `.nvmrc`, `index.html`, `vite.config.ts`,
+- Create: `.gitattributes`, `.nvmrc`, `index.html`, `vite.config.ts`,
   `vitest.config.ts`, `eslint.config.mjs`, `playwright.config.ts`,
   `tsconfig.app.json`, `tsconfig.node.json`
 - Create: `.github/workflows/ci.yml`, `.github/workflows/deploy-pages.yml`
 - Create: `scripts/verify-legacy-hashes.mjs`,
+  `scripts/verify-legacy-hashes.test.ts`,
   `scripts/optimize-images.mjs`, `scripts/verify-assets.mjs`,
   `scripts/verify-dist.mjs`, `scripts/audit-external-links.mjs`,
   `scripts/smoke-pages.mjs`, `scripts/smoke-pages.test.ts`
@@ -315,7 +316,9 @@ EOF
 ## Task 2: Lock Legacy Content Before Moving It
 
 **Files:**
+- Create: `.gitattributes`
 - Create: `scripts/verify-legacy-hashes.mjs`
+- Test: `scripts/verify-legacy-hashes.test.ts`
 - Create: `tests/fixtures/legacy-content.sha256`
 
 - [ ] **Step 1: Write the failing hash-verification script**
@@ -340,20 +343,52 @@ Write the six hash lines from **Legacy Content Hashes** to
 Verified 6 legacy content sources.
 ```
 
-- [ ] **Step 3: Run the gate**
+- [ ] **Step 3: Pin protected bytes and test fail-closed behavior**
+
+Add explicit `text eol=lf` rules to `.gitattributes` for the six
+protected source paths, `tests/fixtures/legacy-content.sha256`, and
+`scripts/verify-legacy-hashes.mjs`. Do not add a repository-wide text
+rule or renormalize unrelated files.
+
+Create `scripts/verify-legacy-hashes.test.ts` as a subprocess integration
+suite. Each test copies the real verifier into an operating-system temp
+directory containing six tiny fixture/source records, runs it from outside
+that synthetic repository root, and removes the temp directory afterward.
+Assert the exact success output and non-zero failures for malformed input,
+normalized duplicate paths, traversal and absolute paths, an absent source,
+and a hash mismatch. Do not add production injection hooks or test-only
+branches.
+
+Run:
+
+```bash
+npm run test:unit -- scripts/verify-legacy-hashes.test.ts
+git check-attr text eol -- src/components/Main.tsx src/components/Expertise.tsx src/components/Project.tsx src/components/Timeline.tsx src/components/Contact.tsx public/assets/json/mentorandteam.json tests/fixtures/legacy-content.sha256 scripts/verify-legacy-hashes.mjs
+```
+
+Expected: seven focused tests pass, and every listed path reports
+`text: set` and `eol: lf`.
+
+- [ ] **Step 4: Run the complete preservation gate**
 
 ```bash
 npm run verify:legacy
+npm run test:unit
+npm run lint
+npm run build
+npm run check
+git diff --check
 ```
 
-Expected: PASS with the exact six-file message.
+Expected: every command passes, `verify:legacy` prints the exact six-file
+message, and the six protected source files have no diff.
 
-- [ ] **Step 4: Commit the preservation gate**
+- [ ] **Step 5: Commit the preservation gate**
 
 ```bash
-git add scripts/verify-legacy-hashes.mjs tests/fixtures/legacy-content.sha256 package.json
+git add .gitattributes scripts/verify-legacy-hashes.mjs scripts/verify-legacy-hashes.test.ts tests/fixtures/legacy-content.sha256 docs/superpowers/plans/2026-08-10-portfolio-modernization.md
 git commit -m "$(cat <<'EOF'
-Guard legacy portfolio content hashes
+Guard legacy portfolio content
 
 Record the active source files before migration so content changes
 cannot be confused with structural extraction or cleanup.

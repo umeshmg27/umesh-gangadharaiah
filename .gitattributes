@@ -1,0 +1,8 @@
+src/components/Main.tsx text eol=lf
+src/components/Expertise.tsx text eol=lf
+src/components/Project.tsx text eol=lf
+src/components/Timeline.tsx text eol=lf
+src/components/Contact.tsx text eol=lf
+public/assets/json/mentorandteam.json text eol=lf
+tests/fixtures/legacy-content.sha256 text eol=lf
+scripts/verify-legacy-hashes.mjs text eol=lf
