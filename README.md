@@ -82,12 +82,17 @@ The initial featured projects are ordered by `featuredOrder`:
 4. Resource Allocation Manager (RAM).
 
 `Agentic Engineering Automation` is an intentionally abstracted public case
-study. It describes reusable AI Agents, Skills, Model Context Protocol
-integrations, evidence-led investigation, human approval, and automated
-validation without publishing proprietary product names, repositories, issue
-identifiers, customer information, operational data, or implementation details.
-Its cover is a local CSS illustration, so it adds no image or runtime network
-dependency.
+study and the primary Impact story. Its AI-first spotlight presents four
+source-backed workflow abstractions: evidence-led defect resolution,
+agent-assisted feature planning, living system documentation, and interactive
+simulation and validation. The same four flows are available as structured
+details in the project archive. They describe reusable AI Agents, Skills, Model
+Context Protocol integrations, sanitized or synthetic inputs, human-reviewed
+decisions, and deterministic validation without publishing proprietary product
+names, repositories, issue identifiers, customer information, operational data,
+or implementation details. Its cover is a local CSS illustration, so it adds no
+image or runtime network dependency. The `Up to 5–6×` result remains explicitly
+qualified as reported; it is not inferred from private catalog counts.
 
 Recognition dates are derived from each record ID's `DDMMYY` suffix. The
 initial highlights are the six newest recognitions:

@@ -29,12 +29,20 @@ export type AbstractProjectVisual = {
   readonly labels: readonly [string, string, string];
 };
 
+export type ProjectFlow = {
+  readonly id: string;
+  readonly title: string;
+  readonly path: string;
+  readonly summary: string;
+};
+
 export type Project = {
   readonly id: string;
   readonly title: string;
   readonly description: string;
   readonly image: ImageAsset | AbstractProjectVisual;
   readonly capabilities?: readonly string[];
+  readonly flows?: readonly ProjectFlow[];
   readonly abstracted?: true;
   readonly publicUrl?: string;
   readonly featuredOrder?: 1 | 2 | 3 | 4;

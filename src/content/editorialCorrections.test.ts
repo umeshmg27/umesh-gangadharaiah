@@ -254,6 +254,34 @@ describe("approved editorial corrections", () => {
       image: { kind: "abstract" },
       abstracted: true,
     });
+    expect(projects.at(-1)).toMatchObject({
+      flows: [
+        {
+          id: "defect-resolution",
+          title: "Evidence-led defect resolution",
+          path:
+            "Sanitized issue → Evidence and hypotheses → Reviewed RCA and validation",
+        },
+        {
+          id: "feature-planning",
+          title: "Agent-assisted feature planning",
+          path:
+            "Feature brief → System model and options → Implementation plan and tests",
+        },
+        {
+          id: "living-documentation",
+          title: "Living system documentation",
+          path:
+            "Verified behavior → Connected system model → Living engineering guide",
+        },
+        {
+          id: "simulation-validation",
+          title: "Interactive simulation & validation",
+          path:
+            "Synthetic scenario → Deterministic model → Reviewable validation evidence",
+        },
+      ],
+    });
     expect(impactMetrics).toEqual([
       {
         id: "agentic-resolution-throughput",

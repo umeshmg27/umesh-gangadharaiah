@@ -1,7 +1,11 @@
 import {
   ArrowRight,
+  BookOpen,
   BrainCircuit,
+  Bug,
   Clock3,
+  FlaskConical,
+  Route,
   Search,
   Workflow,
   type LucideIcon,
@@ -11,36 +15,45 @@ import {
   impactMetrics,
   type ImpactMetricId,
 } from "../content/impact";
+import type { Project, ProjectFlow } from "../content/models";
+import { projects } from "../content/projects";
 import styles from "./ImpactSummary.module.css";
 
-type ImpactOutcome = {
+type EstablishedOutcome = {
   readonly id: string;
   readonly title: string;
   readonly summary: string;
   readonly metricIds: readonly ImpactMetricId[];
-  readonly capabilities?: readonly string[];
   readonly linkLabel: string;
   readonly href: string;
   readonly icon: LucideIcon;
 };
 
-const impactOutcomes: readonly ImpactOutcome[] = [
-  {
-    id: "agentic-engineering-automation",
-    title: "Agentic Engineering Automation",
-    summary:
-      "Designed MCP integrations and applied reusable agent workflows to evidence-led diagnosis, human-reviewed decisions, validation, and feature delivery.",
-    metricIds: ["agentic-resolution-throughput"],
-    capabilities: [
-      "AI Agents",
-      "Reusable Skills",
-      "Model Context Protocol",
-      "Evidence-led workflows",
-    ],
-    linkLabel: "Explore agentic engineering project",
-    href: "#project-agentic-engineering-automation",
-    icon: BrainCircuit,
-  },
+const projectRecords: readonly Project[] = projects;
+type AgenticProject = Project & {
+  readonly capabilities: readonly string[];
+  readonly flows: readonly ProjectFlow[];
+};
+
+function findAgenticProject(): AgenticProject {
+  const project = projectRecords.find(
+    ({ id }) => id === "agentic-engineering-automation",
+  );
+
+  if (!project?.flows || !project.capabilities) {
+    throw new Error("Missing agentic engineering project content");
+  }
+
+  return {
+    ...project,
+    capabilities: project.capabilities,
+    flows: project.flows,
+  };
+}
+
+const agenticProject = findAgenticProject();
+
+const establishedOutcomes: readonly EstablishedOutcome[] = [
   {
     id: "ndo-search-explore",
     title: "NDO Search & Explore",
@@ -79,6 +92,41 @@ function metricById(metricId: ImpactMetricId) {
   return metric;
 }
 
+function iconForFlow(flow: ProjectFlow): LucideIcon {
+  switch (flow.id) {
+    case "defect-resolution":
+      return Bug;
+    case "feature-planning":
+      return Route;
+    case "living-documentation":
+      return BookOpen;
+    case "simulation-validation":
+      return FlaskConical;
+    default:
+      return BrainCircuit;
+  }
+}
+
+function Metrics({
+  metricIds,
+}: {
+  readonly metricIds: readonly ImpactMetricId[];
+}) {
+  return (
+    <div className={styles.metrics}>
+      {metricIds.map((metricId) => {
+        const metric = metricById(metricId);
+        return (
+          <span className={styles.metric} key={metric.id}>
+            <strong className={styles.value}>{metric.value}</strong>
+            <span className={styles.label}>{metric.label}</span>
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function ImpactSummary() {
   return (
     <section aria-labelledby="impact-heading" className={styles.section}>
@@ -90,56 +138,126 @@ export default function ImpactSummary() {
           </h2>
         </div>
         <p className={styles.explanation}>
-          Each result connects the number to the work that produced it.
+          Each result connects the outcome to the work that produced it.
         </p>
       </div>
 
-      <ul className={styles.outcomes}>
-        {impactOutcomes.map((outcome) => {
-          const Icon = outcome.icon;
+      <article
+        aria-labelledby="agentic-impact-title"
+        className={styles.spotlight}
+        data-impact-outcome-id="agentic-engineering-automation"
+        data-impact-spotlight=""
+      >
+        <div className={styles.spotlightOverview}>
+          <p className={styles.currentLabel}>Current focus · AI engineering</p>
+          <div className={styles.spotlightTitleRow}>
+            <div aria-hidden="true" className={styles.spotlightIcon}>
+              <BrainCircuit size={26} strokeWidth={1.8} />
+            </div>
+            <h3 className={styles.spotlightTitle} id="agentic-impact-title">
+              {agenticProject.title}
+            </h3>
+          </div>
 
-          return (
-            <li
-              className={styles.outcome}
-              data-impact-outcome-id={outcome.id}
-              key={outcome.id}
+          <Metrics metricIds={["agentic-resolution-throughput"]} />
+
+          <ul
+            aria-label={`${agenticProject.title} capabilities`}
+            className={styles.capabilities}
+          >
+            {agenticProject.capabilities.slice(0, 4).map((capability) => (
+              <li className={styles.capability} key={capability}>
+                {capability}
+              </li>
+            ))}
+          </ul>
+
+          <p className={styles.summary}>
+            Designed MCP integrations and applied reusable agent workflows to
+            evidence-led diagnosis, human-reviewed decisions,
+            implementation-ready feature delivery, living documentation, and
+            deterministic simulation.
+          </p>
+          <a
+            className={styles.sourceLink}
+            href="#project-agentic-engineering-automation"
+          >
+            Explore agentic engineering project
+            <ArrowRight aria-hidden="true" size={17} strokeWidth={2} />
+          </a>
+        </div>
+
+        <ul
+          aria-label="Agentic engineering workflows"
+          className={styles.flows}
+        >
+          {agenticProject.flows.map((flow) => {
+            const FlowIcon = iconForFlow(flow);
+
+            return (
+              <li
+                className={styles.flow}
+                data-agentic-flow-id={flow.id}
+                key={flow.id}
+              >
+                <div className={styles.flowHeader}>
+                  <div aria-hidden="true" className={styles.flowIcon}>
+                    <FlowIcon size={19} strokeWidth={1.8} />
+                  </div>
+                  <h4 className={styles.flowTitle}>{flow.title}</h4>
+                </div>
+                <p className={styles.flowSummary}>{flow.summary}</p>
+                <p className={styles.flowPath}>{flow.path}</p>
+              </li>
+            );
+          })}
+        </ul>
+      </article>
+
+      <section
+        aria-labelledby="established-impact-heading"
+        className={styles.established}
+      >
+        <div className={styles.establishedHeader}>
+          <div>
+            <p className={styles.establishedEyebrow}>Established impact</p>
+            <h3
+              className={styles.establishedTitle}
+              id="established-impact-heading"
             >
-              <div aria-hidden="true" className={styles.icon}>
-                <Icon size={22} strokeWidth={1.8} />
-              </div>
-              <h3 className={styles.outcomeTitle}>{outcome.title}</h3>
-              <div className={styles.metrics}>
-                {outcome.metricIds.map((metricId) => {
-                  const metric = metricById(metricId);
-                  return (
-                    <span className={styles.metric} key={metric.id}>
-                      <strong className={styles.value}>{metric.value}</strong>
-                      <span className={styles.label}>{metric.label}</span>
-                    </span>
-                  );
-                })}
-              </div>
-              {outcome.capabilities ? (
-                <ul
-                  aria-label={`${outcome.title} capabilities`}
-                  className={styles.capabilities}
-                >
-                  {outcome.capabilities.map((capability) => (
-                    <li className={styles.capability} key={capability}>
-                      {capability}
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-              <p className={styles.summary}>{outcome.summary}</p>
-              <a className={styles.sourceLink} href={outcome.href}>
-                {outcome.linkLabel}
-                <ArrowRight aria-hidden="true" size={17} strokeWidth={2} />
-              </a>
-            </li>
-          );
-        })}
-      </ul>
+              Established product outcomes
+            </h3>
+          </div>
+          <p className={styles.establishedExplanation}>
+            Earlier systems work with measured, source-linked results.
+          </p>
+        </div>
+
+        <ul className={styles.establishedOutcomes}>
+          {establishedOutcomes.map((outcome) => {
+            const Icon = outcome.icon;
+
+            return (
+              <li
+                className={styles.outcome}
+                data-established-outcome-id={outcome.id}
+                key={outcome.id}
+              >
+                <div aria-hidden="true" className={styles.outcomeIcon}>
+                  <Icon size={18} strokeWidth={1.8} />
+                </div>
+                <h4 className={styles.outcomeTitle}>{outcome.title}</h4>
+                <Metrics metricIds={outcome.metricIds} />
+                <p className={styles.summary}>{outcome.summary}</p>
+                <a className={styles.sourceLink} href={outcome.href}>
+                  {outcome.linkLabel}
+                  <ArrowRight aria-hidden="true" size={17} strokeWidth={2} />
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
     </section>
   );
 }

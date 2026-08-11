@@ -12,7 +12,9 @@
   gap: 1rem 2rem;
 }
 
-.eyebrow {
+.eyebrow,
+.currentLabel,
+.establishedEyebrow {
   margin: 0 0 0.45rem;
   color: var(--color-accent-strong);
   font-family: var(--font-mono);
@@ -34,29 +36,58 @@
   color: var(--color-text-muted);
 }
 
-.outcomes {
+.spotlight {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  margin: 2rem 0 0;
-  padding: 0;
-  gap: 1rem;
-  list-style: none;
+  min-width: 0;
+  margin-top: 2rem;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  overflow: hidden;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-medium);
+  background:
+    radial-gradient(circle at 12% 12%, rgb(169 138 255 / 18%), transparent 35%),
+    var(--color-surface);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
 }
 
-.outcome {
+.spotlight::after {
+  position: absolute;
+  right: -4rem;
+  bottom: -6rem;
+  width: 16rem;
+  height: 16rem;
+  border: 1px solid rgb(169 138 255 / 18%);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.spotlightOverview,
+.flows {
+  position: relative;
+  z-index: 1;
+}
+
+.spotlightOverview {
   display: flex;
   min-width: 0;
+  align-items: flex-start;
   flex-direction: column;
-  padding: clamp(1.25rem, 3vw, 2rem);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-medium);
-  background: var(--color-surface);
 }
 
-.icon {
+.spotlightTitleRow {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.spotlightIcon,
+.flowIcon,
+.outcomeIcon {
   display: inline-flex;
-  width: 2.75rem;
-  height: 2.75rem;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--color-border);
@@ -65,12 +96,19 @@
   color: var(--color-accent-strong);
 }
 
-.outcomeTitle {
-  margin: 1.15rem 0 0;
+.spotlightIcon {
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+.spotlightTitle {
+  min-width: 0;
+  margin: 0;
   color: var(--color-text);
-  font-size: clamp(1.15rem, 2vw, 1.45rem);
-  line-height: 1.3;
-  letter-spacing: -0.025em;
+  font-size: clamp(1.45rem, 3vw, 2.15rem);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
 }
 
 .metrics {
@@ -93,6 +131,10 @@
   font-size: clamp(1.5rem, 2.5vw, 2rem);
   line-height: 1.1;
   letter-spacing: -0.04em;
+}
+
+.spotlight .value {
+  font-size: clamp(2rem, 4vw, 3rem);
 }
 
 .label {
@@ -141,19 +183,161 @@
   text-decoration-thickness: 1px;
 }
 
+.flows {
+  display: grid;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  gap: 0.8rem;
+  list-style: none;
+}
+
+.flow {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-canvas);
+}
+
+.flowHeader {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.flowIcon {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.flowTitle {
+  min-width: 0;
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(1rem, 1.7vw, 1.15rem);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.flowSummary {
+  margin: 0.85rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.flowPath {
+  margin: auto 0 0;
+  padding-top: 0.85rem;
+  color: var(--color-accent-strong);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.established {
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.establishedHeader {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+}
+
+.establishedEyebrow {
+  margin-bottom: 0.3rem;
+  color: var(--color-text-muted);
+}
+
+.establishedTitle {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+  letter-spacing: -0.025em;
+}
+
+.establishedExplanation {
+  max-width: 42ch;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.establishedOutcomes {
+  display: grid;
+  margin: 1rem 0 0;
+  padding: 0;
+  gap: 0.8rem;
+  list-style: none;
+}
+
+.outcome {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+}
+
+.outcomeIcon {
+  width: 2.35rem;
+  height: 2.35rem;
+}
+
+.outcomeTitle {
+  margin: 0.85rem 0 0;
+  color: var(--color-text);
+  font-size: clamp(1rem, 1.7vw, 1.15rem);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.outcome .metrics {
+  margin-top: 0.9rem;
+}
+
+.outcome .value {
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+}
+
+.outcome .summary {
+  margin-top: 0.85rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
 @media (min-width: 48rem) {
-  .introduction {
+  .introduction,
+  .establishedHeader {
     align-items: flex-end;
     flex-direction: row;
   }
 
-  .outcomes {
+  .flows {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .establishedOutcomes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 75rem) {
-  .outcomes {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  .spotlight {
+    align-items: stretch;
+    grid-template-columns: minmax(18rem, 0.72fr) minmax(0, 1.6fr);
   }
 }

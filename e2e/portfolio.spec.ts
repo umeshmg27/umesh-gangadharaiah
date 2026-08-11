@@ -163,8 +163,9 @@ test("uses the approved aspect ratios and viewport layouts", async ({ page }) =>
   const expectedContactColumns = viewportWidth >= 768 ? 2 : 1;
   const expectedExpertiseColumns = viewportWidth >= 768 ? 2 : 1;
   const expectedHeroColumns = viewportWidth >= 1024 ? 2 : 1;
-  const expectedImpactColumns =
-    viewportWidth >= 1200 ? 4 : viewportWidth >= 768 ? 2 : 1;
+  const expectedAgenticSpotlightColumns = viewportWidth >= 1200 ? 2 : 1;
+  const expectedAgenticFlowColumns = viewportWidth >= 768 ? 2 : 1;
+  const expectedEstablishedImpactColumns = viewportWidth >= 768 ? 3 : 1;
   const expectedRecognitionColumns = viewportWidth >= 1024 ? 3 : 1;
   const expectedTimelineColumns = viewportWidth >= 768 ? 3 : 2;
 
@@ -178,12 +179,18 @@ test("uses the approved aspect ratios and viewport layouts", async ({ page }) =>
   expect(await gridColumnCount(page, "#expertise > div")).toBe(
     expectedExpertiseColumns,
   );
+  expect(await gridColumnCount(page, "[data-impact-spotlight]")).toBe(
+    expectedAgenticSpotlightColumns,
+  );
+  expect(
+    await gridColumnCount(page, '[aria-label="Agentic engineering workflows"]'),
+  ).toBe(expectedAgenticFlowColumns);
   expect(
     await gridColumnCount(
       page,
-      'section[aria-labelledby="impact-heading"] > ul',
+      '[aria-labelledby="established-impact-heading"] > ul',
     ),
-  ).toBe(expectedImpactColumns);
+  ).toBe(expectedEstablishedImpactColumns);
   expect(
     await gridColumnCount(
       page,
@@ -441,6 +448,32 @@ test("reveals the abstracted agentic case study from Impact", async ({ page }) =
   await expect(
     outcome.getByText("Model Context Protocol", { exact: true }),
   ).toBeVisible();
+  const impactFlows = outcome.locator("[data-agentic-flow-id]");
+  await expect(impactFlows).toHaveCount(4);
+  await expect(
+    impactFlows.getByRole("heading", {
+      level: 4,
+      name: "Evidence-led defect resolution",
+    }),
+  ).toBeVisible();
+  await expect(
+    impactFlows.getByRole("heading", {
+      level: 4,
+      name: "Agent-assisted feature planning",
+    }),
+  ).toBeVisible();
+  await expect(
+    impactFlows.getByRole("heading", {
+      level: 4,
+      name: "Living system documentation",
+    }),
+  ).toBeVisible();
+  await expect(
+    impactFlows.getByRole("heading", {
+      level: 4,
+      name: "Interactive simulation & validation",
+    }),
+  ).toBeVisible();
 
   await outcome
     .getByRole("link", { name: "Explore agentic engineering project" })
@@ -469,11 +502,35 @@ test("reveals the abstracted agentic case study from Impact", async ({ page }) =
     /(?:https?:\/\/|\b\d{1,3}(?:\.\d{1,3}){3}\b|\b[A-Z]+-\d{3,}\b)/u,
   );
   await page.keyboard.press("Tab");
-  await expect(
-    project.getByRole("button", {
-      name: "Read Project Details for Agentic Engineering Automation",
-    }),
-  ).toBeFocused();
+  const detailsButton = project.locator(
+    'button[aria-controls="agentic-engineering-automation-details"]',
+  );
+  await expect(detailsButton).toHaveAccessibleName(
+    "Read Project Details for Agentic Engineering Automation",
+  );
+  await expect(detailsButton).toBeFocused();
+  await detailsButton.click();
+  await expect(detailsButton).toHaveAttribute("aria-expanded", "true");
+  await expect(detailsButton).toHaveAccessibleName(
+    "Hide Project Details for Agentic Engineering Automation",
+  );
+
+  const projectFlows = project.getByRole("list", {
+    name: "Agentic engineering workflow details",
+  });
+  await expect(projectFlows.locator("[data-project-flow-id]")).toHaveCount(4);
+  await expect(projectFlows).toContainText("Evidence-led defect resolution");
+  await expect(projectFlows).toContainText("Agent-assisted feature planning");
+  await expect(projectFlows).toContainText("Living system documentation");
+  await expect(projectFlows).toContainText(
+    "Interactive simulation & validation",
+  );
+  await expect(projectFlows).toContainText("Sanitized issue");
+  await expect(projectFlows).toContainText("Implementation plan and tests");
+  await expect(projectFlows).toContainText("Living engineering guide");
+  await expect(projectFlows).toContainText(
+    "Reviewable validation evidence",
+  );
   await expect(project).toBeInViewport();
   browser.assertNone();
 });

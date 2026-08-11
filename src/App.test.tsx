@@ -117,48 +117,72 @@ test("renders typed hero actions, safe named social links, and the fallback port
   expect(portrait).toHaveAttribute("decoding", "async");
 });
 
-test("groups five typed metrics into explained source outcomes", async () => {
+test("leads Impact with four agentic workflows before established outcomes", async () => {
   await renderPortfolio();
   const impact = screen.getByRole("region", { name: "Impact" });
-  const outcomes = Array.from(
-    impact.querySelectorAll<HTMLElement>("[data-impact-outcome-id]"),
+  const spotlight = impact.querySelector<HTMLElement>(
+    '[data-impact-outcome-id="agentic-engineering-automation"]',
+  );
+  const flows = Array.from(
+    impact.querySelectorAll<HTMLElement>("[data-agentic-flow-id]"),
+  );
+  const establishedOutcomes = Array.from(
+    impact.querySelectorAll<HTMLElement>("[data-established-outcome-id]"),
   );
 
-  expect(outcomes.map((item) => item.dataset.impactOutcomeId)).toEqual([
-    "agentic-engineering-automation",
+  expect(spotlight).not.toBeNull();
+  if (!spotlight) return;
+
+  expect(spotlight).toHaveTextContent("Agentic Engineering");
+  expect(spotlight).toHaveTextContent("Up to 5–6×");
+  expect(spotlight).toHaveTextContent("reported defect-resolution throughput");
+  expect(
+    flows.map((item) => item.dataset.agenticFlowId),
+  ).toEqual([
+    "defect-resolution",
+    "feature-planning",
+    "living-documentation",
+    "simulation-validation",
+  ]);
+  expect(flows.map((item) => within(item).getByRole("heading").textContent)).toEqual([
+    "Evidence-led defect resolution",
+    "Agent-assisted feature planning",
+    "Living system documentation",
+    "Interactive simulation & validation",
+  ]);
+  expect(spotlight).toHaveTextContent("sanitized");
+  expect(spotlight).toHaveTextContent("human-reviewed");
+  expect(spotlight).toHaveTextContent("implementation-ready");
+  expect(spotlight).toHaveTextContent("deterministic");
+
+  expect(
+    within(impact).getByRole("heading", {
+      name: "Established product outcomes",
+    }),
+  ).toBeInTheDocument();
+  expect(
+    establishedOutcomes.map((item) => item.dataset.establishedOutcomeId),
+  ).toEqual([
     "ndo-search-explore",
     "configuration-automation",
     "codeshift-cicd-platform",
   ]);
-  expect(outcomes[0]).toHaveTextContent("Agentic Engineering Automation");
-  expect(outcomes[0]).toHaveTextContent("Up to 5–6×");
-  expect(outcomes[0]).toHaveTextContent(
-    "Designed MCP integrations and applied reusable agent workflows to evidence-led diagnosis, human-reviewed decisions, validation, and feature delivery.",
-  );
-  expect(
-    within(outcomes[0])
-      .getAllByRole("listitem")
-      .map((item) => item.textContent),
-  ).toEqual([
-    "AI Agents",
-    "Reusable Skills",
-    "Model Context Protocol",
-    "Evidence-led workflows",
-  ]);
-  expect(outcomes[1]).toHaveTextContent("NDO Search & Explore");
-  expect(outcomes[1]).toHaveTextContent("50,000+");
-  expect(outcomes[1]).toHaveTextContent("Sub-second");
-  expect(outcomes[1]).toHaveTextContent(
+  expect(establishedOutcomes[0]).toHaveTextContent("NDO Search & Explore");
+  expect(establishedOutcomes[0]).toHaveTextContent("50,000+");
+  expect(establishedOutcomes[0]).toHaveTextContent("Sub-second");
+  expect(establishedOutcomes[0]).toHaveTextContent(
     "Indexed production-scale policy data while keeping retrieval under one second.",
   );
-  expect(outcomes[2]).toHaveTextContent("Multiserver configuration automation");
-  expect(outcomes[2]).toHaveTextContent("300+ hours");
-  expect(outcomes[2]).toHaveTextContent(
+  expect(establishedOutcomes[1]).toHaveTextContent(
+    "Multiserver configuration automation",
+  );
+  expect(establishedOutcomes[1]).toHaveTextContent("300+ hours");
+  expect(establishedOutcomes[1]).toHaveTextContent(
     "Automated multiserver configurations during my Staff Engineer internship.",
   );
-  expect(outcomes[3]).toHaveTextContent("Codeshift CI/CD platform");
-  expect(outcomes[3]).toHaveTextContent("70%");
-  expect(outcomes[3]).toHaveTextContent(
+  expect(establishedOutcomes[2]).toHaveTextContent("Codeshift CI/CD platform");
+  expect(establishedOutcomes[2]).toHaveTextContent("70%");
+  expect(establishedOutcomes[2]).toHaveTextContent(
     "Created APIs for VM and resource allocation, reducing manual deployment effort.",
   );
 

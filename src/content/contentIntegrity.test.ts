@@ -12,12 +12,24 @@ import { impactMetrics } from "./impact";
 import { profile } from "./profile";
 import { projects } from "./projects";
 import { recognitions } from "./recognitions";
-import type { LocalImageAsset, Profile, Project, Recognition } from "./models";
+import type {
+  LocalImageAsset,
+  Profile,
+  Project,
+  ProjectFlow,
+  Recognition,
+} from "./models";
 
 function assertReadonlyContentContracts(): void {
   const project = {} as Project;
   // @ts-expect-error Content contracts must make project fields readonly.
   project.title = "Changed";
+
+  const projectFlow = {} as ProjectFlow;
+  // @ts-expect-error Agentic project flow fields must remain readonly.
+  projectFlow.path = "Changed";
+  // @ts-expect-error Nested project flow arrays must remain readonly.
+  project.flows?.push(projectFlow);
 
   const recognition = {} as Recognition;
   // @ts-expect-error Content contracts must make recognition fields readonly.
@@ -487,8 +499,45 @@ describe("typed portfolio content", () => {
         "Human approval gates",
         "Automated validation",
       ],
+      flows: [
+        {
+          id: "defect-resolution",
+          title: "Evidence-led defect resolution",
+          path:
+            "Sanitized issue → Evidence and hypotheses → Reviewed RCA and validation",
+          summary:
+            "Agents turn sanitized issue context into scoped evidence, competing hypotheses, human-reviewed root causes, and validated resolution handoffs.",
+        },
+        {
+          id: "feature-planning",
+          title: "Agent-assisted feature planning",
+          path:
+            "Feature brief → System model and options → Implementation plan and tests",
+          summary:
+            "Agent-assisted analysis maps current behavior, compares design options, surfaces dependencies and risks, and produces implementation-ready plans with a test strategy.",
+        },
+        {
+          id: "living-documentation",
+          title: "Living system documentation",
+          path:
+            "Verified behavior → Connected system model → Living engineering guide",
+          summary:
+            "Reusable Skills keep architecture, interfaces, state, lifecycle, failure behavior, and verification guidance discoverable for engineers and agents.",
+        },
+        {
+          id: "simulation-validation",
+          title: "Interactive simulation & validation",
+          path:
+            "Synthetic scenario → Deterministic model → Reviewable validation evidence",
+          summary:
+            "Deterministic browser simulations use synthetic scenarios to explain state transitions, exercise edge cases, and support human-reviewed validation.",
+        },
+      ],
       abstracted: true,
     });
+    expect(
+      projects.slice(0, -1).every((project) => !("flows" in project)),
+    ).toBe(true);
     expect(projects.at(-1)).not.toHaveProperty("publicUrl");
     expect(projects.at(-1)?.description).not.toMatch(
       /(?:https?:\/\/|\b\d{1,3}(?:\.\d{1,3}){3}\b|\b[A-Z]+-\d{3,}\b)/u,

@@ -208,6 +208,40 @@ export const projects = [
       "Human approval gates",
       "Automated validation",
     ],
+    flows: [
+      {
+        id: "defect-resolution",
+        title: "Evidence-led defect resolution",
+        path:
+          "Sanitized issue → Evidence and hypotheses → Reviewed RCA and validation",
+        summary:
+          "Agents turn sanitized issue context into scoped evidence, competing hypotheses, human-reviewed root causes, and validated resolution handoffs.",
+      },
+      {
+        id: "feature-planning",
+        title: "Agent-assisted feature planning",
+        path:
+          "Feature brief → System model and options → Implementation plan and tests",
+        summary:
+          "Agent-assisted analysis maps current behavior, compares design options, surfaces dependencies and risks, and produces implementation-ready plans with a test strategy.",
+      },
+      {
+        id: "living-documentation",
+        title: "Living system documentation",
+        path:
+          "Verified behavior → Connected system model → Living engineering guide",
+        summary:
+          "Reusable Skills keep architecture, interfaces, state, lifecycle, failure behavior, and verification guidance discoverable for engineers and agents.",
+      },
+      {
+        id: "simulation-validation",
+        title: "Interactive simulation & validation",
+        path:
+          "Synthetic scenario → Deterministic model → Reviewable validation evidence",
+        summary:
+          "Deterministic browser simulations use synthetic scenarios to explain state transitions, exercise edge cases, and support human-reviewed validation.",
+      },
+    ],
     abstracted: true,
   },
 ] as const satisfies readonly Project[];

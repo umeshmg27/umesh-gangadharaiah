@@ -1,4 +1,13 @@
-import { Bot, Network, Puzzle } from "lucide-react";
+import {
+  BookOpen,
+  Bot,
+  Bug,
+  ClipboardList,
+  FlaskConical,
+  Network,
+  Puzzle,
+  type LucideIcon,
+} from "lucide-react";
 
 import { createWordBoundaryPreview } from "../content/createWordBoundaryPreview";
 import type { Project } from "../content/models";
@@ -11,12 +20,20 @@ type ProjectCardProps = {
   readonly onToggle: (projectId: string) => void;
 };
 
+const flowIcons: Readonly<Record<string, LucideIcon>> = {
+  "defect-resolution": Bug,
+  "feature-planning": ClipboardList,
+  "living-documentation": BookOpen,
+  "simulation-validation": FlaskConical,
+};
+
 export default function ProjectCard({
   project,
   expanded,
   onToggle,
 }: ProjectCardProps) {
   const detailsId = `${project.id}-details`;
+  const workflowsHeadingId = `${project.id}-workflows-heading`;
   const detailsAction = expanded
     ? "Hide Project Details"
     : "Read Project Details";
@@ -108,13 +125,55 @@ export default function ProjectCard({
           ) : null}
         </div>
 
-        <p
-          className={styles.details}
-          hidden={!expanded}
-          id={detailsId}
-        >
-          {project.description}
-        </p>
+        {project.flows ? (
+          <div className={styles.details} hidden={!expanded} id={detailsId}>
+            <p className={styles.detailsCopy}>{project.description}</p>
+
+            {expanded ? (
+              <section
+                aria-labelledby={workflowsHeadingId}
+                className={styles.workflows}
+              >
+                <p className={styles.workflowsEyebrow}>Applied AI workflows</p>
+                <h4
+                  className={styles.workflowsHeading}
+                  id={workflowsHeadingId}
+                >
+                  Agentic engineering workflows
+                </h4>
+                <ul
+                  aria-label="Agentic engineering workflow details"
+                  className={styles.flowList}
+                >
+                  {project.flows.map((flow) => {
+                    const FlowIcon = flowIcons[flow.id] ?? Bot;
+
+                    return (
+                      <li
+                        className={styles.flowCard}
+                        data-project-flow-id={flow.id}
+                        key={flow.id}
+                      >
+                        <span aria-hidden="true" className={styles.flowIcon}>
+                          <FlowIcon size={18} strokeWidth={1.8} />
+                        </span>
+                        <div>
+                          <h5 className={styles.flowTitle}>{flow.title}</h5>
+                          <p className={styles.flowPath}>{flow.path}</p>
+                          <p className={styles.flowSummary}>{flow.summary}</p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            ) : null}
+          </div>
+        ) : (
+          <p className={styles.details} hidden={!expanded} id={detailsId}>
+            {project.description}
+          </p>
+        )}
       </div>
     </article>
   );

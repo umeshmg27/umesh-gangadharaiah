@@ -377,6 +377,9 @@ describe("ProjectExplorer", () => {
     const capabilityList = within(card).getByRole("list", {
       name: "Agentic Engineering Automation capabilities",
     });
+    const detailsButton = within(card).getByRole("button", {
+      name: "Read Project Details for Agentic Engineering Automation",
+    });
 
     expect(card).toHaveAttribute(
       "data-project-id",
@@ -402,6 +405,61 @@ describe("ProjectExplorer", () => {
     expect(card).toHaveTextContent(
       "This public case study intentionally omits proprietary product names, repositories, customer information, operational data, and implementation details.",
     );
+    expect(
+      within(card).queryByRole("region", {
+        name: "Agentic engineering workflows",
+      }),
+    ).not.toBeInTheDocument();
+
+    await user.click(detailsButton);
+
+    const workflows = within(card).getByRole("region", {
+      name: "Agentic engineering workflows",
+    });
+    const flowCards = within(workflows).getAllByRole("listitem");
+
+    expect(flowCards.map((flow) => flow.dataset.projectFlowId)).toEqual([
+      "defect-resolution",
+      "feature-planning",
+      "living-documentation",
+      "simulation-validation",
+    ]);
+    expect(
+      flowCards.map((flow) =>
+        within(flow).getByRole("heading", { level: 5 }).textContent,
+      ),
+    ).toEqual([
+      "Evidence-led defect resolution",
+      "Agent-assisted feature planning",
+      "Living system documentation",
+      "Interactive simulation & validation",
+    ]);
+    expect(flowCards[0]).toHaveTextContent(
+      "Sanitized issue → Evidence and hypotheses → Reviewed RCA and validation",
+    );
+    expect(flowCards[0]).toHaveTextContent(
+      "Agents turn sanitized issue context into scoped evidence, competing hypotheses, human-reviewed root causes, and validated resolution handoffs.",
+    );
+    expect(flowCards[1]).toHaveTextContent(
+      "Feature brief → System model and options → Implementation plan and tests",
+    );
+    expect(flowCards[2]).toHaveTextContent(
+      "Verified behavior → Connected system model → Living engineering guide",
+    );
+    expect(flowCards[3]).toHaveTextContent(
+      "Synthetic scenario → Deterministic model → Reviewable validation evidence",
+    );
+    expect(workflows.textContent).not.toMatch(
+      /(?:https?:\/\/|\b\d{1,3}(?:\.\d{1,3}){3}\b|\b[A-Z]+-\d{3,}\b)/u,
+    );
+
+    await user.click(detailsButton);
+
+    expect(
+      within(card).queryByRole("region", {
+        name: "Agentic engineering workflows",
+      }),
+    ).not.toBeInTheDocument();
     expect(within(card).queryByRole("link")).not.toBeInTheDocument();
     expect(card.textContent).not.toMatch(
       /(?:https?:\/\/|\b\d{1,3}(?:\.\d{1,3}){3}\b|\b[A-Z]+-\d{3,}\b)/u,
