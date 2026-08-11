@@ -1,5 +1,12 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { afterEach, vi } from "vitest";
 
 import { createWordBoundaryPreview } from "../content/createWordBoundaryPreview";
 import type { Project } from "../content/models";
@@ -15,6 +22,10 @@ const featuredIds = projectRecords
       (right.featuredOrder ?? Number.POSITIVE_INFINITY),
   )
   .map((project) => project.id);
+
+afterEach(() => {
+  window.history.replaceState(null, "", "#");
+});
 
 function renderExplorer() {
   const user = userEvent.setup();
@@ -98,6 +109,55 @@ describe("ProjectExplorer", () => {
       "Search project titles and descriptions.",
     );
     expectOrdinaryCount(explorer, "Showing 12 projects.");
+  });
+
+  it("reveals and scrolls to an archived project addressed by its fragment", async () => {
+    const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
+      configurable: true,
+      value: scrollIntoView,
+    });
+    window.history.replaceState(
+      null,
+      "",
+      "#project-codeshift-cicd-platform",
+    );
+
+    try {
+      const { explorer, user } = renderExplorer();
+
+      await waitFor(() =>
+        expect(
+          explorer.querySelector("#project-codeshift-cicd-platform"),
+        ).toBeInTheDocument(),
+      );
+      expect(
+        within(explorer).getByRole("button", {
+          name: "Show featured projects",
+        }),
+      ).toHaveAttribute("aria-expanded", "true");
+      expect(scrollIntoView).toHaveBeenCalledWith({ block: "start" });
+
+      await user.click(
+        within(explorer).getByRole("button", {
+          name: "Show featured projects",
+        }),
+      );
+      expect(window.location.hash).toBe("#projects");
+      expect(
+        explorer.querySelector("#project-codeshift-cicd-platform"),
+      ).toBeNull();
+    } finally {
+      if (originalScrollIntoView) {
+        Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
+          configurable: true,
+          value: originalScrollIntoView,
+        });
+      } else {
+        Reflect.deleteProperty(HTMLElement.prototype, "scrollIntoView");
+      }
+    }
   });
 
   it("filters title and description text without re-ranking source matches", async () => {

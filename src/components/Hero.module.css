@@ -2,10 +2,10 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  width: min(calc(100% - 2 * var(--page-gutter)), var(--content-max));
+  width: min(calc(100% - 2 * var(--page-gutter)), var(--layout-max));
   margin: 0 auto;
   padding: var(--section-space) 0;
-  gap: clamp(2.5rem, 8vw, 7rem);
+  gap: clamp(2.5rem, 6vw, 6rem);
 }
 
 .content {
@@ -34,6 +34,7 @@
 }
 
 .specialization {
+  max-width: 48ch;
   margin: 1.5rem 0 0;
   color: var(--color-text-muted);
   font-size: clamp(1.15rem, 2.3vw, 1.6rem);
@@ -124,11 +125,12 @@
 @media (min-width: 64rem) {
   .hero {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-    min-height: calc(100svh - var(--header-height));
+    min-height: min(50rem, calc(100svh - var(--header-height)));
   }
 
   .portraitFrame {
     grid-column: 2;
+    width: min(100%, 28rem);
     justify-self: end;
   }
 }

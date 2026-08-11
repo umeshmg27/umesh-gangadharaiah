@@ -12,26 +12,71 @@
 }
 
 .timeline {
+  --timeline-gap: clamp(1.25rem, 4vw, 2rem);
+
   display: grid;
   margin: 2rem 0 0;
-  padding-left: clamp(2.25rem, 5vw, 3.5rem);
-  gap: 1rem;
-  list-style: decimal-leading-zero;
+  padding: 0;
+  gap: var(--timeline-gap);
+  list-style: none;
 }
 
 .timelineEntry {
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "marker period"
+    "marker card";
+  grid-template-columns: 1.25rem minmax(0, 1fr);
   min-width: 0;
-  padding-left: clamp(0.25rem, 1vw, 0.75rem);
+  column-gap: 0.75rem;
+  row-gap: 0.65rem;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
 }
 
-.timelineEntry::marker {
-  color: var(--color-accent-strong);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 700;
+.marker {
+  position: relative;
+  grid-area: marker;
+  align-self: stretch;
+  width: 1.25rem;
+}
+
+.marker::before {
+  position: absolute;
+  z-index: 0;
+  top: 0.7rem;
+  bottom: calc(-1 * var(--timeline-gap) - 0.7rem);
+  left: calc(50% - 0.0625rem);
+  width: 0.125rem;
+  background: var(--color-border);
+  content: "";
+}
+
+.marker::after {
+  position: absolute;
+  z-index: 1;
+  top: 0.3rem;
+  left: 50%;
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 0.15rem solid var(--color-accent);
+  border-radius: 50%;
+  background: var(--color-canvas);
+  box-shadow: 0 0 0 0.25rem var(--color-canvas);
+  content: "";
+  transform: translateX(-50%);
+}
+
+.timelineEntry:first-child .marker::after {
+  background: var(--color-accent);
+}
+
+.timelineEntry:last-child .marker::before {
+  display: none;
 }
 
 .card {
+  grid-area: card;
   min-width: 0;
   padding: clamp(1.25rem, 3vw, 2rem);
   border: 1px solid var(--color-border);
@@ -40,11 +85,8 @@
 }
 
 .entryHeader {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
+  display: grid;
+  gap: 0.3rem;
 }
 
 .role {
@@ -62,17 +104,24 @@
 }
 
 .organization {
-  margin-top: 0.3rem;
   color: var(--color-accent-strong);
   font-weight: 700;
 }
 
 .period {
-  flex: 0 1 auto;
-  color: var(--color-text-muted);
+  grid-area: period;
+  align-self: start;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface-raised);
+  color: var(--color-accent-strong);
   font-family: var(--font-mono);
   font-size: 0.82rem;
   font-weight: 700;
+  line-height: 1.35;
 }
 
 .summary {
@@ -104,6 +153,7 @@
 }
 
 .technologies li {
+  max-width: 100%;
   padding: 0.4rem 0.65rem;
   border: 1px solid var(--color-border);
   border-radius: 999px;
@@ -126,11 +176,31 @@
 }
 
 @media (min-width: 48rem) {
-  .entryHeader {
-    flex-direction: row;
+  .timelineEntry {
+    grid-template-areas: "period marker card";
+    grid-template-columns: minmax(9rem, 12rem) 1.5rem minmax(0, 1fr);
+    column-gap: clamp(0.85rem, 2vw, 1.5rem);
+    row-gap: 0;
   }
 
   .period {
-    flex: 0 0 auto;
+    justify-self: end;
+    margin-top: 1.35rem;
+    text-align: right;
+  }
+
+  .marker {
+    width: 1.5rem;
+  }
+
+  .marker::before {
+    top: 2.05rem;
+    bottom: calc(-1 * var(--timeline-gap) - 2.05rem);
+  }
+
+  .marker::after {
+    top: 1.6rem;
+    width: 1rem;
+    height: 1rem;
   }
 }

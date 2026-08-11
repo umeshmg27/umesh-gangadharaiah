@@ -1,5 +1,5 @@
 .section {
-  width: min(calc(100% - 2 * var(--page-gutter)), var(--content-max));
+  width: min(calc(100% - 2 * var(--page-gutter)), var(--layout-max));
   margin: 0 auto;
   padding: var(--section-space) 0;
 }
@@ -13,17 +13,37 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  grid-template-columns: minmax(0, 1fr);
   margin-top: 2rem;
   gap: clamp(1rem, 2.5vw, 1.5rem);
 }
 
 .card {
+  display: flex;
   min-width: 0;
+  flex-direction: column;
   padding: clamp(1.25rem, 3vw, 2rem);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-medium);
   background: var(--color-surface);
+}
+
+.cardHeader {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.icon {
+  box-sizing: content-box;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0.55rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: var(--color-surface-raised);
+  color: var(--color-accent-strong);
 }
 
 .cardHeading {
@@ -34,10 +54,16 @@
   letter-spacing: -0.025em;
 }
 
+.lead,
 .description {
   margin: 1rem 0 0;
   color: var(--color-text-muted);
   line-height: 1.7;
+}
+
+.lead {
+  max-width: 60ch;
+  color: var(--color-text);
 }
 
 .itemsLabel {
@@ -95,4 +121,45 @@
 .externalLink:hover {
   border-color: var(--color-accent);
   background: var(--color-canvas);
+}
+
+.details {
+  margin-top: auto;
+  padding-top: 1.25rem;
+}
+
+.detailsSummary {
+  min-height: 44px;
+  padding: 0.65rem 0.25rem;
+  border-radius: var(--radius-small);
+  color: var(--color-accent-strong);
+  font-weight: 700;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.detailsSummary::marker {
+  color: var(--color-accent);
+}
+
+.detailsSummary:hover {
+  color: var(--color-accent);
+}
+
+.detailsSummary:focus-visible {
+  outline: 0.125rem solid transparent;
+  outline-offset: 3px;
+  box-shadow: var(--focus-ring);
+}
+
+.description {
+  max-width: 65ch;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+@media (min-width: 48rem) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }

@@ -6,6 +6,7 @@ import { createWordBoundaryPreview } from "../content/createWordBoundaryPreview"
 import type { Recognition, RecognitionCategory } from "../content/models";
 import { recognitions } from "../content/recognitions";
 import RecognitionGallery from "./RecognitionGallery";
+import recognitionGalleryCss from "./RecognitionGallery.module.css?raw";
 
 const recognitionRecords: readonly Recognition[] = recognitions;
 const categories = ["Innovation", "Mentorship", "Leadership"] as const;
@@ -60,6 +61,39 @@ function recognitionCard(gallery: HTMLElement, id: string): HTMLElement {
   return card;
 }
 
+function recognitionHighlightTrack(gallery: HTMLElement): HTMLElement {
+  return within(gallery).getByLabelText("Scrollable recognition highlights");
+}
+
+function configureHorizontalScroll(
+  track: HTMLElement,
+  { clientWidth, scrollWidth }: { clientWidth: number; scrollWidth: number },
+) {
+  Object.defineProperties(track, {
+    clientWidth: { configurable: true, value: clientWidth },
+    scrollWidth: { configurable: true, value: scrollWidth },
+  });
+
+  function setScrollLeft(scrollLeft: number): void {
+    track.scrollLeft = scrollLeft;
+    fireEvent.scroll(track);
+  }
+
+  const scrollBy = vi.fn((options: ScrollToOptions) => {
+    const left = typeof options.left === "number" ? options.left : 0;
+    const maximumScrollLeft = Math.max(0, scrollWidth - clientWidth);
+    setScrollLeft(
+      Math.max(0, Math.min(maximumScrollLeft, track.scrollLeft + left)),
+    );
+  });
+  Object.defineProperty(track, "scrollBy", {
+    configurable: true,
+    value: scrollBy,
+  });
+
+  return { scrollBy, setScrollLeft };
+}
+
 function expectOrdinaryCount(gallery: HTMLElement, text: string): void {
   const count = within(gallery).getByText(text);
 
@@ -99,6 +133,69 @@ describe("RecognitionGallery", () => {
       }),
     ).not.toBeInTheDocument();
     expectOrdinaryCount(gallery, "Showing 6 recognition highlights.");
+  });
+
+  it("scrolls the highlighted track with visible boundary-aware controls", async () => {
+    const { gallery, user } = renderGallery();
+    const carousel = within(gallery).getByRole("region", {
+      name: "Recognition highlights carousel",
+    });
+    const track = recognitionHighlightTrack(gallery);
+    const previous = within(carousel).getByRole("button", {
+      name: "Previous recognition highlight",
+    });
+    const next = within(carousel).getByRole("button", {
+      name: "Next recognition highlight",
+    });
+    const { scrollBy, setScrollLeft } = configureHorizontalScroll(track, {
+      clientWidth: 320,
+      scrollWidth: 960,
+    });
+
+    setScrollLeft(0);
+
+    expect(carousel).toHaveAttribute("aria-roledescription", "carousel");
+    expect(track).toHaveAttribute("data-contained-horizontal-scroll", "");
+    expect(previous).toHaveAttribute("aria-controls", track.id);
+    expect(next).toHaveAttribute("aria-controls", track.id);
+    expect(previous).toBeVisible();
+    expect(next).toBeVisible();
+    expect(previous).toHaveAttribute("aria-disabled", "true");
+    expect(next).toHaveAttribute("aria-disabled", "false");
+
+    await user.click(next);
+
+    expect(scrollBy).toHaveBeenLastCalledWith({
+      behavior: "smooth",
+      left: 320,
+    });
+    expect(previous).toHaveAttribute("aria-disabled", "false");
+    expect(next).toHaveAttribute("aria-disabled", "false");
+
+    setScrollLeft(640);
+    expect(previous).toHaveAttribute("aria-disabled", "false");
+    expect(next).toHaveAttribute("aria-disabled", "true");
+
+    const callsAtEnd = scrollBy.mock.calls.length;
+    await user.click(next);
+    expect(next).toHaveFocus();
+    expect(scrollBy).toHaveBeenCalledTimes(callsAtEnd);
+
+    await user.click(previous);
+    expect(scrollBy).toHaveBeenLastCalledWith({
+      behavior: "smooth",
+      left: -320,
+    });
+    expect(previous).toHaveAttribute("aria-disabled", "false");
+    expect(next).toHaveAttribute("aria-disabled", "false");
+
+    await user.click(previous);
+    expect(previous).toHaveAttribute("aria-disabled", "true");
+    expect(next).toHaveAttribute("aria-disabled", "false");
+
+    expect(recognitionGalleryCss).toMatch(/overflow-x:\s*auto/);
+    expect(recognitionGalleryCss).toMatch(/scroll-snap-type:\s*x mandatory/);
+    expect(recognitionGalleryCss).toMatch(/scroll-snap-align:\s*start/);
   });
 
   it("reveals all twenty-five recognitions in source order with exact filter counts", async () => {
@@ -443,7 +540,7 @@ describe("RecognitionGallery", () => {
     ).toBeNull();
   });
 
-  it("renders no timer-driven carousel, autoplay affordance, or modal", () => {
+  it("renders no timer-driven autoplay affordance or modal", () => {
     const intervalSpy = vi.spyOn(globalThis, "setInterval");
     const timeoutSpy = vi.spyOn(globalThis, "setTimeout");
     const { gallery } = renderGallery();
@@ -452,9 +549,10 @@ describe("RecognitionGallery", () => {
     expect(timeoutSpy).not.toHaveBeenCalled();
     expect(within(gallery).queryByRole("dialog")).not.toBeInTheDocument();
     expect(
-      gallery.querySelector('[aria-roledescription="carousel"]'),
-    ).toBeNull();
+      within(gallery).getByRole("region", {
+        name: "Recognition highlights carousel",
+      }),
+    ).toHaveAttribute("aria-roledescription", "carousel");
     expect(gallery.querySelector("[data-autoplay]")).toBeNull();
-    expect(gallery.querySelector('[class*="carousel" i]')).toBeNull();
   });
 });

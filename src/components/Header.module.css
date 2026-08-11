@@ -38,7 +38,7 @@
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-rows: minmax(var(--header-height), auto) auto;
   align-items: center;
-  width: min(calc(100% - 2 * var(--page-gutter)), var(--content-max));
+  width: min(calc(100% - 2 * var(--page-gutter)), var(--layout-max));
   min-height: var(--header-height);
   margin: 0 auto;
   column-gap: 0.75rem;

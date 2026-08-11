@@ -110,25 +110,50 @@ test("renders typed hero actions, safe named social links, and the fallback port
       /umesh-gangadharaiah-320\.webp 320w, .*umesh-gangadharaiah-640\.webp 640w/u,
     ),
   );
-  expect(sources?.[0]).toHaveAttribute("sizes", "(max-width: 46rem) 78vw, 25rem");
+  expect(sources?.[0]).toHaveAttribute("sizes", "(max-width: 46rem) 78vw, 28rem");
   expect(portrait).toHaveAttribute("width", "800");
   expect(portrait).toHaveAttribute("height", "800");
   expect(portrait).toHaveAttribute("loading", "eager");
   expect(portrait).toHaveAttribute("decoding", "async");
 });
 
-test("renders the four typed impact metrics in their source order", async () => {
+test("groups the four typed metrics into explained source outcomes", async () => {
   await renderPortfolio();
   const impact = screen.getByRole("region", { name: "Impact" });
+  const outcomes = within(impact).getAllByRole("listitem");
 
-  expect(within(impact).getAllByRole("listitem").map((item) => item.textContent)).toEqual(
-    [
-      "50,000+policy objects indexed",
-      "Sub-secondpolicy retrieval",
-      "300+ hoursmanual effort saved",
-      "70%manual effort reduced",
-    ],
+  expect(outcomes.map((item) => item.dataset.impactOutcomeId)).toEqual([
+    "ndo-search-explore",
+    "configuration-automation",
+    "codeshift-cicd-platform",
+  ]);
+  expect(outcomes[0]).toHaveTextContent("NDO Search & Explore");
+  expect(outcomes[0]).toHaveTextContent("50,000+");
+  expect(outcomes[0]).toHaveTextContent("Sub-second");
+  expect(outcomes[0]).toHaveTextContent(
+    "Indexed production-scale policy data while keeping retrieval under one second.",
   );
+  expect(outcomes[1]).toHaveTextContent("Multiserver configuration automation");
+  expect(outcomes[1]).toHaveTextContent("300+ hours");
+  expect(outcomes[1]).toHaveTextContent(
+    "Automated multiserver configurations during my Staff Engineer internship.",
+  );
+  expect(outcomes[2]).toHaveTextContent("Codeshift CI/CD platform");
+  expect(outcomes[2]).toHaveTextContent("70%");
+  expect(outcomes[2]).toHaveTextContent(
+    "Created APIs for VM and resource allocation, reducing manual deployment effort.",
+  );
+
+  for (const [name, href] of [
+    ["View Search & Explore project", "#project-ndo-search-explore"],
+    ["View career milestone", "#career-cisco-staff-engineer-intern"],
+    ["View Codeshift project", "#project-codeshift-cicd-platform"],
+  ] as const) {
+    expect(within(impact).getByRole("link", { name })).toHaveAttribute(
+      "href",
+      href,
+    );
+  }
 });
 
 test("renders every expertise area once as semantic source-ordered content", async () => {
@@ -198,13 +223,30 @@ test("renders every expertise area once as semantic source-ordered content", asy
       level: 3,
       name: area.title,
     });
-    const description = title.nextElementSibling;
+    const normalizedDescription = area.description.trimStart();
+    const sentenceEnd = normalizedDescription.search(/[.!?](?=\s|$)/u);
+    const lead =
+      sentenceEnd < 0
+        ? normalizedDescription
+        : normalizedDescription.slice(0, sentenceEnd + 1);
+    const description = card.querySelector("details p");
+    const disclosure = card.querySelector("details");
+    const disclosureSummary = disclosure?.querySelector("summary");
+    const icon = card.querySelector("svg[aria-hidden='true']");
     const itemLists = within(card).getAllByRole("list", {
       name: area.itemsLabel,
     });
 
-    expect(description?.tagName).toBe("P");
-    expect(description?.textContent).toBe(area.description);
+    expect(title).toHaveAttribute("id", `${area.id}-heading`);
+    expect(icon).toHaveAttribute("focusable", "false");
+    expect(within(card).getByText(lead, { selector: "p" })).toBeVisible();
+    expect(
+      `${lead} ${description?.textContent ?? ""}`,
+    ).toBe(area.description.trimStart());
+    expect(disclosure).not.toHaveAttribute("open");
+    expect(disclosureSummary).toHaveAccessibleName(
+      `Read full description for ${area.title}`,
+    );
     expect(itemLists).toHaveLength(1);
     expect(
       within(itemLists[0]).getAllByRole("listitem").map((item) => item.textContent),

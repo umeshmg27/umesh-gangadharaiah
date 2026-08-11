@@ -77,8 +77,18 @@ async function expectNoHorizontalOverflow(page: Page): Promise<void> {
       .filter((element) => {
         const style = getComputedStyle(element);
         const bounds = element.getBoundingClientRect();
+        const horizontalScrollContainer = element.closest<HTMLElement>(
+          "[data-contained-horizontal-scroll]",
+        );
+        const isContainedHorizontalSlide =
+          horizontalScrollContainer !== null &&
+          horizontalScrollContainer !== element &&
+          ["auto", "scroll"].includes(
+            getComputedStyle(horizontalScrollContainer).overflowX,
+          );
 
         return (
+          !isContainedHorizontalSlide &&
           style.display !== "none" &&
           style.visibility !== "hidden" &&
           style.position !== "fixed" &&
@@ -125,6 +135,7 @@ test("uses the approved global design tokens", async ({ page }) => {
     const style = getComputedStyle(document.documentElement);
     return {
       contentMax: style.getPropertyValue("--content-max").trim(),
+      layoutMax: style.getPropertyValue("--layout-max").trim(),
       focusRing: style.getPropertyValue("--focus-ring").trim(),
       headerHeight: style.getPropertyValue("--header-height").trim(),
       pageGutter: style.getPropertyValue("--page-gutter").trim(),
@@ -134,9 +145,10 @@ test("uses the approved global design tokens", async ({ page }) => {
 
   expect(tokens).toMatchObject({
     contentMax: "72rem",
+    layoutMax: "90rem",
     headerHeight: "4rem",
     pageGutter: "clamp(1rem, 4vw, 3rem)",
-    sectionSpace: "clamp(3.5rem, 8vw, 7rem)",
+    sectionSpace: "clamp(3rem, 6vw, 6rem)",
   });
   expect(tokens.focusRing).toMatch(/(?:^|\s)0?\.1875rem(?:\s|$)/u);
   browser.assertNone();
@@ -149,19 +161,111 @@ test("uses the approved aspect ratios and viewport layouts", async ({ page }) =>
   const viewportWidth = page.viewportSize()?.width ?? 0;
   const expectedProjectColumns = viewportWidth >= 768 ? 2 : 1;
   const expectedContactColumns = viewportWidth >= 768 ? 2 : 1;
+  const expectedExpertiseColumns = viewportWidth >= 768 ? 2 : 1;
   const expectedHeroColumns = viewportWidth >= 1024 ? 2 : 1;
+  const expectedImpactColumns = viewportWidth >= 768 ? 3 : 1;
   const expectedRecognitionColumns = viewportWidth >= 1024 ? 3 : 1;
+  const expectedTimelineColumns = viewportWidth >= 768 ? 3 : 2;
 
   expect(await gridColumnCount(page, "#project-results > div")).toBe(
     expectedProjectColumns,
-  );
-  expect(await gridColumnCount(page, "#recognition-results > div")).toBe(
-    expectedRecognitionColumns,
   );
   expect(
     await gridColumnCount(page, 'section[aria-labelledby="hero-heading"]'),
   ).toBe(expectedHeroColumns);
   expect(await gridColumnCount(page, "#contact")).toBe(expectedContactColumns);
+  expect(await gridColumnCount(page, "#expertise > div")).toBe(
+    expectedExpertiseColumns,
+  );
+  expect(
+    await gridColumnCount(
+      page,
+      'section[aria-labelledby="impact-heading"] > ul',
+    ),
+  ).toBe(expectedImpactColumns);
+  expect(
+    await gridColumnCount(
+      page,
+      '[aria-label="Career timeline, newest to oldest"] > li:first-child',
+    ),
+  ).toBe(expectedTimelineColumns);
+  const timelineGeometry = await page
+    .locator('[aria-label="Career timeline, newest to oldest"] > li')
+    .first()
+    .evaluate((entry) => {
+      const marker = entry.querySelector<HTMLElement>("[data-timeline-marker]");
+      const period = entry.querySelector<HTMLElement>(":scope > p");
+      const card = entry.querySelector<HTMLElement>("article");
+
+      if (!marker || !period || !card) {
+        throw new Error("Missing timeline geometry element");
+      }
+
+      return {
+        card: card.getBoundingClientRect().toJSON(),
+        marker: marker.getBoundingClientRect().toJSON(),
+        period: period.getBoundingClientRect().toJSON(),
+      };
+    });
+  expect(timelineGeometry.marker.right).toBeLessThanOrEqual(
+    timelineGeometry.card.left,
+  );
+
+  if (viewportWidth >= 768) {
+    expect(timelineGeometry.period.right).toBeLessThanOrEqual(
+      timelineGeometry.marker.left,
+    );
+  } else {
+    expect(timelineGeometry.marker.right).toBeLessThanOrEqual(
+      timelineGeometry.period.left,
+    );
+    expect(timelineGeometry.period.bottom).toBeLessThanOrEqual(
+      timelineGeometry.card.top,
+    );
+  }
+
+  const carousel = page.getByRole("region", {
+    name: "Recognition highlights carousel",
+  });
+  const carouselTrack = carousel.getByLabel("Scrollable recognition highlights");
+  const carouselGeometry = await carouselTrack.evaluate((track) => ({
+    clientWidth: track.clientWidth,
+    scrollSnapType: getComputedStyle(track).scrollSnapType,
+    scrollWidth: track.scrollWidth,
+  }));
+  expect(carouselGeometry.scrollWidth).toBeGreaterThan(
+    carouselGeometry.clientWidth,
+  );
+  expect(carouselGeometry.scrollSnapType).toContain("x mandatory");
+  await expect(
+    carousel.getByRole("button", { name: "Previous recognition highlight" }),
+  ).toBeVisible();
+  const nextHighlight = carousel.getByRole("button", {
+    name: "Next recognition highlight",
+  });
+  await expect(nextHighlight).toBeVisible();
+  await nextHighlight.focus();
+  await carouselTrack.evaluate((track) => {
+    track.scrollLeft = track.scrollWidth - track.clientWidth;
+    track.dispatchEvent(new Event("scroll"));
+  });
+  await expect(nextHighlight).toHaveAttribute("aria-disabled", "true");
+  await page.keyboard.press("Enter");
+  await expect(nextHighlight).toBeFocused();
+
+  if (viewportWidth >= 1440) {
+    const wideSectionWidth = await page
+      .locator('section[aria-labelledby="impact-heading"]')
+      .evaluate((section) => section.getBoundingClientRect().width);
+    expect(wideSectionWidth).toBeGreaterThan(1152);
+  }
+
+  await page
+    .getByRole("button", { name: "View all 25 recognitions" })
+    .click();
+  expect(await gridColumnCount(page, "#recognition-results > div")).toBe(
+    expectedRecognitionColumns,
+  );
 
   const projectRatio = await page
     .locator("[data-project-id] > div:first-child")
@@ -198,6 +302,32 @@ test("uses the approved aspect ratios and viewport layouts", async ({ page }) =>
   });
   expect(surnameLineFragments).toBe(1);
   await expectNoHorizontalOverflow(page);
+  browser.assertNone();
+});
+
+test("reveals archived work from a contextual impact link", async ({ page }) => {
+  const browser = monitorBrowserProblems(page);
+  await openPortfolio(page);
+
+  await page.getByRole("link", { name: "View Codeshift project" }).click();
+  await expect(page).toHaveURL(/#project-codeshift-cicd-platform$/u);
+
+  const codeshift = page.locator("#project-codeshift-cicd-platform");
+  await expect(codeshift).toBeVisible();
+  await expect(codeshift).toContainText("reducing manual deployment effort by 70%");
+  await expect(
+    page.getByRole("button", { name: "Show featured projects" }),
+  ).toHaveAttribute("aria-expanded", "true");
+  await expect(codeshift).toBeInViewport();
+
+  const offset = await page.evaluate(() => ({
+    cardTop: document
+      .getElementById("project-codeshift-cicd-platform")!
+      .getBoundingClientRect().top,
+    headerBottom: document.querySelector("header")!.getBoundingClientRect()
+      .bottom,
+  }));
+  expect(offset.cardTop).toBeGreaterThanOrEqual(offset.headerBottom - 1);
   browser.assertNone();
 });
 

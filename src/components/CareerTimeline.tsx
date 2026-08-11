@@ -12,8 +12,12 @@ export default function CareerTimeline() {
         Career
       </h2>
 
-      <ol className={styles.timeline}>
+      <ol
+        aria-label="Career timeline, newest to oldest"
+        className={styles.timeline}
+      >
         {careerEntries.map((entry) => {
+          const roleHeadingId = `${entry.id}-role`;
           const technologiesHeadingId = `${entry.id}-technologies`;
           const highlightsHeadingId = `${entry.id}-highlights`;
 
@@ -21,19 +25,26 @@ export default function CareerTimeline() {
             <li
               className={styles.timelineEntry}
               data-career-id={entry.id}
+              id={`career-${entry.id}`}
               key={entry.id}
             >
-              <article className={styles.card}>
+              <p className={styles.period}>{entry.period}</p>
+              <span
+                aria-hidden="true"
+                className={styles.marker}
+                data-timeline-marker=""
+              />
+
+              <article aria-labelledby={roleHeadingId} className={styles.card}>
                 <div className={styles.entryHeader}>
-                  <div>
-                    <h3 className={styles.role}>{entry.role}</h3>
-                    <p className={styles.organization}>
-                      <span>{entry.organization}</span>
-                      <span>, </span>
-                      <span>{entry.location}</span>
-                    </p>
-                  </div>
-                  <p className={styles.period}>{entry.period}</p>
+                  <h3 className={styles.role} id={roleHeadingId}>
+                    {entry.role}
+                  </h3>
+                  <p className={styles.organization}>
+                    <span>{entry.organization}</span>
+                    <span>, </span>
+                    <span>{entry.location}</span>
+                  </p>
                 </div>
 
                 {"summary" in entry ? (

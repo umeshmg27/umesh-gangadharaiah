@@ -23,6 +23,7 @@ export default function ProjectCard({
     <article
       className={styles.card}
       data-project-id={project.id}
+      id={`project-${project.id}`}
     >
       <div className={styles.imageFrame}>
         <ResponsivePortfolioImage

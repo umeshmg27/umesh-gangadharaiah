@@ -1,4 +1,10 @@
-import { type ChangeEvent, useRef, useState } from "react";
+import {
+  type ChangeEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import type { Project } from "../content/models";
 import { projects } from "../content/projects";
@@ -20,25 +26,86 @@ const featuredProjects = projectRecords
       (left.featuredOrder ?? Number.POSITIVE_INFINITY) -
       (right.featuredOrder ?? Number.POSITIVE_INFINITY),
   );
+const archivedProjectIds = new Set(
+  projectRecords
+    .filter((project) => project.featuredOrder === undefined)
+    .map((project) => project.id),
+);
 
 function projectCountText(count: number, archiveOpen: boolean): string {
   if (!archiveOpen) return `Showing ${count} featured projects.`;
   return `Showing ${count} ${count === 1 ? "project" : "projects"}.`;
 }
 
+function archivedProjectIdFromHash(): string | null {
+  const projectId = window.location.hash.startsWith("#project-")
+    ? window.location.hash.slice("#project-".length)
+    : "";
+
+  return archivedProjectIds.has(projectId) ? projectId : null;
+}
+
 export default function ProjectExplorer() {
-  const [state, setState] = useState<ProjectExplorerState>(() => ({
-    archiveOpen: false,
-    query: "",
-    expandedIds: new Set<string>(),
-  }));
+  const [state, setState] = useState<ProjectExplorerState>(() => {
+    const archivedProjectId = archivedProjectIdFromHash();
+
+    return {
+      archiveOpen: archivedProjectId !== null,
+      query: "",
+      expandedIds: new Set<string>(),
+    };
+  });
   const archiveControlRef = useRef<HTMLButtonElement>(null);
+  const pendingProjectIdRef = useRef<string | null>(
+    archivedProjectIdFromHash(),
+  );
   const visibleProjects = state.archiveOpen
     ? filterProjects(projectRecords, state.query)
     : featuredProjects;
 
+  const revealArchivedProjectFromHash = useCallback((): void => {
+    const projectId = archivedProjectIdFromHash();
+
+    if (!projectId) return;
+
+    pendingProjectIdRef.current = projectId;
+    setState((current) =>
+      current.archiveOpen && current.query === ""
+        ? current
+        : { ...current, archiveOpen: true, query: "" },
+    );
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("hashchange", revealArchivedProjectFromHash);
+
+    return () =>
+      window.removeEventListener("hashchange", revealArchivedProjectFromHash);
+  }, [revealArchivedProjectFromHash]);
+
+  useEffect(() => {
+    const projectId = pendingProjectIdRef.current;
+
+    if (!projectId || !state.archiveOpen || state.query !== "") return;
+
+    const target = document.getElementById(`project-${projectId}`);
+    if (!target) return;
+
+    target.scrollIntoView({ block: "start" });
+    pendingProjectIdRef.current = null;
+  }, [state.archiveOpen, state.query]);
+
   function toggleArchive(): void {
-    if (state.archiveOpen) archiveControlRef.current?.focus();
+    if (state.archiveOpen) {
+      archiveControlRef.current?.focus();
+
+      const projectId = window.location.hash.startsWith("#project-")
+        ? window.location.hash.slice("#project-".length)
+        : "";
+      if (archivedProjectIds.has(projectId)) {
+        window.history.replaceState(null, "", "#projects");
+      }
+    }
 
     setState((current) => ({
       ...current,

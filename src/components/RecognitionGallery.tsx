@@ -1,4 +1,10 @@
-import { type MouseEvent, useRef, useState } from "react";
+import {
+  type MouseEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import type { Recognition, RecognitionCategory } from "../content/models";
 import { recognitions } from "../content/recognitions";
@@ -13,12 +19,22 @@ type RecognitionState = {
   expandedIds: ReadonlySet<string>;
 };
 
+type CarouselControls = {
+  canScrollNext: boolean;
+  canScrollPrevious: boolean;
+};
+
 const recognitionRecords: readonly Recognition[] = recognitions;
 const recognitionCategories = [
   "Innovation",
   "Mentorship",
   "Leadership",
 ] as const satisfies readonly RecognitionCategory[];
+const highlightTrackId = "recognition-highlight-track";
+const initialCarouselControls: CarouselControls = {
+  canScrollNext: false,
+  canScrollPrevious: false,
+};
 const highlightedRecognitions = recognitionRecords
   .filter((recognition) => recognition.highlightOrder !== undefined)
   .sort(
@@ -62,9 +78,51 @@ export default function RecognitionGallery() {
     expandedIds: new Set<string>(),
   }));
   const archiveControlRef = useRef<HTMLButtonElement>(null);
+  const highlightTrackRef = useRef<HTMLDivElement>(null);
+  const [carouselControls, setCarouselControls] =
+    useState<CarouselControls>(initialCarouselControls);
   const visibleRecognitions = state.archiveOpen
     ? filterRecognitions(state.filter)
     : highlightedRecognitions;
+
+  const updateCarouselControls = useCallback((): void => {
+    const track = highlightTrackRef.current;
+
+    if (!track) return;
+
+    const maximumScrollLeft = Math.max(
+      0,
+      track.scrollWidth - track.clientWidth,
+    );
+    const boundaryTolerance = 1;
+    const nextControls = {
+      canScrollNext:
+        track.scrollLeft < maximumScrollLeft - boundaryTolerance,
+      canScrollPrevious: track.scrollLeft > boundaryTolerance,
+    };
+
+    setCarouselControls((current) =>
+      current.canScrollNext === nextControls.canScrollNext &&
+      current.canScrollPrevious === nextControls.canScrollPrevious
+        ? current
+        : nextControls,
+    );
+  }, []);
+
+  useEffect(() => {
+    if (state.archiveOpen) return;
+
+    const track = highlightTrackRef.current;
+
+    if (!track) return;
+
+    updateCarouselControls();
+
+    const resizeObserver = new ResizeObserver(updateCarouselControls);
+    resizeObserver.observe(track);
+
+    return () => resizeObserver.disconnect();
+  }, [state.archiveOpen, updateCarouselControls]);
 
   function toggleArchive(): void {
     if (state.archiveOpen) archiveControlRef.current?.focus();
@@ -107,6 +165,34 @@ export default function RecognitionGallery() {
       return { ...current, expandedIds };
     });
   }
+
+  function scrollHighlights(direction: -1 | 1): void {
+    const track = highlightTrackRef.current;
+
+    if (
+      !track ||
+      (direction < 0 && !carouselControls.canScrollPrevious) ||
+      (direction > 0 && !carouselControls.canScrollNext)
+    ) {
+      return;
+    }
+
+    track.scrollBy({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+      left: direction * track.clientWidth,
+    });
+  }
+
+  const cards = visibleRecognitions.map((recognition) => (
+    <RecognitionCard
+      expanded={state.expandedIds.has(recognition.id)}
+      key={recognition.id}
+      onToggle={toggleDetails}
+      recognition={recognition}
+    />
+  ));
 
   return (
     <section
@@ -173,16 +259,50 @@ export default function RecognitionGallery() {
       </p>
 
       <div id="recognition-results">
-        <div className={styles.grid}>
-          {visibleRecognitions.map((recognition) => (
-            <RecognitionCard
-              expanded={state.expandedIds.has(recognition.id)}
-              key={recognition.id}
-              onToggle={toggleDetails}
-              recognition={recognition}
-            />
-          ))}
-        </div>
+        {state.archiveOpen ? (
+          <div className={styles.grid}>{cards}</div>
+        ) : (
+          <div
+            aria-label="Recognition highlights carousel"
+            aria-roledescription="carousel"
+            className={styles.highlightCarousel}
+            role="region"
+          >
+            <div className={styles.carouselControls}>
+              <button
+                aria-controls={highlightTrackId}
+                aria-disabled={!carouselControls.canScrollPrevious}
+                aria-label="Previous recognition highlight"
+                className={styles.carouselControl}
+                onClick={() => scrollHighlights(-1)}
+                type="button"
+              >
+                Previous
+              </button>
+              <button
+                aria-controls={highlightTrackId}
+                aria-disabled={!carouselControls.canScrollNext}
+                aria-label="Next recognition highlight"
+                className={styles.carouselControl}
+                onClick={() => scrollHighlights(1)}
+                type="button"
+              >
+                Next
+              </button>
+            </div>
+
+            <div
+              aria-label="Scrollable recognition highlights"
+              className={styles.highlightTrack}
+              data-contained-horizontal-scroll=""
+              id={highlightTrackId}
+              onScroll={updateCarouselControls}
+              ref={highlightTrackRef}
+            >
+              {cards}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

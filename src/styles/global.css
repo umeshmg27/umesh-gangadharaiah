@@ -62,7 +62,7 @@ main {
 }
 
 .page-shell {
-  width: min(calc(100% - 2 * var(--page-gutter)), var(--content-max));
+  width: min(calc(100% - 2 * var(--page-gutter)), var(--layout-max));
   margin-inline: auto;
 }
 

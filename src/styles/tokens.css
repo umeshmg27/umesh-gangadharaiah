@@ -16,9 +16,10 @@
     "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --content-max: 72rem;
+  --layout-max: 90rem;
   --header-height: 4rem;
   --page-gutter: clamp(1rem, 4vw, 3rem);
-  --section-space: clamp(3.5rem, 8vw, 7rem);
+  --section-space: clamp(3rem, 6vw, 6rem);
   --focus-ring: 0 0 0 0.1875rem var(--color-focus);
   --radius-small: 0.6rem;
   --radius-medium: 1rem;

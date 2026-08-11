@@ -1,5 +1,5 @@
 .section {
-  width: min(calc(100% - 2 * var(--page-gutter)), var(--content-max));
+  width: min(calc(100% - 2 * var(--page-gutter)), var(--layout-max));
   margin: 0 auto;
   padding: var(--section-space) 0;
 }
@@ -89,6 +89,72 @@
   gap: clamp(1rem, 2.5vw, 1.5rem);
 }
 
+.highlightCarousel {
+  margin-top: 1rem;
+}
+
+.carouselControls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.carouselControl {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-small);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.carouselControl:hover:not([aria-disabled="true"]) {
+  border-color: var(--color-accent);
+  color: var(--color-accent-strong);
+}
+
+.carouselControl[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.highlightTrack {
+  --highlight-gap: clamp(1rem, 2.5vw, 1.5rem);
+
+  display: grid;
+  grid-auto-columns: 88%;
+  grid-auto-flow: column;
+  gap: var(--highlight-gap);
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding: 0.125rem 0.125rem 1rem;
+  scroll-padding-inline: 0.125rem;
+  scroll-snap-type: x mandatory;
+}
+
+.highlightTrack:focus-visible {
+  border-radius: var(--radius-small);
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.highlightTrack > article {
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 40rem) {
+  .highlightTrack {
+    grid-auto-columns: calc((100% - var(--highlight-gap)) / 2);
+  }
+}
+
 @media (min-width: 64rem) {
   .sectionHeader {
     align-items: flex-end;
@@ -97,5 +163,9 @@
 
   .grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .highlightTrack {
+    grid-auto-columns: calc((100% - 2 * var(--highlight-gap)) / 3);
   }
 }

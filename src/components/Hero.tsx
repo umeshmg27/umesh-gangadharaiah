@@ -33,7 +33,7 @@ export default function Hero() {
           className={styles.portrait}
           image={profile.portrait}
           loading="eager"
-          sizes="(max-width: 46rem) 78vw, 25rem"
+          sizes="(max-width: 46rem) 78vw, 28rem"
         />
       </div>
     </section>
