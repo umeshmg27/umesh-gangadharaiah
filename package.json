@@ -30,6 +30,8 @@
     "verify:content": "vitest run src/content/contentIntegrity.test.ts",
     "verify:assets": "node scripts/verify-assets.mjs",
     "verify:dist": "node scripts/verify-dist.mjs",
+    "audit:external": "node scripts/audit-external-links.mjs",
+    "smoke:pages": "node scripts/smoke-pages.mjs",
     "check": "npm run verify:content && npm run lint && npm run test && npm run verify:assets && npm run build"
   },
   "devDependencies": {
