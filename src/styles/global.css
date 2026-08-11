@@ -78,21 +78,6 @@ section[id] {
   scroll-margin-top: calc(var(--header-height) + 1rem);
 }
 
-/* Temporary compatibility while Tasks 6–9 replace retained legacy sections. */
-html[data-theme="light"] .skills-container svg,
-html[data-theme="light"] .flex-chips .chip-title {
-  color: var(--color-text);
-}
-
-html[data-theme="light"] .vertical-timeline span,
-html[data-theme="light"] .vertical-timeline-element-date {
-  color: var(--color-text-muted);
-}
-
-html[data-theme="light"] .vertical-timeline-element-icon .svg-inline--fa {
-  color: var(--color-accent-contrast);
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

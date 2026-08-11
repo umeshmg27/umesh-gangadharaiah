@@ -7,7 +7,6 @@ import Hero from "./components/Hero";
 import ImpactSummary from "./components/ImpactSummary";
 import ProjectExplorer from "./components/ProjectExplorer";
 import RecognitionGallery from "./components/RecognitionGallery";
-import "./index.scss";
 import "./styles/tokens.css";
 import "./styles/global.css";
 

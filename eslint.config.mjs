@@ -5,23 +5,9 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-// Task 12: remove this temporary legacy migration exclusion after modernizing these files.
-const legacyMigrationFiles = [
-  'src/components/Navigation.tsx',
-  'src/components/Main.tsx',
-  'src/components/Expertise.tsx',
-  'src/components/Timeline.tsx',
-  'src/components/Project.tsx',
-  'src/components/Recognition.tsx',
-  'src/components/RecognitionModel.tsx',
-  'src/components/Contact.tsx',
-  'src/components/FadeIn.tsx',
-  'src/components/index.js',
-];
-
 export default tseslint.config(
   {
-    ignores: ['dist', 'coverage', 'node_modules', ...legacyMigrationFiles],
+    ignores: ['dist', 'coverage', 'node_modules'],
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,tsx}'],

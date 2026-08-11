@@ -89,8 +89,11 @@ function runScript(scriptName: (typeof scriptNames)[number], args: string[] = []
 
 async function copyHistoricalSource(record: AssetRecord): Promise<void> {
   const target = path.join(temporaryRoot, record.source);
+  const preservedRecord = fixture.assets.find(({ id }) => id === record.id);
+  if (!preservedRecord) throw new Error(`Unknown active asset: ${record.id}`);
   await mkdir(path.dirname(target), { recursive: true });
-  await copyFile(path.join(repositoryRoot, record.source), target);
+  // Fallbacks preserve the locked source bytes after legacy paths are removed.
+  await copyFile(path.join(repositoryRoot, preservedRecord.fallback), target);
 }
 
 async function copyAllHistoricalSources(): Promise<void> {
@@ -381,7 +384,7 @@ describe("active asset pipeline integrity", () => {
     const source = path.join(temporaryRoot, firstRecord.source);
     const externalSource = path.join(externalRoot, "portrait.jpg");
     await mkdir(path.dirname(source), { recursive: true });
-    await copyFile(path.join(repositoryRoot, firstRecord.source), externalSource);
+    await copyFile(path.join(repositoryRoot, firstRecord.fallback), externalSource);
     const externalBytes = await readFile(externalSource);
     await symlink(externalSource, source);
 

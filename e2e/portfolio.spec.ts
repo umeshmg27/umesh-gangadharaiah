@@ -240,9 +240,46 @@ test("keeps project and recognition archives, filters, and disclosures usable", 
   const browser = monitorBrowserProblems(page);
   await openPortfolio(page);
 
+  const pageHeadings = page.getByRole("heading", { level: 1 });
+  await expect(pageHeadings).toHaveCount(1);
+  await expect(pageHeadings).toHaveAccessibleName("Umesh Gangadharaiah");
+  const primaryLinks = page.locator(
+    'nav[aria-label="Primary navigation"] a[href^="#"]',
+  );
+  await expect(primaryLinks).toHaveCount(5);
+  expect(
+    await primaryLinks.evaluateAll((links) =>
+      links.map((link) => link.getAttribute("href")),
+    ),
+  ).toEqual([
+    "#expertise",
+    "#experience",
+    "#projects",
+    "#recognition",
+    "#contact",
+  ]);
+  await expect(page.getByText("50,000+", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      name: "Backend Engineer - Distributed Systems & Infrastructure",
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Software Engineer III" }),
+  ).toBeVisible();
+
   await expect(page.locator("[data-project-id]")).toHaveCount(4);
   await page.getByRole("button", { name: "View all 12 projects" }).click();
   await expect(page.locator("[data-project-id]")).toHaveCount(12);
+  const archivedProject = page.locator(
+    '[data-project-id="telegram-data-storage"]',
+  );
+  await expect(
+    archivedProject.getByRole("heading", { name: "Telegram as Data Storage" }),
+  ).toBeVisible();
+  await expect(archivedProject).toContainText(
+    "Personal project that uses Telegram chats as an ad-hoc storage service. Designed as a lightweight backup system for data dump using Telegram APIs and automation.",
+  );
   await page.getByRole("searchbox", { name: "Search projects" }).fill("Telegram");
   await expect(page.locator("[data-project-id]")).toHaveCount(1);
   await expect(page.getByText("Showing 1 project.")).toBeVisible();
@@ -260,6 +297,15 @@ test("keeps project and recognition archives, filters, and disclosures usable", 
   await expect(page.locator("[data-recognition-id]")).toHaveCount(6);
   await page.getByRole("button", { name: "View all 25 recognitions" }).click();
   await expect(page.locator("[data-recognition-id]")).toHaveCount(25);
+  const archivedRecognition = page.locator(
+    '[data-recognition-id="damo-211224"]',
+  );
+  await expect(archivedRecognition).toContainText(
+    "Ownership towards NDO ESG triages",
+  );
+  await expect(archivedRecognition).toContainText(
+    "You have been demonstrating ownership and responsibility triaging NDO ESG issues that saves QA cycle time. Keep up the good work.",
+  );
   await page.getByRole("button", { name: /^Mentorship \(\d+\)$/u }).click();
   const mentorshipCards = page.locator('[data-recognition-category="Mentorship"]');
   await expect(mentorshipCards).not.toHaveCount(0);

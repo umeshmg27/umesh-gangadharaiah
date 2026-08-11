@@ -1,10 +1,9 @@
-import { act, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 
 import App from "./App";
 import ResponsivePortfolioImage from "./components/ResponsivePortfolioImage";
 import type { LocalImageAsset, RemoteImageAsset } from "./content/models";
-import globalCss from "./styles/global.css?raw";
 
 beforeEach(() => {
   window.localStorage.clear();
@@ -49,12 +48,9 @@ test("renders the semantic shell with all five primary sections", async () => {
   mainLandmark.focus();
   expect(mainLandmark).toHaveFocus();
   expect(screen.getByRole("contentinfo")).toBeInTheDocument();
-  expect(
-    screen.getByRole("heading", {
-      level: 1,
-      name: "Umesh Gangadharaiah",
-    }),
-  ).toBeInTheDocument();
+  const pageHeadings = screen.getAllByRole("heading", { level: 1 });
+  expect(pageHeadings).toHaveLength(1);
+  expect(pageHeadings[0]).toHaveAccessibleName("Umesh Gangadharaiah");
 
   for (const heading of [
     "Expertise",
@@ -358,7 +354,52 @@ test("renders all career entries as one complete ordered timeline", async () => 
       "Automated multiserver configurations saving 300+ hours",
     ),
   ).toBeInTheDocument();
-  expect(career.querySelector(".vertical-timeline, .MuiChip-root")).toBeNull();
+});
+
+test("keeps representative project and recognition content discoverable through archives", async () => {
+  await renderPortfolio();
+
+  expect(
+    screen.queryByRole("heading", { name: "Telegram as Data Storage" }),
+  ).not.toBeInTheDocument();
+  fireEvent.click(
+    screen.getByRole("button", { name: "View all 12 projects" }),
+  );
+
+  const archivedProject = document.querySelector<HTMLElement>(
+    '[data-project-id="telegram-data-storage"]',
+  );
+  expect(archivedProject).not.toBeNull();
+  expect(
+    within(archivedProject!).getByRole("heading", {
+      name: "Telegram as Data Storage",
+    }),
+  ).toBeInTheDocument();
+  expect(archivedProject).toHaveTextContent(
+    "Personal project that uses Telegram chats as an ad-hoc storage service. Designed as a lightweight backup system for data dump using Telegram APIs and automation.",
+  );
+
+  expect(
+    screen.queryByRole("heading", {
+      name: "Ownership towards NDO ESG triages",
+    }),
+  ).not.toBeInTheDocument();
+  fireEvent.click(
+    screen.getByRole("button", { name: "View all 25 recognitions" }),
+  );
+
+  const archivedRecognition = document.querySelector<HTMLElement>(
+    '[data-recognition-id="damo-211224"]',
+  );
+  expect(archivedRecognition).not.toBeNull();
+  expect(
+    within(archivedRecognition!).getByRole("heading", {
+      name: "Ownership towards NDO ESG triages",
+    }),
+  ).toBeInTheDocument();
+  expect(archivedRecognition).toHaveTextContent(
+    "You have been demonstrating ownership and responsibility triaging NDO ESG issues that saves QA cycle time. Keep up the good work.",
+  );
 });
 
 test("keeps all five navigation destinations as real anchors", async () => {
@@ -441,24 +482,6 @@ test("combines local WebP candidates into one responsive source", () => {
     "(max-width: 40rem) 90vw, 30rem",
   );
   expect(image).toHaveAttribute("loading", "eager");
-});
-
-test("temporarily corrects only known light-theme legacy foregrounds", () => {
-  expect(globalCss).toMatch(
-    /html\[data-theme="light"\] \.skills-container svg,[\s\S]*html\[data-theme="light"\] \.flex-chips \.chip-title\s*\{[^}]*color:\s*var\(--color-text\);/,
-  );
-  expect(globalCss).toMatch(
-    /html\[data-theme="light"\] \.vertical-timeline span,[\s\S]*html\[data-theme="light"\] \.vertical-timeline-element-date\s*\{[^}]*color:\s*var\(--color-text-muted\);/,
-  );
-  expect(globalCss).not.toMatch(
-    /html\[data-theme="light"\]\s+\.vertical-timeline\s+\*/,
-  );
-  expect(globalCss).not.toMatch(
-    /html\[data-theme="light"\] \.svg-inline--fa\s*\{/,
-  );
-  expect(globalCss).toMatch(
-    /html\[data-theme="light"\] \.vertical-timeline-element-icon \.svg-inline--fa\s*\{[^}]*color:\s*var\(--color-accent-contrast\);/,
-  );
 });
 
 test("footer reuses named social links and preserves the original statement as text", async () => {
