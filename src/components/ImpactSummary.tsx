@@ -1,5 +1,6 @@
 import {
   ArrowRight,
+  BrainCircuit,
   Clock3,
   Search,
   Workflow,
@@ -17,12 +18,29 @@ type ImpactOutcome = {
   readonly title: string;
   readonly summary: string;
   readonly metricIds: readonly ImpactMetricId[];
+  readonly capabilities?: readonly string[];
   readonly linkLabel: string;
   readonly href: string;
   readonly icon: LucideIcon;
 };
 
-const impactOutcomes = [
+const impactOutcomes: readonly ImpactOutcome[] = [
+  {
+    id: "agentic-engineering-automation",
+    title: "Agentic Engineering Automation",
+    summary:
+      "Designed MCP integrations and applied reusable agent workflows to evidence-led diagnosis, human-reviewed decisions, validation, and feature delivery.",
+    metricIds: ["agentic-resolution-throughput"],
+    capabilities: [
+      "AI Agents",
+      "Reusable Skills",
+      "Model Context Protocol",
+      "Evidence-led workflows",
+    ],
+    linkLabel: "Explore agentic engineering project",
+    href: "#project-agentic-engineering-automation",
+    icon: BrainCircuit,
+  },
   {
     id: "ndo-search-explore",
     title: "NDO Search & Explore",
@@ -53,7 +71,7 @@ const impactOutcomes = [
     href: "#project-codeshift-cicd-platform",
     icon: Workflow,
   },
-] as const satisfies readonly ImpactOutcome[];
+];
 
 function metricById(metricId: ImpactMetricId) {
   const metric = impactMetrics.find(({ id }) => id === metricId);
@@ -101,6 +119,18 @@ export default function ImpactSummary() {
                   );
                 })}
               </div>
+              {outcome.capabilities ? (
+                <ul
+                  aria-label={`${outcome.title} capabilities`}
+                  className={styles.capabilities}
+                >
+                  {outcome.capabilities.map((capability) => (
+                    <li className={styles.capability} key={capability}>
+                      {capability}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
               <p className={styles.summary}>{outcome.summary}</p>
               <a className={styles.sourceLink} href={outcome.href}>
                 {outcome.linkLabel}

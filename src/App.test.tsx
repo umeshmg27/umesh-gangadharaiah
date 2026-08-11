@@ -117,34 +117,56 @@ test("renders typed hero actions, safe named social links, and the fallback port
   expect(portrait).toHaveAttribute("decoding", "async");
 });
 
-test("groups the four typed metrics into explained source outcomes", async () => {
+test("groups five typed metrics into explained source outcomes", async () => {
   await renderPortfolio();
   const impact = screen.getByRole("region", { name: "Impact" });
-  const outcomes = within(impact).getAllByRole("listitem");
+  const outcomes = Array.from(
+    impact.querySelectorAll<HTMLElement>("[data-impact-outcome-id]"),
+  );
 
   expect(outcomes.map((item) => item.dataset.impactOutcomeId)).toEqual([
+    "agentic-engineering-automation",
     "ndo-search-explore",
     "configuration-automation",
     "codeshift-cicd-platform",
   ]);
-  expect(outcomes[0]).toHaveTextContent("NDO Search & Explore");
-  expect(outcomes[0]).toHaveTextContent("50,000+");
-  expect(outcomes[0]).toHaveTextContent("Sub-second");
+  expect(outcomes[0]).toHaveTextContent("Agentic Engineering Automation");
+  expect(outcomes[0]).toHaveTextContent("Up to 5–6×");
   expect(outcomes[0]).toHaveTextContent(
+    "Designed MCP integrations and applied reusable agent workflows to evidence-led diagnosis, human-reviewed decisions, validation, and feature delivery.",
+  );
+  expect(
+    within(outcomes[0])
+      .getAllByRole("listitem")
+      .map((item) => item.textContent),
+  ).toEqual([
+    "AI Agents",
+    "Reusable Skills",
+    "Model Context Protocol",
+    "Evidence-led workflows",
+  ]);
+  expect(outcomes[1]).toHaveTextContent("NDO Search & Explore");
+  expect(outcomes[1]).toHaveTextContent("50,000+");
+  expect(outcomes[1]).toHaveTextContent("Sub-second");
+  expect(outcomes[1]).toHaveTextContent(
     "Indexed production-scale policy data while keeping retrieval under one second.",
   );
-  expect(outcomes[1]).toHaveTextContent("Multiserver configuration automation");
-  expect(outcomes[1]).toHaveTextContent("300+ hours");
-  expect(outcomes[1]).toHaveTextContent(
+  expect(outcomes[2]).toHaveTextContent("Multiserver configuration automation");
+  expect(outcomes[2]).toHaveTextContent("300+ hours");
+  expect(outcomes[2]).toHaveTextContent(
     "Automated multiserver configurations during my Staff Engineer internship.",
   );
-  expect(outcomes[2]).toHaveTextContent("Codeshift CI/CD platform");
-  expect(outcomes[2]).toHaveTextContent("70%");
-  expect(outcomes[2]).toHaveTextContent(
+  expect(outcomes[3]).toHaveTextContent("Codeshift CI/CD platform");
+  expect(outcomes[3]).toHaveTextContent("70%");
+  expect(outcomes[3]).toHaveTextContent(
     "Created APIs for VM and resource allocation, reducing manual deployment effort.",
   );
 
   for (const [name, href] of [
+    [
+      "Explore agentic engineering project",
+      "#project-agentic-engineering-automation",
+    ],
     ["View Search & Explore project", "#project-ndo-search-explore"],
     ["View career milestone", "#career-cisco-staff-engineer-intern"],
     ["View Codeshift project", "#project-codeshift-cicd-platform"],
@@ -423,7 +445,7 @@ test("keeps representative project and recognition content discoverable through 
     screen.queryByRole("heading", { name: "Telegram as Data Storage" }),
   ).not.toBeInTheDocument();
   fireEvent.click(
-    screen.getByRole("button", { name: "View all 12 projects" }),
+    screen.getByRole("button", { name: "View all 13 projects" }),
   );
 
   const archivedProject = document.querySelector<HTMLElement>(

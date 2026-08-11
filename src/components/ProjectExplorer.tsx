@@ -92,6 +92,11 @@ export default function ProjectExplorer() {
     if (!target) return;
 
     target.scrollIntoView({ block: "start" });
+    const heading = target.querySelector<HTMLElement>("h3");
+    if (heading) {
+      heading.tabIndex = -1;
+      heading.focus({ preventScroll: true });
+    }
     pendingProjectIdRef.current = null;
   }, [state.archiveOpen, state.query]);
 

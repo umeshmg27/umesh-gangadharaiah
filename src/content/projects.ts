@@ -189,6 +189,27 @@ export const projects = [
     ),
     publicUrl: "https://github.com/umeshmg27/Telegram-as-Data-Storage",
   },
+  {
+    id: "agentic-engineering-automation",
+    title: "Agentic Engineering Automation",
+    description:
+      "Helped establish and evolve an agentic engineering foundation by designing selected Model Context Protocol integrations and applying reusable Skills and specialist-agent workflows. The system turns sanitized issue context into scoped evidence, competing hypotheses, human-reviewed root causes, validated change options, and review-ready technical handoffs; the same building blocks support feature delivery and day-to-day engineering, with reported gains of up to 5–6× in bug-resolution throughput for individual engineers and the wider team. This public case study intentionally omits proprietary product names, repositories, customer information, operational data, and implementation details.",
+    image: {
+      kind: "abstract",
+      alt: "Abstract workflow connecting AI agents, reusable Skills, and context integration",
+      labels: ["Agents", "Skills", "MCP"],
+    },
+    capabilities: [
+      "AI Agents",
+      "Reusable Skills",
+      "Model Context Protocol",
+      "Multi-agent orchestration",
+      "Evidence-led RCA",
+      "Human approval gates",
+      "Automated validation",
+    ],
+    abstracted: true,
+  },
 ] as const satisfies readonly Project[];
 
 export type ProjectId = (typeof projects)[number]["id"];

@@ -51,6 +51,7 @@ const projectIds = [
   "dementia-detection-ieee",
   "flikrify",
   "telegram-data-storage",
+  "agentic-engineering-automation",
 ] as const;
 
 const recognitionIds = [
@@ -197,11 +198,11 @@ describe("typed portfolio content", () => {
     expect(careerEntries.map(({ id }) => id)).toEqual(careerIds);
     expect(expertiseAreas.map(({ id }) => id)).toEqual(expertiseIds);
 
-    expect(projects).toHaveLength(12);
+    expect(projects).toHaveLength(13);
     expect(recognitions).toHaveLength(25);
     expect(careerEntries).toHaveLength(5);
     expect(expertiseAreas).toHaveLength(4);
-    expect(impactMetrics).toHaveLength(4);
+    expect(impactMetrics).toHaveLength(5);
 
     expectUnique(projects.map(({ id }) => id));
     expectUnique(recognitions.map(({ id }) => id));
@@ -210,8 +211,14 @@ describe("typed portfolio content", () => {
     expectUnique(impactMetrics.map(({ id }) => id));
   });
 
-  it("preserves the four evidence-backed impact metrics", () => {
+  it("preserves the five public impact metrics and their source records", () => {
     expect(impactMetrics).toEqual([
+      {
+        id: "agentic-resolution-throughput",
+        value: "Up to 5–6×",
+        label: "reported defect-resolution throughput",
+        sourceRecordId: "agentic-engineering-automation",
+      },
       {
         id: "policy-objects-indexed",
         value: "50,000+",
@@ -237,6 +244,16 @@ describe("typed portfolio content", () => {
         sourceRecordId: "codeshift-cicd-platform",
       },
     ]);
+
+    const sourceRecordIds = new Set([
+      ...projects.map(({ id }) => id),
+      ...careerEntries.map(({ id }) => id),
+    ]);
+    expect(
+      impactMetrics.every(({ sourceRecordId }) =>
+        sourceRecordIds.has(sourceRecordId),
+      ),
+    ).toBe(true);
   });
 
   it("uses only approved project destinations and selections", () => {
@@ -280,6 +297,11 @@ describe("typed portfolio content", () => {
         featuredOrder: null,
         publicUrl: "https://github.com/umeshmg27/Telegram-as-Data-Storage",
       },
+      {
+        id: "agentic-engineering-automation",
+        featuredOrder: null,
+        publicUrl: null,
+      },
     ]);
 
     const linkedProjects = projects.filter((project) => "publicUrl" in project);
@@ -305,8 +327,14 @@ describe("typed portfolio content", () => {
     });
   });
 
-  it("preserves project prose with only the approved ND-AlphaX cleanup", () => {
-    expect(sha256(projects.map(({ title, description }) => ({ title, description })))).toBe(
+  it("preserves legacy project prose and adds one explicitly abstracted case study", () => {
+    expect(
+      sha256(
+        projects
+          .slice(0, 12)
+          .map(({ title, description }) => ({ title, description })),
+      ),
+    ).toBe(
       "d655a4093749f15a99408b07c7a7f6d002b7737f1a42fbc5e90be0c8881935c3",
     );
     expect(projects.map(({ id, image }) => ({ id, image }))).toEqual([
@@ -430,7 +458,41 @@ describe("typed portfolio content", () => {
           1080,
         ),
       },
+      {
+        id: "agentic-engineering-automation",
+        image: {
+          kind: "abstract",
+          alt: "Abstract workflow connecting AI agents, reusable Skills, and context integration",
+          labels: ["Agents", "Skills", "MCP"],
+        },
+      },
     ]);
+
+    expect(projects.at(-1)).toEqual({
+      id: "agentic-engineering-automation",
+      title: "Agentic Engineering Automation",
+      description:
+        "Helped establish and evolve an agentic engineering foundation by designing selected Model Context Protocol integrations and applying reusable Skills and specialist-agent workflows. The system turns sanitized issue context into scoped evidence, competing hypotheses, human-reviewed root causes, validated change options, and review-ready technical handoffs; the same building blocks support feature delivery and day-to-day engineering, with reported gains of up to 5–6× in bug-resolution throughput for individual engineers and the wider team. This public case study intentionally omits proprietary product names, repositories, customer information, operational data, and implementation details.",
+      image: {
+        kind: "abstract",
+        alt: "Abstract workflow connecting AI agents, reusable Skills, and context integration",
+        labels: ["Agents", "Skills", "MCP"],
+      },
+      capabilities: [
+        "AI Agents",
+        "Reusable Skills",
+        "Model Context Protocol",
+        "Multi-agent orchestration",
+        "Evidence-led RCA",
+        "Human approval gates",
+        "Automated validation",
+      ],
+      abstracted: true,
+    });
+    expect(projects.at(-1)).not.toHaveProperty("publicUrl");
+    expect(projects.at(-1)?.description).not.toMatch(
+      /(?:https?:\/\/|\b\d{1,3}(?:\.\d{1,3}){3}\b|\b[A-Z]+-\d{3,}\b)/u,
+    );
   });
 
   it("preserves recognition records, categories, and approved highlights", () => {
@@ -708,8 +770,15 @@ describe("typed portfolio content", () => {
       expect(project.title.trim()).not.toBe("");
       expect(project.description.trim()).not.toBe("");
       expect(project.image.alt.trim()).not.toBe("");
-      expect(project.image.width).toBeGreaterThan(0);
-      expect(project.image.height).toBeGreaterThan(0);
+      if (project.image.kind === "abstract") {
+        expect(project.image.labels).toHaveLength(3);
+        expect(project.image.labels.every((label) => label.trim() !== "")).toBe(
+          true,
+        );
+      } else {
+        expect(project.image.width).toBeGreaterThan(0);
+        expect(project.image.height).toBeGreaterThan(0);
+      }
     }
 
     for (const recognition of recognitions) {

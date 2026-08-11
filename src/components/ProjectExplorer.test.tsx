@@ -73,7 +73,7 @@ describe("ProjectExplorer", () => {
     expect(projectIds(explorer)).toEqual(featuredIds);
     expect(
       within(explorer).getByRole("button", {
-        name: "View all 12 projects",
+        name: "View all 13 projects",
       }),
     ).toHaveAttribute("aria-expanded", "false");
     expect(
@@ -82,12 +82,12 @@ describe("ProjectExplorer", () => {
     expectOrdinaryCount(explorer, "Showing 4 featured projects.");
   });
 
-  it("reveals all twelve projects in source order with a described search input", async () => {
+  it("reveals all thirteen projects in source order with a described search input", async () => {
     const { explorer, user } = renderExplorer();
 
     await user.click(
       within(explorer).getByRole("button", {
-        name: "View all 12 projects",
+        name: "View all 13 projects",
       }),
     );
 
@@ -108,7 +108,7 @@ describe("ProjectExplorer", () => {
     expect(document.getElementById(descriptionId ?? "")).toHaveTextContent(
       "Search project titles and descriptions.",
     );
-    expectOrdinaryCount(explorer, "Showing 12 projects.");
+    expectOrdinaryCount(explorer, "Showing 13 projects.");
   });
 
   it("reveals and scrolls to an archived project addressed by its fragment", async () => {
@@ -138,6 +138,12 @@ describe("ProjectExplorer", () => {
         }),
       ).toHaveAttribute("aria-expanded", "true");
       expect(scrollIntoView).toHaveBeenCalledWith({ block: "start" });
+      expect(
+        within(explorer).getByRole("heading", {
+          level: 3,
+          name: "Codeshift - CI/CD Platform",
+        }),
+      ).toHaveFocus();
 
       await user.click(
         within(explorer).getByRole("button", {
@@ -165,7 +171,7 @@ describe("ProjectExplorer", () => {
 
     await user.click(
       within(explorer).getByRole("button", {
-        name: "View all 12 projects",
+        name: "View all 13 projects",
       }),
     );
     const search = within(explorer).getByRole("searchbox", {
@@ -201,7 +207,7 @@ describe("ProjectExplorer", () => {
 
     await user.click(
       within(explorer).getByRole("button", {
-        name: "View all 12 projects",
+        name: "View all 13 projects",
       }),
     );
     const search = within(explorer).getByRole("searchbox", {
@@ -217,7 +223,7 @@ describe("ProjectExplorer", () => {
     fireEvent.click(collapseControl);
 
     expect(collapseControl).toHaveFocus();
-    expect(collapseControl).toHaveAccessibleName("View all 12 projects");
+    expect(collapseControl).toHaveAccessibleName("View all 13 projects");
     expect(projectIds(explorer)).toEqual(featuredIds);
     expect(
       within(explorer).queryByRole("searchbox", { name: "Search projects" }),
@@ -236,7 +242,7 @@ describe("ProjectExplorer", () => {
 
     await user.click(
       within(explorer).getByRole("button", {
-        name: "View all 12 projects",
+        name: "View all 13 projects",
       }),
     );
 
@@ -275,7 +281,7 @@ describe("ProjectExplorer", () => {
 
     await user.click(
       within(explorer).getByRole("button", {
-        name: "View all 12 projects",
+        name: "View all 13 projects",
       }),
     );
 
@@ -311,7 +317,7 @@ describe("ProjectExplorer", () => {
 
     await user.click(
       within(explorer).getByRole("button", {
-        name: "View all 12 projects",
+        name: "View all 13 projects",
       }),
     );
 
@@ -322,10 +328,8 @@ describe("ProjectExplorer", () => {
       });
       const detailsId = detailsButton.getAttribute("aria-controls");
       const details = document.getElementById(detailsId ?? "");
-      const preview = Array.from(card.querySelectorAll("p")).find(
-        (paragraph) => paragraph.id !== detailsId,
-      );
-      const image = within(card).getByRole("img", {
+      const preview = card.querySelector("[data-project-preview]");
+      const visual = within(card).getByRole("img", {
         name: project.image.alt,
       });
 
@@ -337,17 +341,71 @@ describe("ProjectExplorer", () => {
       expect(detailsButton).toHaveAttribute("aria-expanded", "false");
       expect(details).toHaveTextContent(project.description);
       expect(details).not.toBeVisible();
-      expect(image).toHaveAttribute("loading", "lazy");
-      expect(image).toHaveAttribute("decoding", "async");
-      expect(image).toHaveAttribute("width", String(project.image.width));
-      expect(image).toHaveAttribute("height", String(project.image.height));
-
-      if (project.image.kind === "local") {
-        expect(image.closest("picture")).not.toBeNull();
+      if (project.image.kind === "abstract") {
+        expect(visual.tagName).toBe("DIV");
+        expect(visual.closest("picture")).toBeNull();
+        expect(visual).not.toHaveAttribute("loading");
+        expect(visual).not.toHaveAttribute("decoding");
       } else {
-        expect(image.closest("picture")).toBeNull();
+        expect(visual).toHaveAttribute("loading", "lazy");
+        expect(visual).toHaveAttribute("decoding", "async");
+        expect(visual).toHaveAttribute("width", String(project.image.width));
+        expect(visual).toHaveAttribute("height", String(project.image.height));
+
+        if (project.image.kind === "local") {
+          expect(visual.closest("picture")).not.toBeNull();
+        } else {
+          expect(visual.closest("picture")).toBeNull();
+        }
       }
     }
+  });
+
+  it("presents the abstracted agentic case study without internal names, imagery, or links", async () => {
+    const { explorer, user } = renderExplorer();
+
+    await user.click(
+      within(explorer).getByRole("button", {
+        name: "View all 13 projects",
+      }),
+    );
+
+    const card = projectCard(explorer, "Agentic Engineering Automation");
+    const visual = within(card).getByRole("img", {
+      name: "Abstract workflow connecting AI agents, reusable Skills, and context integration",
+    });
+    const capabilityList = within(card).getByRole("list", {
+      name: "Agentic Engineering Automation capabilities",
+    });
+
+    expect(card).toHaveAttribute(
+      "data-project-id",
+      "agentic-engineering-automation",
+    );
+    expect(card).toHaveTextContent("Abstracted public case study");
+    expect(visual.tagName).toBe("DIV");
+    expect(visual.querySelector("img, picture")).toBeNull();
+    expect(
+      within(capabilityList).getAllByRole("listitem").map((item) => item.textContent),
+    ).toEqual([
+      "AI Agents",
+      "Reusable Skills",
+      "Model Context Protocol",
+      "Multi-agent orchestration",
+      "Evidence-led RCA",
+      "Human approval gates",
+      "Automated validation",
+    ]);
+    expect(card).toHaveTextContent(
+      "with reported gains of up to 5–6× in bug-resolution throughput for individual engineers and the wider team",
+    );
+    expect(card).toHaveTextContent(
+      "This public case study intentionally omits proprietary product names, repositories, customer information, operational data, and implementation details.",
+    );
+    expect(within(card).queryByRole("link")).not.toBeInTheDocument();
+    expect(card.textContent).not.toMatch(
+      /(?:https?:\/\/|\b\d{1,3}(?:\.\d{1,3}){3}\b|\b[A-Z]+-\d{3,}\b)/u,
+    );
   });
 
   it("reveals and hides unchanged full copy through independent controlled buttons", async () => {

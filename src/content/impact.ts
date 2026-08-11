@@ -2,6 +2,12 @@ import type { ImpactMetric } from "./models";
 
 export const impactMetrics = [
   {
+    id: "agentic-resolution-throughput",
+    value: "Up to 5–6×",
+    label: "reported defect-resolution throughput",
+    sourceRecordId: "agentic-engineering-automation",
+  },
+  {
     id: "policy-objects-indexed",
     value: "50,000+",
     label: "policy objects indexed",

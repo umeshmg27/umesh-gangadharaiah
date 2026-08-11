@@ -64,14 +64,15 @@ The preview must be available at
 
 ## Preserved content contract
 
-The integrity gate currently requires exactly 12 projects, 25 recognition
-records, five career entries, four expertise areas, and four impact metrics.
+The integrity gate currently requires exactly 13 projects, 25 recognition
+records, five career entries, four expertise areas, and five impact metrics.
 The impact metrics are displayed in this order:
 
-1. `50,000+` — policy objects indexed.
-2. `Sub-second` — policy retrieval.
-3. `300+ hours` — manual effort saved.
-4. `70%` — manual effort reduced.
+1. `Up to 5–6×` — reported defect-resolution throughput.
+2. `50,000+` — policy objects indexed.
+3. `Sub-second` — policy retrieval.
+4. `300+ hours` — manual effort saved.
+5. `70%` — manual effort reduced.
 
 The initial featured projects are ordered by `featuredOrder`:
 
@@ -79,6 +80,14 @@ The initial featured projects are ordered by `featuredOrder`:
 2. Unified Backup and Restore - Cisco Nexus Dashboard.
 3. Cisco NDO - Simplified L4L7 Service Chaining.
 4. Resource Allocation Manager (RAM).
+
+`Agentic Engineering Automation` is an intentionally abstracted public case
+study. It describes reusable AI Agents, Skills, Model Context Protocol
+integrations, evidence-led investigation, human approval, and automated
+validation without publishing proprietary product names, repositories, issue
+identifiers, customer information, operational data, or implementation details.
+Its cover is a local CSS illustration, so it adds no image or runtime network
+dependency.
 
 Recognition dates are derived from each record ID's `DDMMYY` suffix. The
 initial highlights are the six newest recognitions:

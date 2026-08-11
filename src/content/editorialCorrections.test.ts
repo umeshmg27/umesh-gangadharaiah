@@ -221,7 +221,7 @@ describe("approved editorial corrections", () => {
     ).toBe("00201627a559b481d3419b413dd84522ac8403af0edc073e3ebe9f054ed9976e");
     expect(
       sha256(
-        projects.map((project) => ({
+        projects.slice(0, 12).map((project) => ({
           id: project.id,
           title: project.title,
           description: project.id === "nd-alphax" ? null : project.description,
@@ -243,9 +243,24 @@ describe("approved editorial corrections", () => {
       ),
     ).toBe("ab9095470911937ace5b6a0941fb1f8152d40398f6468c7dcc8320ead6219190");
     expect(
-      sha256(projects.slice(1).map(({ title, description }) => ({ title, description }))),
+      sha256(
+        projects
+          .slice(1, 12)
+          .map(({ title, description }) => ({ title, description })),
+      ),
     ).toBe("f7491975cac441bfa13d5900ca9c6ba02b494f91f6254166fdfa25c2d26be8f5");
+    expect(projects.at(-1)).toMatchObject({
+      id: "agentic-engineering-automation",
+      image: { kind: "abstract" },
+      abstracted: true,
+    });
     expect(impactMetrics).toEqual([
+      {
+        id: "agentic-resolution-throughput",
+        value: "Up to 5–6×",
+        label: "reported defect-resolution throughput",
+        sourceRecordId: "agentic-engineering-automation",
+      },
       {
         id: "policy-objects-indexed",
         value: "50,000+",

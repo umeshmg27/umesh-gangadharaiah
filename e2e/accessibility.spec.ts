@@ -34,7 +34,7 @@ test("has no serious or critical Axe violations in dark and light themes", async
   page,
 }, testInfo) => {
   await openDeterministicPortfolio(page);
-  await page.getByRole("button", { name: "View all 12 projects" }).click();
+  await page.getByRole("button", { name: "View all 13 projects" }).click();
   await page.getByRole("button", { name: "All (25)" }).click();
   if ((page.viewportSize()?.width ?? 0) < 1024) {
     await page.getByRole("button", { name: "Open navigation" }).click();
@@ -73,7 +73,7 @@ test("keeps every visible interactive target at least 44 pixels square", async (
   page,
 }) => {
   await openDeterministicPortfolio(page);
-  await page.getByRole("button", { name: "View all 12 projects" }).click();
+  await page.getByRole("button", { name: "View all 13 projects" }).click();
   await page.getByRole("button", { name: "All (25)" }).click();
   if ((page.viewportSize()?.width ?? 0) < 1024) {
     await page.getByRole("button", { name: "Open navigation" }).click();

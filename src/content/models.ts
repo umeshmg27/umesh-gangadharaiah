@@ -23,11 +23,19 @@ export type RemoteImageAsset = {
 
 export type ImageAsset = LocalImageAsset | RemoteImageAsset;
 
+export type AbstractProjectVisual = {
+  readonly kind: "abstract";
+  readonly alt: string;
+  readonly labels: readonly [string, string, string];
+};
+
 export type Project = {
   readonly id: string;
   readonly title: string;
   readonly description: string;
-  readonly image: ImageAsset;
+  readonly image: ImageAsset | AbstractProjectVisual;
+  readonly capabilities?: readonly string[];
+  readonly abstracted?: true;
   readonly publicUrl?: string;
   readonly featuredOrder?: 1 | 2 | 3 | 4;
 };

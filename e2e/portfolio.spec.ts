@@ -163,7 +163,8 @@ test("uses the approved aspect ratios and viewport layouts", async ({ page }) =>
   const expectedContactColumns = viewportWidth >= 768 ? 2 : 1;
   const expectedExpertiseColumns = viewportWidth >= 768 ? 2 : 1;
   const expectedHeroColumns = viewportWidth >= 1024 ? 2 : 1;
-  const expectedImpactColumns = viewportWidth >= 768 ? 3 : 1;
+  const expectedImpactColumns =
+    viewportWidth >= 1200 ? 4 : viewportWidth >= 768 ? 2 : 1;
   const expectedRecognitionColumns = viewportWidth >= 1024 ? 3 : 1;
   const expectedTimelineColumns = viewportWidth >= 768 ? 3 : 2;
 
@@ -405,6 +406,12 @@ test("reveals archived work from a contextual impact link", async ({ page }) => 
 
   const codeshift = page.locator("#project-codeshift-cicd-platform");
   await expect(codeshift).toBeVisible();
+  await expect(
+    codeshift.getByRole("heading", {
+      level: 3,
+      name: "Codeshift - CI/CD Platform",
+    }),
+  ).toBeFocused();
   await expect(codeshift).toContainText("reducing manual deployment effort by 70%");
   await expect(
     page.getByRole("button", { name: "Show featured projects" }),
@@ -419,6 +426,55 @@ test("reveals archived work from a contextual impact link", async ({ page }) => 
       .bottom,
   }));
   expect(offset.cardTop).toBeGreaterThanOrEqual(offset.headerBottom - 1);
+  browser.assertNone();
+});
+
+test("reveals the abstracted agentic case study from Impact", async ({ page }) => {
+  const browser = monitorBrowserProblems(page);
+  await openPortfolio(page);
+
+  const outcome = page.locator(
+    '[data-impact-outcome-id="agentic-engineering-automation"]',
+  );
+  await expect(outcome).toContainText("Up to 5–6×");
+  await expect(outcome.getByText("AI Agents", { exact: true })).toBeVisible();
+  await expect(
+    outcome.getByText("Model Context Protocol", { exact: true }),
+  ).toBeVisible();
+
+  await outcome
+    .getByRole("link", { name: "Explore agentic engineering project" })
+    .click();
+  await expect(page).toHaveURL(/#project-agentic-engineering-automation$/u);
+
+  const project = page.locator("#project-agentic-engineering-automation");
+  await expect(project).toBeVisible();
+  const projectHeading = project.getByRole("heading", {
+    level: 3,
+    name: "Agentic Engineering Automation",
+  });
+  await expect(projectHeading).toBeFocused();
+  await expect(project).toContainText("Abstracted public case study");
+  await expect(
+    project.getByRole("img", {
+      name: "Abstract workflow connecting AI agents, reusable Skills, and context integration",
+    }),
+  ).toBeVisible();
+  await expect(project.getByText("Human approval gates", { exact: true })).toBeVisible();
+  await expect(project).toContainText(
+    "intentionally omits proprietary product names, repositories, customer information, operational data, and implementation details",
+  );
+  await expect(project.getByRole("link")).toHaveCount(0);
+  expect(await project.textContent()).not.toMatch(
+    /(?:https?:\/\/|\b\d{1,3}(?:\.\d{1,3}){3}\b|\b[A-Z]+-\d{3,}\b)/u,
+  );
+  await page.keyboard.press("Tab");
+  await expect(
+    project.getByRole("button", {
+      name: "Read Project Details for Agentic Engineering Automation",
+    }),
+  ).toBeFocused();
+  await expect(project).toBeInViewport();
   browser.assertNone();
 });
 
@@ -496,8 +552,8 @@ test("keeps project archives and immediate recognition views usable", async ({
   await expect(currentCareer).toContainText("up to 5–6× per engineer");
 
   await expect(page.locator("[data-project-id]")).toHaveCount(4);
-  await page.getByRole("button", { name: "View all 12 projects" }).click();
-  await expect(page.locator("[data-project-id]")).toHaveCount(12);
+  await page.getByRole("button", { name: "View all 13 projects" }).click();
+  await expect(page.locator("[data-project-id]")).toHaveCount(13);
   const archivedProject = page.locator(
     '[data-project-id="telegram-data-storage"]',
   );
