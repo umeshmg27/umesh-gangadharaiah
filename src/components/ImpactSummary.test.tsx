@@ -4,24 +4,20 @@ import ImpactSummary from "./ImpactSummary";
 
 const expectedFlows = [
   {
-    title: "Evidence-led defect resolution",
-    path:
-      "Sanitized issue → Evidence and hypotheses → Reviewed RCA and validation",
+    title: "Finding and fixing bugs",
+    path: "Issue context → Evidence → Root cause → Validation",
   },
   {
-    title: "Agent-assisted feature planning",
-    path:
-      "Feature brief → System model and options → Implementation plan and tests",
+    title: "Planning features before coding",
+    path: "Feature request → Existing behavior → Delivery plan → Tests",
   },
   {
-    title: "Living system documentation",
-    path:
-      "Verified behavior → Connected system model → Living engineering guide",
+    title: "Documenting complex systems",
+    path: "Verified behavior → System map → Practical guide",
   },
   {
-    title: "Interactive simulation & validation",
-    path:
-      "Synthetic scenario → Deterministic model → Reviewable validation evidence",
+    title: "Simulating and validating behavior",
+    path: "Synthetic scenario → Simulation → Validation evidence",
   },
 ] as const;
 
@@ -30,7 +26,7 @@ test("makes four public-safe agentic workflows the primary Impact story", () => 
 
   const impact = screen.getByRole("region", { name: "Impact" });
   const spotlight = within(impact).getByRole("article", {
-    name: "Agentic Engineering Automation",
+    name: "AI-Assisted Engineering Workflows",
   });
   const workflows = within(spotlight).getByRole("list", {
     name: "Agentic engineering workflows",
@@ -38,7 +34,8 @@ test("makes four public-safe agentic workflows the primary Impact story", () => 
   const flowCards = within(workflows).getAllByRole("listitem");
 
   expect(spotlight).toHaveAttribute("data-impact-spotlight");
-  expect(spotlight).toHaveTextContent("Current focus");
+  expect(impact).toHaveTextContent("What I’ve delivered");
+  expect(spotlight).toHaveTextContent("What I’m focused on now");
   expect(spotlight).toHaveTextContent("Up to 5–6×");
   expect(spotlight).toHaveTextContent("reported defect-resolution throughput");
   expect(flowCards).toHaveLength(expectedFlows.length);
@@ -60,7 +57,7 @@ test("makes four public-safe agentic workflows the primary Impact story", () => 
 
   expect(
     within(spotlight).getByRole("link", {
-      name: "Explore agentic engineering project",
+      name: "See how I use AI in engineering",
     }),
   ).toHaveAttribute("href", "#project-agentic-engineering-automation");
   expect(spotlight.textContent).not.toMatch(
@@ -75,10 +72,10 @@ test("keeps established outcomes as a separate secondary group", () => {
 
   const impact = screen.getByRole("region", { name: "Impact" });
   const spotlight = within(impact).getByRole("article", {
-    name: "Agentic Engineering Automation",
+    name: "AI-Assisted Engineering Workflows",
   });
   const established = within(impact).getByRole("region", {
-    name: "Established product outcomes",
+    name: "Earlier projects and results",
   });
   const establishedOutcomes = Array.from(
     established.querySelectorAll<HTMLElement>("[data-established-outcome-id]"),

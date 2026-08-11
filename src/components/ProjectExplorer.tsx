@@ -31,18 +31,37 @@ const archivedProjectIds = new Set(
     .filter((project) => project.featuredOrder === undefined)
     .map((project) => project.id),
 );
+const projectIds = new Set(projectRecords.map((project) => project.id));
+const legacyProjectIds = new Map([["nd-alphax", "nd-nexusone"]]);
 
 function projectCountText(count: number, archiveOpen: boolean): string {
   if (!archiveOpen) return `Showing ${count} featured projects.`;
   return `Showing ${count} ${count === 1 ? "project" : "projects"}.`;
 }
 
+function projectIdFromHash(): string | null {
+  const requestedProjectId = window.location.hash.startsWith("#project-")
+    ? window.location.hash.slice("#project-".length)
+    : "";
+  const projectId = legacyProjectIds.get(requestedProjectId) ?? requestedProjectId;
+
+  return projectIds.has(projectId) ? projectId : null;
+}
+
 function archivedProjectIdFromHash(): string | null {
-  const projectId = window.location.hash.startsWith("#project-")
+  const projectId = projectIdFromHash();
+
+  return projectId && archivedProjectIds.has(projectId) ? projectId : null;
+}
+
+function canonicalizeLegacyProjectHash(projectId: string): void {
+  const requestedProjectId = window.location.hash.startsWith("#project-")
     ? window.location.hash.slice("#project-".length)
     : "";
 
-  return archivedProjectIds.has(projectId) ? projectId : null;
+  if (legacyProjectIds.get(requestedProjectId) === projectId) {
+    window.history.replaceState(null, "", `#project-${projectId}`);
+  }
 }
 
 export default function ProjectExplorer() {
@@ -56,37 +75,41 @@ export default function ProjectExplorer() {
     };
   });
   const archiveControlRef = useRef<HTMLButtonElement>(null);
-  const pendingProjectIdRef = useRef<string | null>(
-    archivedProjectIdFromHash(),
-  );
+  const pendingProjectIdRef = useRef<string | null>(projectIdFromHash());
+  const [hashRequestVersion, setHashRequestVersion] = useState(0);
   const visibleProjects = state.archiveOpen
     ? filterProjects(projectRecords, state.query)
     : featuredProjects;
 
-  const revealArchivedProjectFromHash = useCallback((): void => {
-    const projectId = archivedProjectIdFromHash();
+  const revealProjectFromHash = useCallback((): void => {
+    const projectId = projectIdFromHash();
 
     if (!projectId) return;
 
+    canonicalizeLegacyProjectHash(projectId);
     pendingProjectIdRef.current = projectId;
     setState((current) =>
-      current.archiveOpen && current.query === ""
+      (current.archiveOpen || !archivedProjectIds.has(projectId)) &&
+      current.query === ""
         ? current
         : { ...current, archiveOpen: true, query: "" },
     );
+    setHashRequestVersion((current) => current + 1);
   }, []);
 
   useEffect(() => {
-    window.addEventListener("hashchange", revealArchivedProjectFromHash);
+    const projectId = projectIdFromHash();
+    if (projectId) canonicalizeLegacyProjectHash(projectId);
+    window.addEventListener("hashchange", revealProjectFromHash);
 
     return () =>
-      window.removeEventListener("hashchange", revealArchivedProjectFromHash);
-  }, [revealArchivedProjectFromHash]);
+      window.removeEventListener("hashchange", revealProjectFromHash);
+  }, [revealProjectFromHash]);
 
   useEffect(() => {
     const projectId = pendingProjectIdRef.current;
 
-    if (!projectId || !state.archiveOpen || state.query !== "") return;
+    if (!projectId || state.query !== "") return;
 
     const target = document.getElementById(`project-${projectId}`);
     if (!target) return;
@@ -98,7 +121,7 @@ export default function ProjectExplorer() {
       heading.focus({ preventScroll: true });
     }
     pendingProjectIdRef.current = null;
-  }, [state.archiveOpen, state.query]);
+  }, [hashRequestVersion, state.archiveOpen, state.query]);
 
   function toggleArchive(): void {
     if (state.archiveOpen) {
@@ -142,7 +165,7 @@ export default function ProjectExplorer() {
     >
       <div className={styles.sectionHeader}>
         <div>
-          <p className={styles.eyebrow}>Selected work</p>
+          <p className={styles.eyebrow}>Projects I’ve worked on</p>
           <h2 className={styles.heading} id="projects-heading">
             Projects
           </h2>

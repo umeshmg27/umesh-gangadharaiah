@@ -408,7 +408,7 @@ test("reveals archived work from a contextual impact link", async ({ page }) => 
   const browser = monitorBrowserProblems(page);
   await openPortfolio(page);
 
-  await page.getByRole("link", { name: "View Codeshift project" }).click();
+  await page.getByRole("link", { name: "See the delivery platform" }).click();
   await expect(page).toHaveURL(/#project-codeshift-cicd-platform$/u);
 
   const codeshift = page.locator("#project-codeshift-cicd-platform");
@@ -453,30 +453,30 @@ test("reveals the abstracted agentic case study from Impact", async ({ page }) =
   await expect(
     impactFlows.getByRole("heading", {
       level: 4,
-      name: "Evidence-led defect resolution",
+      name: "Finding and fixing bugs",
     }),
   ).toBeVisible();
   await expect(
     impactFlows.getByRole("heading", {
       level: 4,
-      name: "Agent-assisted feature planning",
+      name: "Planning features before coding",
     }),
   ).toBeVisible();
   await expect(
     impactFlows.getByRole("heading", {
       level: 4,
-      name: "Living system documentation",
+      name: "Documenting complex systems",
     }),
   ).toBeVisible();
   await expect(
     impactFlows.getByRole("heading", {
       level: 4,
-      name: "Interactive simulation & validation",
+      name: "Simulating and validating behavior",
     }),
   ).toBeVisible();
 
   await outcome
-    .getByRole("link", { name: "Explore agentic engineering project" })
+    .getByRole("link", { name: "See how I use AI in engineering" })
     .click();
   await expect(page).toHaveURL(/#project-agentic-engineering-automation$/u);
 
@@ -484,10 +484,10 @@ test("reveals the abstracted agentic case study from Impact", async ({ page }) =
   await expect(project).toBeVisible();
   const projectHeading = project.getByRole("heading", {
     level: 3,
-    name: "Agentic Engineering Automation",
+    name: "AI-Assisted Engineering Workflows",
   });
   await expect(projectHeading).toBeFocused();
-  await expect(project).toContainText("Abstracted public case study");
+  await expect(project).toContainText("Details simplified for public sharing");
   await expect(
     project.getByRole("img", {
       name: "Abstract workflow connecting AI agents, reusable Skills, and context integration",
@@ -495,7 +495,7 @@ test("reveals the abstracted agentic case study from Impact", async ({ page }) =
   ).toBeVisible();
   await expect(project.getByText("Human approval gates", { exact: true })).toBeVisible();
   await expect(project).toContainText(
-    "intentionally omits proprietary product names, repositories, customer information, operational data, and implementation details",
+    "I’ve left out identifying names and implementation details so I can share the approach publicly",
   );
   await expect(project.getByRole("link")).toHaveCount(0);
   expect(await project.textContent()).not.toMatch(
@@ -506,31 +506,29 @@ test("reveals the abstracted agentic case study from Impact", async ({ page }) =
     'button[aria-controls="agentic-engineering-automation-details"]',
   );
   await expect(detailsButton).toHaveAccessibleName(
-    "Read Project Details for Agentic Engineering Automation",
+    "Read more about AI-Assisted Engineering Workflows",
   );
   await expect(detailsButton).toBeFocused();
   await detailsButton.click();
   await expect(detailsButton).toHaveAttribute("aria-expanded", "true");
   await expect(detailsButton).toHaveAccessibleName(
-    "Hide Project Details for Agentic Engineering Automation",
+    "Show less about AI-Assisted Engineering Workflows",
   );
 
   const projectFlows = project.getByRole("list", {
     name: "Agentic engineering workflow details",
   });
   await expect(projectFlows.locator("[data-project-flow-id]")).toHaveCount(4);
-  await expect(projectFlows).toContainText("Evidence-led defect resolution");
-  await expect(projectFlows).toContainText("Agent-assisted feature planning");
-  await expect(projectFlows).toContainText("Living system documentation");
+  await expect(projectFlows).toContainText("Finding and fixing bugs");
+  await expect(projectFlows).toContainText("Planning features before coding");
+  await expect(projectFlows).toContainText("Documenting complex systems");
   await expect(projectFlows).toContainText(
-    "Interactive simulation & validation",
+    "Simulating and validating behavior",
   );
-  await expect(projectFlows).toContainText("Sanitized issue");
-  await expect(projectFlows).toContainText("Implementation plan and tests");
-  await expect(projectFlows).toContainText("Living engineering guide");
-  await expect(projectFlows).toContainText(
-    "Reviewable validation evidence",
-  );
+  await expect(projectFlows).toContainText("Issue context");
+  await expect(projectFlows).toContainText("Delivery plan");
+  await expect(projectFlows).toContainText("Practical guide");
+  await expect(projectFlows).toContainText("Validation evidence");
   await expect(project).toBeInViewport();
   browser.assertNone();
 });
@@ -609,6 +607,21 @@ test("keeps project archives and immediate recognition views usable", async ({
   await expect(currentCareer).toContainText("up to 5–6× per engineer");
 
   await expect(page.locator("[data-project-id]")).toHaveCount(4);
+  const nexusOne = page.locator('[data-project-id="nd-nexusone"]');
+  await expect(nexusOne).toBeVisible();
+  await expect(
+    nexusOne.getByRole("heading", { level: 3, name: "ND — NexusOne" }),
+  ).toBeVisible();
+  await expect(nexusOne).toContainText("Details simplified for public sharing");
+  await expect(nexusOne).toContainText("Backend code ownership");
+  await expect(nexusOne).toContainText("Agent-assisted planning");
+  await page.evaluate(() => {
+    window.location.hash = "#project-nd-alphax";
+  });
+  await expect(page).toHaveURL(/#project-nd-nexusone$/u);
+  await expect(
+    nexusOne.getByRole("heading", { level: 3, name: "ND — NexusOne" }),
+  ).toBeFocused();
   await page.getByRole("button", { name: "View all 13 projects" }).click();
   await expect(page.locator("[data-project-id]")).toHaveCount(13);
   const archivedProject = page.locator(
@@ -626,11 +639,11 @@ test("keeps project archives and immediate recognition views usable", async ({
 
   const projectCard = page.locator("[data-project-id]").first();
   const projectDetails = projectCard.getByRole("button", {
-    name: /Read Project Details/u,
+    name: /Read more about/u,
   });
   await projectDetails.click();
   await expect(
-    projectCard.getByRole("button", { name: /Hide Project Details/u }),
+    projectCard.getByRole("button", { name: /Show less about/u }),
   ).toHaveAttribute("aria-expanded", "true");
   await expect(projectCard.locator('p[id$="-details"]')).toBeVisible();
 

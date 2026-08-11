@@ -76,23 +76,28 @@ The impact metrics are displayed in this order:
 
 The initial featured projects are ordered by `featuredOrder`:
 
-1. NDO - Search & Explore Feature.
-2. Unified Backup and Restore - Cisco Nexus Dashboard.
-3. Cisco NDO - Simplified L4L7 Service Chaining.
-4. Resource Allocation Manager (RAM).
+1. ND — NexusOne.
+2. NDO - Search & Explore Feature.
+3. Unified Backup and Restore - Cisco Nexus Dashboard.
+4. Cisco NDO - Simplified L4L7 Service Chaining.
 
-`Agentic Engineering Automation` is an intentionally abstracted public case
-study and the primary Impact story. Its AI-first spotlight presents four
-source-backed workflow abstractions: evidence-led defect resolution,
-agent-assisted feature planning, living system documentation, and interactive
-simulation and validation. The same four flows are available as structured
-details in the project archive. They describe reusable AI Agents, Skills, Model
-Context Protocol integrations, sanitized or synthetic inputs, human-reviewed
-decisions, and deterministic validation without publishing proprietary product
-names, repositories, issue identifiers, customer information, operational data,
-or implementation details. Its cover is a local CSS illustration, so it adds no
-image or runtime network dependency. The `Up to 5–6×` result remains explicitly
-qualified as reported; it is not inferred from private catalog counts.
+`ND — NexusOne` is a generalized, first-person account of release feature work.
+It describes Umesh's role, agent-assisted planning, documentation, validation,
+testing, and reliability work without publishing internal architecture,
+interfaces, repositories, release information, or operational data. Its local
+image was re-encoded without authoring metadata before publication.
+
+`AI-Assisted Engineering Workflows` is the primary Impact story. Its four
+plain-language workflows cover finding and fixing bugs, planning features before
+coding, documenting complex systems, and simulating and validating behavior.
+The same four flows are available as structured details in the project archive.
+They describe reusable AI Agents, Skills, Model Context Protocol integrations,
+sanitized or synthetic inputs, human-reviewed decisions, and deterministic
+validation without publishing proprietary product names, repositories, issue
+identifiers, customer information, operational data, or implementation details.
+Its cover is a local CSS illustration, so it adds no image or runtime network
+dependency. The `Up to 5–6×` result remains explicitly qualified as reported;
+it is not inferred from private catalog counts.
 
 Recognition dates are derived from each record ID's `DDMMYY` suffix. The
 initial highlights are the six newest recognitions:

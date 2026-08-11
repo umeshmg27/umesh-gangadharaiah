@@ -24,16 +24,16 @@
       ]
     },
     {
-      "id": "nd-alphax",
+      "id": "nd-nexusone",
       "recordType": "project",
       "source": "public/assets/images/data-center.png",
-      "fallback": "src/assets/portfolio/projects/nd-alphax.png",
-      "sha256": "fde11962630fd99b091511f5511d939ec3c421b15067627461fc42f2427ec122",
+      "fallback": "src/assets/portfolio/projects/nd-nexusone.png",
+      "sha256": "945279876839f215e61ba12b5b21d89d9d220d3046c515411f4bca4ce8a5291a",
       "width": 1920,
       "height": 1080,
       "variants": [
-        { "path": "src/assets/portfolio/projects/nd-alphax-640.webp", "width": 640 },
-        { "path": "src/assets/portfolio/projects/nd-alphax-960.webp", "width": 960 }
+        { "path": "src/assets/portfolio/projects/nd-nexusone-640.webp", "width": 640 },
+        { "path": "src/assets/portfolio/projects/nd-nexusone-960.webp", "width": 960 }
       ]
     },
     {

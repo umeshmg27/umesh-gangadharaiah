@@ -41,11 +41,25 @@ function localProjectImage(
 
 export const projects = [
   {
-    id: "nd-alphax",
-    title: "ND- AlphaX",
+    id: "nd-nexusone",
+    title: "ND — NexusOne",
     description:
-      "Part of the design team, developing a key product feature that would shape the future of data center networking.",
-    image: localProjectImage("nd-alphax", "png", "ND- AlphaX", 1920, 1080),
+      "I helped design and deliver a key data-center networking capability for NexusOne, serving as a backend code owner. I used agent-assisted planning, documentation, and validation to help move the work from early design through release, alongside core backend implementation, automated testing, and reliability hardening. I’ve generalized the details here and left out internal architecture, interfaces, repositories, release information, and operational data.",
+    image: localProjectImage(
+      "nd-nexusone",
+      "png",
+      "Rows of servers in a modern data center",
+      1920,
+      1080,
+    ),
+    capabilities: [
+      "Backend code ownership",
+      "Agent-assisted planning",
+      "Living documentation",
+      "Release validation",
+    ],
+    abstracted: true,
+    featuredOrder: 1,
   },
   {
     id: "ndo-search-explore",
@@ -59,7 +73,7 @@ export const projects = [
       2048,
       2048,
     ),
-    featuredOrder: 1,
+    featuredOrder: 2,
   },
   {
     id: "nexus-dashboard-unified-backup-restore",
@@ -73,7 +87,7 @@ export const projects = [
       1920,
       1080,
     ),
-    featuredOrder: 2,
+    featuredOrder: 3,
   },
   {
     id: "ndo-l4l7-service-chaining",
@@ -87,7 +101,7 @@ export const projects = [
       width: 1935,
       height: 998,
     },
-    featuredOrder: 3,
+    featuredOrder: 4,
   },
   {
     id: "aci-advanced-pbr",
@@ -127,7 +141,6 @@ export const projects = [
       1700,
       1120,
     ),
-    featuredOrder: 4,
   },
   {
     id: "kollect-curi-knowledge-bot",
@@ -191,9 +204,9 @@ export const projects = [
   },
   {
     id: "agentic-engineering-automation",
-    title: "Agentic Engineering Automation",
+    title: "AI-Assisted Engineering Workflows",
     description:
-      "Helped establish and evolve an agentic engineering foundation by designing selected Model Context Protocol integrations and applying reusable Skills and specialist-agent workflows. The system turns sanitized issue context into scoped evidence, competing hypotheses, human-reviewed root causes, validated change options, and review-ready technical handoffs; the same building blocks support feature delivery and day-to-day engineering, with reported gains of up to 5–6× in bug-resolution throughput for individual engineers and the wider team. This public case study intentionally omits proprietary product names, repositories, customer information, operational data, and implementation details.",
+      "I’ve built and used an engineering approach that combines AI agents, reusable Skills, and a few MCP integrations. I use it to investigate bugs, plan features, write practical engineering guides, and build simulations that help validate behavior. People still review the evidence, decisions, and changes. For defect resolution, the reported throughput improvement is up to 5–6× for individual engineers and the wider team. I’ve left out identifying names and implementation details so I can share the approach publicly.",
     image: {
       kind: "abstract",
       alt: "Abstract workflow connecting AI agents, reusable Skills, and context integration",
@@ -211,35 +224,31 @@ export const projects = [
     flows: [
       {
         id: "defect-resolution",
-        title: "Evidence-led defect resolution",
-        path:
-          "Sanitized issue → Evidence and hypotheses → Reviewed RCA and validation",
+        title: "Finding and fixing bugs",
+        path: "Issue context → Evidence → Root cause → Validation",
         summary:
-          "Agents turn sanitized issue context into scoped evidence, competing hypotheses, human-reviewed root causes, and validated resolution handoffs.",
+          "I use agents to organize sanitized evidence, test competing explanations, and turn the strongest one into a human-reviewed root cause and validated fix plan.",
       },
       {
         id: "feature-planning",
-        title: "Agent-assisted feature planning",
-        path:
-          "Feature brief → System model and options → Implementation plan and tests",
+        title: "Planning features before coding",
+        path: "Feature request → Existing behavior → Delivery plan → Tests",
         summary:
-          "Agent-assisted analysis maps current behavior, compares design options, surfaces dependencies and risks, and produces implementation-ready plans with a test strategy.",
+          "I map current behavior, dependencies, and trade-offs before turning a feature request into an implementation-ready plan and test strategy.",
       },
       {
         id: "living-documentation",
-        title: "Living system documentation",
-        path:
-          "Verified behavior → Connected system model → Living engineering guide",
+        title: "Documenting complex systems",
+        path: "Verified behavior → System map → Practical guide",
         summary:
-          "Reusable Skills keep architecture, interfaces, state, lifecycle, failure behavior, and verification guidance discoverable for engineers and agents.",
+          "I turn verified source behavior into practical guides covering architecture, state, failure paths, operations, and debugging.",
       },
       {
         id: "simulation-validation",
-        title: "Interactive simulation & validation",
-        path:
-          "Synthetic scenario → Deterministic model → Reviewable validation evidence",
+        title: "Simulating and validating behavior",
+        path: "Synthetic scenario → Simulation → Validation evidence",
         summary:
-          "Deterministic browser simulations use synthetic scenarios to explain state transitions, exercise edge cases, and support human-reviewed validation.",
+          "I build deterministic browser simulations with synthetic scenarios so engineers can explore state changes, edge cases, and regressions safely.",
       },
     ],
     abstracted: true,

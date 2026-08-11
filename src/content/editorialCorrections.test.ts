@@ -69,16 +69,26 @@ describe("approved editorial corrections", () => {
     ]);
   });
 
-  it("locks the approved expertise and ND-AlphaX copy edits exactly", () => {
+  it("locks the approved expertise and public-safe NexusOne copy exactly", () => {
     expect(expertiseAreas.map(({ description }) => description)).toEqual([
       " Experienced backend engineer with hands-on expertise in designing and managing microservices within large-scale distributed systems. I’ve built reliable workflows, implemented robust configuration validation logic, and optimized deployment dependency resolution using graph algorithms. My work emphasizes maintaining consistency and correctness across services, handling complex interactions in distributed environments to ensure stability and reliability. With a keen eye for identifying critical flaws in architecture, I deliver scalable, low-impact solutions that support high-availability systems.",
       "I'm a big fan of Generative AI and Large Language Models (LLMs), and I've had the chance to dive deep into these technologies through research and experimentation. My work focuses on improving LLMs' language understanding and responsiveness, while also deploying smaller models for internal tools to test new possibilities. Right now, I'm working on a proof of concept (PoC) to bring these AI solutions to life in exciting, real-world applications!",
       "Beyond backend development, I bring a strong skill set in DevOps and internal automation. I’m skilled at building tools that boost team efficiency, like automating a custom Go-based code coverage framework to improve test visibility and streamline development workflows. I also write smart in-house scripts that bridge the gap between development and QA, handling tasks like upgrade, backup, and restore with zero manual hassle. My ability to think beyond just code—optimizing processes, reducing errors, and tightening release cycles—is a big part of how I help teams move faster and ship more reliably.",
       "My approach with tools, services and platforms is hands-on, curiosity-driven, allowing me to be agile and adapt to the latest technology across development, automation and debugging workflows. I’ve used Docker and Kubernetes extensively for containerization and deployment, along with FastAPI, ReactJS, and HAProxy for building and managing robust microservices. For performance optimization, I’ve recently been leveraging Go’s pprof to profile and fine-tune services, leading to significant improvements in scale metrics. I’m also comfortable with databases like MongoDB, Redis, and ArangoDB, and often write internal scripts to improve developer productivity and system observability.",
     ]);
-    expect(projects.find(({ id }) => id === "nd-alphax")?.description).toBe(
-      "Part of the design team, developing a key product feature that would shape the future of data center networking.",
-    );
+    expect(projects.find(({ id }) => id === "nd-nexusone")).toMatchObject({
+      title: "ND — NexusOne",
+      description:
+        "I helped design and deliver a key data-center networking capability for NexusOne, serving as a backend code owner. I used agent-assisted planning, documentation, and validation to help move the work from early design through release, alongside core backend implementation, automated testing, and reliability hardening. I’ve generalized the details here and left out internal architecture, interfaces, repositories, release information, and operational data.",
+      capabilities: [
+        "Backend code ownership",
+        "Agent-assisted planning",
+        "Living documentation",
+        "Release validation",
+      ],
+      abstracted: true,
+      featuredOrder: 1,
+    });
   });
 
   it("locks the approved current role and preserves the prior career history", () => {
@@ -221,29 +231,6 @@ describe("approved editorial corrections", () => {
     ).toBe("00201627a559b481d3419b413dd84522ac8403af0edc073e3ebe9f054ed9976e");
     expect(
       sha256(
-        projects.slice(0, 12).map((project) => ({
-          id: project.id,
-          title: project.title,
-          description: project.id === "nd-alphax" ? null : project.description,
-          image:
-            project.image.kind === "local"
-              ? {
-                  kind: project.image.kind,
-                  alt: project.image.alt,
-                  path: portableLocalPath(project.image),
-                  sources: project.image.sources,
-                  width: project.image.width,
-                  height: project.image.height,
-                }
-              : project.image,
-          featuredOrder:
-            "featuredOrder" in project ? project.featuredOrder : null,
-          publicUrl: "publicUrl" in project ? project.publicUrl : null,
-        })),
-      ),
-    ).toBe("ab9095470911937ace5b6a0941fb1f8152d40398f6468c7dcc8320ead6219190");
-    expect(
-      sha256(
         projects
           .slice(1, 12)
           .map(({ title, description }) => ({ title, description })),
@@ -258,27 +245,23 @@ describe("approved editorial corrections", () => {
       flows: [
         {
           id: "defect-resolution",
-          title: "Evidence-led defect resolution",
-          path:
-            "Sanitized issue → Evidence and hypotheses → Reviewed RCA and validation",
+          title: "Finding and fixing bugs",
+          path: "Issue context → Evidence → Root cause → Validation",
         },
         {
           id: "feature-planning",
-          title: "Agent-assisted feature planning",
-          path:
-            "Feature brief → System model and options → Implementation plan and tests",
+          title: "Planning features before coding",
+          path: "Feature request → Existing behavior → Delivery plan → Tests",
         },
         {
           id: "living-documentation",
-          title: "Living system documentation",
-          path:
-            "Verified behavior → Connected system model → Living engineering guide",
+          title: "Documenting complex systems",
+          path: "Verified behavior → System map → Practical guide",
         },
         {
           id: "simulation-validation",
-          title: "Interactive simulation & validation",
-          path:
-            "Synthetic scenario → Deterministic model → Reviewable validation evidence",
+          title: "Simulating and validating behavior",
+          path: "Synthetic scenario → Simulation → Validation evidence",
         },
       ],
     });

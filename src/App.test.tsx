@@ -133,7 +133,7 @@ test("leads Impact with four agentic workflows before established outcomes", asy
   expect(spotlight).not.toBeNull();
   if (!spotlight) return;
 
-  expect(spotlight).toHaveTextContent("Agentic Engineering");
+  expect(spotlight).toHaveTextContent("AI-Assisted Engineering Workflows");
   expect(spotlight).toHaveTextContent("Up to 5–6×");
   expect(spotlight).toHaveTextContent("reported defect-resolution throughput");
   expect(
@@ -145,10 +145,10 @@ test("leads Impact with four agentic workflows before established outcomes", asy
     "simulation-validation",
   ]);
   expect(flows.map((item) => within(item).getByRole("heading").textContent)).toEqual([
-    "Evidence-led defect resolution",
-    "Agent-assisted feature planning",
-    "Living system documentation",
-    "Interactive simulation & validation",
+    "Finding and fixing bugs",
+    "Planning features before coding",
+    "Documenting complex systems",
+    "Simulating and validating behavior",
   ]);
   expect(spotlight).toHaveTextContent("sanitized");
   expect(spotlight).toHaveTextContent("human-reviewed");
@@ -157,7 +157,7 @@ test("leads Impact with four agentic workflows before established outcomes", asy
 
   expect(
     within(impact).getByRole("heading", {
-      name: "Established product outcomes",
+      name: "Earlier projects and results",
     }),
   ).toBeInTheDocument();
   expect(
@@ -167,33 +167,33 @@ test("leads Impact with four agentic workflows before established outcomes", asy
     "configuration-automation",
     "codeshift-cicd-platform",
   ]);
-  expect(establishedOutcomes[0]).toHaveTextContent("NDO Search & Explore");
+  expect(establishedOutcomes[0]).toHaveTextContent("Production-scale policy search");
   expect(establishedOutcomes[0]).toHaveTextContent("50,000+");
   expect(establishedOutcomes[0]).toHaveTextContent("Sub-second");
   expect(establishedOutcomes[0]).toHaveTextContent(
-    "Indexed production-scale policy data while keeping retrieval under one second.",
+    "I indexed more than 50,000 policy objects and kept retrieval under one second.",
   );
   expect(establishedOutcomes[1]).toHaveTextContent(
-    "Multiserver configuration automation",
+    "Multi-server configuration automation",
   );
   expect(establishedOutcomes[1]).toHaveTextContent("300+ hours");
   expect(establishedOutcomes[1]).toHaveTextContent(
-    "Automated multiserver configurations during my Staff Engineer internship.",
+    "I automated repeatable server setup during my Staff Engineer internship, saving more than 300 hours of manual work.",
   );
-  expect(establishedOutcomes[2]).toHaveTextContent("Codeshift CI/CD platform");
+  expect(establishedOutcomes[2]).toHaveTextContent("Self-service delivery platform");
   expect(establishedOutcomes[2]).toHaveTextContent("70%");
   expect(establishedOutcomes[2]).toHaveTextContent(
-    "Created APIs for VM and resource allocation, reducing manual deployment effort.",
+    "I built APIs for VM and resource allocation, reducing manual deployment effort by 70%.",
   );
 
   for (const [name, href] of [
     [
-      "Explore agentic engineering project",
+      "See how I use AI in engineering",
       "#project-agentic-engineering-automation",
     ],
-    ["View Search & Explore project", "#project-ndo-search-explore"],
-    ["View career milestone", "#career-cisco-staff-engineer-intern"],
-    ["View Codeshift project", "#project-codeshift-cicd-platform"],
+    ["See Search & Explore", "#project-ndo-search-explore"],
+    ["See the career milestone", "#career-cisco-staff-engineer-intern"],
+    ["See the delivery platform", "#project-codeshift-cicd-platform"],
   ] as const) {
     expect(within(impact).getByRole("link", { name })).toHaveAttribute(
       "href",

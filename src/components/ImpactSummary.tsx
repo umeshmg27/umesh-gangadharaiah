@@ -56,31 +56,31 @@ const agenticProject = findAgenticProject();
 const establishedOutcomes: readonly EstablishedOutcome[] = [
   {
     id: "ndo-search-explore",
-    title: "NDO Search & Explore",
+    title: "Production-scale policy search",
     summary:
-      "Indexed production-scale policy data while keeping retrieval under one second.",
+      "I indexed more than 50,000 policy objects and kept retrieval under one second.",
     metricIds: ["policy-objects-indexed", "policy-retrieval-speed"],
-    linkLabel: "View Search & Explore project",
+    linkLabel: "See Search & Explore",
     href: "#project-ndo-search-explore",
     icon: Search,
   },
   {
     id: "configuration-automation",
-    title: "Multiserver configuration automation",
+    title: "Multi-server configuration automation",
     summary:
-      "Automated multiserver configurations during my Staff Engineer internship.",
+      "I automated repeatable server setup during my Staff Engineer internship, saving more than 300 hours of manual work.",
     metricIds: ["manual-hours-saved"],
-    linkLabel: "View career milestone",
+    linkLabel: "See the career milestone",
     href: "#career-cisco-staff-engineer-intern",
     icon: Clock3,
   },
   {
     id: "codeshift-cicd-platform",
-    title: "Codeshift CI/CD platform",
+    title: "Self-service delivery platform",
     summary:
-      "Created APIs for VM and resource allocation, reducing manual deployment effort.",
+      "I built APIs for VM and resource allocation, reducing manual deployment effort by 70%.",
     metricIds: ["manual-effort-reduced"],
-    linkLabel: "View Codeshift project",
+    linkLabel: "See the delivery platform",
     href: "#project-codeshift-cicd-platform",
     icon: Workflow,
   },
@@ -132,13 +132,14 @@ export default function ImpactSummary() {
     <section aria-labelledby="impact-heading" className={styles.section}>
       <div className={styles.introduction}>
         <div>
-          <p className={styles.eyebrow}>Selected outcomes</p>
+          <p className={styles.eyebrow}>What I’ve delivered</p>
           <h2 className={styles.heading} id="impact-heading">
             Impact
           </h2>
         </div>
         <p className={styles.explanation}>
-          Each result connects the outcome to the work that produced it.
+          A few results from systems, tools, and workflows I’ve built or helped
+          deliver.
         </p>
       </div>
 
@@ -149,7 +150,7 @@ export default function ImpactSummary() {
         data-impact-spotlight=""
       >
         <div className={styles.spotlightOverview}>
-          <p className={styles.currentLabel}>Current focus · AI engineering</p>
+          <p className={styles.currentLabel}>What I’m focused on now</p>
           <div className={styles.spotlightTitleRow}>
             <div aria-hidden="true" className={styles.spotlightIcon}>
               <BrainCircuit size={26} strokeWidth={1.8} />
@@ -173,16 +174,15 @@ export default function ImpactSummary() {
           </ul>
 
           <p className={styles.summary}>
-            Designed MCP integrations and applied reusable agent workflows to
-            evidence-led diagnosis, human-reviewed decisions,
-            implementation-ready feature delivery, living documentation, and
-            deterministic simulation.
+            I design and apply AI agents, reusable Skills, and MCP integrations
+            to investigate bugs, plan features, keep technical knowledge useful,
+            and validate behavior before delivery.
           </p>
           <a
             className={styles.sourceLink}
             href="#project-agentic-engineering-automation"
           >
-            Explore agentic engineering project
+            See how I use AI in engineering
             <ArrowRight aria-hidden="true" size={17} strokeWidth={2} />
           </a>
         </div>
@@ -220,16 +220,17 @@ export default function ImpactSummary() {
       >
         <div className={styles.establishedHeader}>
           <div>
-            <p className={styles.establishedEyebrow}>Established impact</p>
+            <p className={styles.establishedEyebrow}>Earlier work</p>
             <h3
               className={styles.establishedTitle}
               id="established-impact-heading"
             >
-              Established product outcomes
+              Earlier projects and results
             </h3>
           </div>
           <p className={styles.establishedExplanation}>
-            Earlier systems work with measured, source-linked results.
+            A few results from systems and automation I built earlier in my
+            career.
           </p>
         </div>
 

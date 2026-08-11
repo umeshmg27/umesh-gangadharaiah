@@ -803,6 +803,20 @@ describe("active asset pipeline integrity", () => {
     expect(result.stdout).toContain("generated targets");
   });
 
+  it("keeps the public NexusOne fallback free of embedded authoring metadata", async () => {
+    const record = fixture.assets.find(({ id }) => id === "nd-nexusone");
+    expect(record).toBeDefined();
+    if (!record) return;
+
+    const metadata = await sharp(
+      path.join(repositoryRoot, record.fallback),
+    ).metadata();
+
+    expect(metadata.exif).toBeUndefined();
+    expect(metadata.xmp).toBeUndefined();
+    expect(metadata.iptc).toBeUndefined();
+  });
+
   it(
     "optimizes, verifies, and deterministically re-optimizes an isolated root",
     async () => {
@@ -833,7 +847,7 @@ describe("active asset pipeline integrity", () => {
       path.join(temporaryRoot, portfolioRelativePath),
       { recursive: true },
     );
-    const record = fixture.assets.find(({ id }) => id === "nd-alphax");
+    const record = fixture.assets.find(({ id }) => id === "nd-nexusone");
     expect(record).toBeDefined();
     if (!record) return;
     const variant = record.variants[0];

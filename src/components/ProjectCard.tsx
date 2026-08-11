@@ -35,8 +35,11 @@ export default function ProjectCard({
   const detailsId = `${project.id}-details`;
   const workflowsHeadingId = `${project.id}-workflows-heading`;
   const detailsAction = expanded
-    ? "Hide Project Details"
-    : "Read Project Details";
+    ? "Show less"
+    : "Read more";
+  const detailsLabel = expanded
+    ? `Show less about ${project.title}`
+    : `Read more about ${project.title}`;
 
   return (
     <article
@@ -78,7 +81,9 @@ export default function ProjectCard({
 
       <div className={styles.content}>
         {project.abstracted ? (
-          <p className={styles.abstractedLabel}>Abstracted public case study</p>
+          <p className={styles.abstractedLabel}>
+            Details simplified for public sharing
+          </p>
         ) : null}
         <h3 className={styles.heading}>{project.title}</h3>
         {!expanded ? (
@@ -104,7 +109,7 @@ export default function ProjectCard({
           <button
             aria-controls={detailsId}
             aria-expanded={expanded}
-            aria-label={`${detailsAction} for ${project.title}`}
+            aria-label={detailsLabel}
             className={styles.detailsButton}
             onClick={() => onToggle(project.id)}
             type="button"
@@ -114,13 +119,13 @@ export default function ProjectCard({
 
           {project.publicUrl ? (
             <a
-              aria-label={`View ${project.title} project`}
+              aria-label={`Open ${project.title} project`}
               className={styles.projectLink}
               href={project.publicUrl}
               rel="noopener noreferrer"
               target="_blank"
             >
-              View Project <span aria-hidden="true">↗</span>
+              Open project <span aria-hidden="true">↗</span>
             </a>
           ) : null}
         </div>
@@ -134,12 +139,12 @@ export default function ProjectCard({
                 aria-labelledby={workflowsHeadingId}
                 className={styles.workflows}
               >
-                <p className={styles.workflowsEyebrow}>Applied AI workflows</p>
+                <p className={styles.workflowsEyebrow}>How I use AI</p>
                 <h4
                   className={styles.workflowsHeading}
                   id={workflowsHeadingId}
                 >
-                  Agentic engineering workflows
+                  Four workflows I’ve put into practice
                 </h4>
                 <ul
                   aria-label="Agentic engineering workflow details"

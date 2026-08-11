@@ -71,6 +71,12 @@ describe("ProjectExplorer", () => {
       within(explorer).getByRole("heading", { level: 2, name: "Projects" }),
     ).toBeInTheDocument();
     expect(projectIds(explorer)).toEqual(featuredIds);
+    expect(projectIds(explorer)).toEqual([
+      "nd-nexusone",
+      "ndo-search-explore",
+      "nexus-dashboard-unified-backup-restore",
+      "ndo-l4l7-service-chaining",
+    ]);
     expect(
       within(explorer).getByRole("button", {
         name: "View all 13 projects",
@@ -109,6 +115,81 @@ describe("ProjectExplorer", () => {
       "Search project titles and descriptions.",
     );
     expectOrdinaryCount(explorer, "Showing 13 projects.");
+  });
+
+  it("presents the NexusOne release work as a public-safe first-person case study", async () => {
+    const { explorer, user } = renderExplorer();
+    const card = projectCard(explorer, "ND — NexusOne");
+    const detailsButton = within(card).getByRole("button", {
+      name: "Read more about ND — NexusOne",
+    });
+
+    expect(card).toHaveAttribute("data-project-id", "nd-nexusone");
+    expect(card).toHaveTextContent("Details simplified for public sharing");
+    expect(
+      within(card).getByRole("img", {
+        name: "Rows of servers in a modern data center",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      within(
+        within(card).getByRole("list", {
+          name: "ND — NexusOne capabilities",
+        }),
+      ).getAllByRole("listitem").map((item) => item.textContent),
+    ).toEqual([
+      "Backend code ownership",
+      "Agent-assisted planning",
+      "Living documentation",
+      "Release validation",
+    ]);
+
+    await user.click(detailsButton);
+
+    expect(card).toHaveTextContent(
+      "I helped design and deliver a key data-center networking capability for NexusOne, serving as a backend code owner.",
+    );
+    expect(card).toHaveTextContent(
+      "I used agent-assisted planning, documentation, and validation to help move the work from early design through release",
+    );
+    expect(card).toHaveTextContent(
+      "I’ve generalized the details here and left out internal architecture, interfaces, repositories, release information, and operational data.",
+    );
+    expect(within(card).queryAllByRole("link")).toHaveLength(0);
+  });
+
+  it("redirects the former public project fragment to the NexusOne case study", async () => {
+    const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
+      configurable: true,
+      value: scrollIntoView,
+    });
+    window.history.replaceState(null, "", "#project-nd-alphax");
+
+    try {
+      const { explorer } = renderExplorer();
+      const heading = within(explorer).getByRole("heading", {
+        level: 3,
+        name: "ND — NexusOne",
+      });
+
+      await waitFor(() =>
+        expect(window.location.hash).toBe("#project-nd-nexusone"),
+      );
+      expect(heading).toHaveFocus();
+      expect(scrollIntoView).toHaveBeenCalledWith({ block: "start" });
+      expect(projectIds(explorer)).toEqual(featuredIds);
+    } finally {
+      if (originalScrollIntoView) {
+        Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
+          configurable: true,
+          value: originalScrollIntoView,
+        });
+      } else {
+        Reflect.deleteProperty(HTMLElement.prototype, "scrollIntoView");
+      }
+    }
   });
 
   it("reveals and scrolls to an archived project addressed by its fragment", async () => {
@@ -262,7 +343,7 @@ describe("ProjectExplorer", () => {
       if (project.publicUrl) {
         expect(links).toHaveLength(1);
         expect(links[0]).toHaveAccessibleName(
-          `View ${project.title} project`,
+          `Open ${project.title} project`,
         );
         expect(links[0]).toHaveAttribute("href", project.publicUrl);
         expect(links[0]).toHaveAttribute("target", "_blank");
@@ -288,10 +369,10 @@ describe("ProjectExplorer", () => {
     const accessibleNames = projectRecords.map((project) => {
       const card = projectCard(explorer, project.title);
       const detailsButton = within(card).getByRole("button", {
-        name: `Read Project Details for ${project.title}`,
+        name: `Read more about ${project.title}`,
       });
 
-      expect(detailsButton).toHaveTextContent(/^Read Project Details$/);
+      expect(detailsButton).toHaveTextContent(/^Read more$/);
       return detailsButton.getAttribute("aria-label");
     });
 
@@ -301,15 +382,15 @@ describe("ProjectExplorer", () => {
     const firstButton = within(
       projectCard(explorer, firstProject.title),
     ).getByRole("button", {
-      name: `Read Project Details for ${firstProject.title}`,
+      name: `Read more about ${firstProject.title}`,
     });
 
     await user.click(firstButton);
 
     expect(firstButton).toHaveAccessibleName(
-      `Hide Project Details for ${firstProject.title}`,
+      `Show less about ${firstProject.title}`,
     );
-    expect(firstButton).toHaveTextContent(/^Hide Project Details$/);
+    expect(firstButton).toHaveTextContent(/^Show less$/);
   });
 
   it("uses responsive lazy images and deterministic 180-character previews on every card", async () => {
@@ -324,7 +405,7 @@ describe("ProjectExplorer", () => {
     for (const project of projectRecords) {
       const card = projectCard(explorer, project.title);
       const detailsButton = within(card).getByRole("button", {
-        name: `Read Project Details for ${project.title}`,
+        name: `Read more about ${project.title}`,
       });
       const detailsId = detailsButton.getAttribute("aria-controls");
       const details = document.getElementById(detailsId ?? "");
@@ -370,22 +451,22 @@ describe("ProjectExplorer", () => {
       }),
     );
 
-    const card = projectCard(explorer, "Agentic Engineering Automation");
+    const card = projectCard(explorer, "AI-Assisted Engineering Workflows");
     const visual = within(card).getByRole("img", {
       name: "Abstract workflow connecting AI agents, reusable Skills, and context integration",
     });
     const capabilityList = within(card).getByRole("list", {
-      name: "Agentic Engineering Automation capabilities",
+      name: "AI-Assisted Engineering Workflows capabilities",
     });
     const detailsButton = within(card).getByRole("button", {
-      name: "Read Project Details for Agentic Engineering Automation",
+      name: "Read more about AI-Assisted Engineering Workflows",
     });
 
     expect(card).toHaveAttribute(
       "data-project-id",
       "agentic-engineering-automation",
     );
-    expect(card).toHaveTextContent("Abstracted public case study");
+    expect(card).toHaveTextContent("Details simplified for public sharing");
     expect(visual.tagName).toBe("DIV");
     expect(visual.querySelector("img, picture")).toBeNull();
     expect(
@@ -400,21 +481,21 @@ describe("ProjectExplorer", () => {
       "Automated validation",
     ]);
     expect(card).toHaveTextContent(
-      "with reported gains of up to 5–6× in bug-resolution throughput for individual engineers and the wider team",
+      "the reported throughput improvement is up to 5–6× for individual engineers and the wider team",
     );
     expect(card).toHaveTextContent(
-      "This public case study intentionally omits proprietary product names, repositories, customer information, operational data, and implementation details.",
+      "I’ve left out identifying names and implementation details so I can share the approach publicly.",
     );
     expect(
       within(card).queryByRole("region", {
-        name: "Agentic engineering workflows",
+        name: "Four workflows I’ve put into practice",
       }),
     ).not.toBeInTheDocument();
 
     await user.click(detailsButton);
 
     const workflows = within(card).getByRole("region", {
-      name: "Agentic engineering workflows",
+      name: "Four workflows I’ve put into practice",
     });
     const flowCards = within(workflows).getAllByRole("listitem");
 
@@ -429,25 +510,25 @@ describe("ProjectExplorer", () => {
         within(flow).getByRole("heading", { level: 5 }).textContent,
       ),
     ).toEqual([
-      "Evidence-led defect resolution",
-      "Agent-assisted feature planning",
-      "Living system documentation",
-      "Interactive simulation & validation",
+      "Finding and fixing bugs",
+      "Planning features before coding",
+      "Documenting complex systems",
+      "Simulating and validating behavior",
     ]);
     expect(flowCards[0]).toHaveTextContent(
-      "Sanitized issue → Evidence and hypotheses → Reviewed RCA and validation",
+      "Issue context → Evidence → Root cause → Validation",
     );
     expect(flowCards[0]).toHaveTextContent(
-      "Agents turn sanitized issue context into scoped evidence, competing hypotheses, human-reviewed root causes, and validated resolution handoffs.",
+      "I use agents to organize sanitized evidence, test competing explanations, and turn the strongest one into a human-reviewed root cause and validated fix plan.",
     );
     expect(flowCards[1]).toHaveTextContent(
-      "Feature brief → System model and options → Implementation plan and tests",
+      "Feature request → Existing behavior → Delivery plan → Tests",
     );
     expect(flowCards[2]).toHaveTextContent(
-      "Verified behavior → Connected system model → Living engineering guide",
+      "Verified behavior → System map → Practical guide",
     );
     expect(flowCards[3]).toHaveTextContent(
-      "Synthetic scenario → Deterministic model → Reviewable validation evidence",
+      "Synthetic scenario → Simulation → Validation evidence",
     );
     expect(workflows.textContent).not.toMatch(
       /(?:https?:\/\/|\b\d{1,3}(?:\.\d{1,3}){3}\b|\b[A-Z]+-\d{3,}\b)/u,
@@ -457,7 +538,7 @@ describe("ProjectExplorer", () => {
 
     expect(
       within(card).queryByRole("region", {
-        name: "Agentic engineering workflows",
+        name: "Four workflows I’ve put into practice",
       }),
     ).not.toBeInTheDocument();
     expect(within(card).queryByRole("link")).not.toBeInTheDocument();
@@ -482,10 +563,10 @@ describe("ProjectExplorer", () => {
     const firstCard = projectCard(explorer, firstProject.title);
     const secondCard = projectCard(explorer, secondProject.title);
     const firstButton = within(firstCard).getByRole("button", {
-      name: `Read Project Details for ${firstProject.title}`,
+      name: `Read more about ${firstProject.title}`,
     });
     const secondButton = within(secondCard).getByRole("button", {
-      name: `Read Project Details for ${secondProject.title}`,
+      name: `Read more about ${secondProject.title}`,
     });
     const detailsId = firstButton.getAttribute("aria-controls");
     const details = document.getElementById(detailsId ?? "");
@@ -494,7 +575,7 @@ describe("ProjectExplorer", () => {
     await user.click(firstButton);
 
     expect(firstButton).toHaveAccessibleName(
-      `Hide Project Details for ${firstProject.title}`,
+      `Show less about ${firstProject.title}`,
     );
     expect(firstButton).toHaveAttribute("aria-expanded", "true");
     expect(details).not.toHaveAttribute("hidden");
@@ -505,7 +586,7 @@ describe("ProjectExplorer", () => {
     await user.click(firstButton);
 
     expect(firstButton).toHaveAccessibleName(
-      `Read Project Details for ${firstProject.title}`,
+      `Read more about ${firstProject.title}`,
     );
     expect(firstButton).toHaveAttribute("aria-expanded", "false");
     expect(details).toHaveAttribute("hidden");
@@ -513,6 +594,11 @@ describe("ProjectExplorer", () => {
 
   it("replaces the preview with one full source copy while expanded and restores it on collapse", async () => {
     const { explorer, user } = renderExplorer();
+    await user.click(
+      within(explorer).getByRole("button", {
+        name: "View all 13 projects",
+      }),
+    );
     const project = projectRecords.find(
       ({ id }) => id === "resource-allocation-manager",
     );
@@ -525,7 +611,7 @@ describe("ProjectExplorer", () => {
 
     const card = projectCard(explorer, project.title);
     const detailsButton = within(card).getByRole("button", {
-      name: `Read Project Details for ${project.title}`,
+      name: `Read more about ${project.title}`,
     });
     const detailsId = detailsButton.getAttribute("aria-controls");
     const details = document.getElementById(detailsId ?? "");

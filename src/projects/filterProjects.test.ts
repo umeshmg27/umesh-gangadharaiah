@@ -87,10 +87,10 @@ describe("filterProjects", () => {
     const fullSourceMatches = filterProjects(projects, "tool");
 
     expect(featured.map(({ id }) => id)).toEqual([
+      "nd-nexusone",
       "ndo-search-explore",
       "nexus-dashboard-unified-backup-restore",
       "ndo-l4l7-service-chaining",
-      "resource-allocation-manager",
     ]);
     expect(featuredMatches.map(({ id }) => id)).toEqual([
       "ndo-search-explore",
@@ -101,15 +101,18 @@ describe("filterProjects", () => {
       "resource-allocation-manager",
       "ucs-config-tool",
     ]);
-    expect(featuredMatches[0]).toBe(featured[0]);
-    expect(featuredMatches[1]).toBe(featured[1]);
-    expect(featuredMatches[2]).toBe(featured[2]);
+    expect(featuredMatches[0]).toBe(featured[1]);
+    expect(featuredMatches[1]).toBe(featured[2]);
+    expect(featuredMatches[2]).toBe(featured[3]);
     expect(fullSourceMatches[0]).toBe(projects[6]);
     expect(fullSourceMatches[1]).toBe(projects[8]);
   });
 
-  it("does not match project IDs, links, or image metadata", () => {
-    expect(filterProjects(projects, "nd-alphax")).toEqual([]);
+  it("matches public copy but not IDs, links, or image metadata", () => {
+    expect(filterProjects(projects, "nd-nexusone")).toEqual([]);
+    expect(filterProjects(projects, "NexusOne").map(({ id }) => id)).toEqual([
+      "nd-nexusone",
+    ]);
     expect(filterProjects(projects, "umeshmg27")).toEqual([]);
     expect(filterProjects(projects, "search-and-explore.jpg")).toEqual([]);
     expect(filterProjects(source, "assets.example.test")).toEqual([]);
