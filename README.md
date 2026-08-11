@@ -65,7 +65,7 @@ The preview must be available at
 ## Preserved content contract
 
 The integrity gate currently requires exactly 12 projects, 25 recognition
-records, four career entries, four expertise areas, and four impact metrics.
+records, five career entries, four expertise areas, and four impact metrics.
 The impact metrics are displayed in this order:
 
 1. `50,000+` — policy objects indexed.
@@ -80,18 +80,18 @@ The initial featured projects are ordered by `featuredOrder`:
 3. Cisco NDO - Simplified L4L7 Service Chaining.
 4. Resource Allocation Manager (RAM).
 
-The initial recognition highlights are ordered by `highlightOrder`:
+Recognition dates are derived from each record ID's `DDMMYY` suffix. The
+initial highlights are the six newest recognitions:
 
-1. `pal-050723` (Innovation) — Congratulations on winning 2023 Asia-Pacific
-   Stevie Bronze award.
-2. `yogi-070422` (Innovation) — Innovation: Internal Tool (Codeshift).
-3. `priyanka-181224` (Mentorship) — Cisco KT Sessions.
-4. `pra-080323` (Mentorship) — Training interns.
+1. `damo-211224` (Leadership) — Ownership towards NDO ESG triages.
+2. `priyanka-181224` (Mentorship) — Cisco KT Sessions.
+3. `alfan-141124` (Innovation) — The right help at the right time.
+4. `srid-181024` (Mentorship) — Release ownership and triages.
 5. `rohi-171024` (Leadership) — Feature Ownership.
-6. `ara-290923` (Leadership) — Root Cause Analysis and Release.
+6. `atul-180724` (Innovation) — Driving ESG IT.
 
-The full project and recognition archives preserve source order. Search and
-category filters do not re-rank records.
+All recognition views are ordered newest first; equal dates preserve source
+order. The full project archive and project search preserve source order.
 
 ## Maintaining content safely
 
@@ -104,8 +104,10 @@ initial featured selection.
 
 For a recognition, add or edit its typed record in
 `src/content/recognitions.ts`, keep the ID unique, and use one of the categories
-declared in `src/content/models.ts`. Assign `highlightOrder` only when
-intentionally changing the initial highlighted selection.
+declared in `src/content/models.ts`. End the ID with the recognition date in
+`DDMMYY` form; this controls the visible date, newest-first category views, and
+the six newest highlights. Existing `highlightOrder` values are preserved as
+legacy editorial metadata and do not control the current highlighted selection.
 
 For local imagery, use imported relative asset references and update
 `tests/fixtures/active-assets.json` with the reviewed relative source and

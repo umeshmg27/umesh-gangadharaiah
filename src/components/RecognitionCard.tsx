@@ -1,5 +1,6 @@
 import { createWordBoundaryPreview } from "../content/createWordBoundaryPreview";
 import type { Recognition } from "../content/models";
+import { recognitionDateFromId } from "../content/recognitionDate";
 import styles from "./RecognitionCard.module.css";
 import ResponsivePortfolioImage from "./ResponsivePortfolioImage";
 
@@ -21,6 +22,7 @@ export default function RecognitionCard({
     : "Read Full Recognition";
   const preview = createWordBoundaryPreview(recognition.description, 400);
   const isTruncated = preview !== recognition.description;
+  const recognitionDate = recognitionDateFromId(recognition.id);
 
   return (
     <article
@@ -39,7 +41,15 @@ export default function RecognitionCard({
       </div>
 
       <div className={styles.content}>
-        <p className={styles.category}>{recognition.category}</p>
+        <div className={styles.metadata}>
+          <p className={styles.category}>{recognition.category}</p>
+          <time
+            className={styles.date}
+            dateTime={recognitionDate.dateTime}
+          >
+            {recognitionDate.label}
+          </time>
+        </div>
         <h3 className={styles.heading} id={headingId}>
           {recognition.title}
         </h3>

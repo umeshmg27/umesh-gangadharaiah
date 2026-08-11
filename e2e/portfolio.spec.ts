@@ -260,9 +260,7 @@ test("uses the approved aspect ratios and viewport layouts", async ({ page }) =>
     expect(wideSectionWidth).toBeGreaterThan(1152);
   }
 
-  await page
-    .getByRole("button", { name: "View all 25 recognitions" })
-    .click();
+  await page.getByRole("button", { name: "All (25)" }).click();
   expect(await gridColumnCount(page, "#recognition-results > div")).toBe(
     expectedRecognitionColumns,
   );
@@ -302,6 +300,99 @@ test("uses the approved aspect ratios and viewport layouts", async ({ page }) =>
   });
   expect(surnameLineFragments).toBe(1);
   await expectNoHorizontalOverflow(page);
+  browser.assertNone();
+});
+
+test("autoplays recognition highlights without taking control from the visitor", async ({
+  page,
+}) => {
+  const browser = monitorBrowserProblems(page);
+  await page.clock.install();
+  await openPortfolio(page);
+
+  const carousel = page.getByRole("region", {
+    name: "Recognition highlights carousel",
+  });
+  const track = carousel.getByLabel("Scrollable recognition highlights");
+  const pause = carousel.getByRole("button", {
+    name: "Pause recognition highlights autoplay",
+  });
+
+  await track.evaluate((element) => {
+    const trackElement = element as HTMLElement;
+
+    Object.defineProperty(trackElement, "scrollBy", {
+      configurable: true,
+      value: ({ left = 0 }: ScrollToOptions) => {
+        const maximumScrollLeft = Math.max(
+          0,
+          trackElement.scrollWidth - trackElement.clientWidth,
+        );
+        trackElement.scrollLeft = Math.max(
+          0,
+          Math.min(maximumScrollLeft, trackElement.scrollLeft + left),
+        );
+        trackElement.dispatchEvent(new Event("scroll"));
+      },
+    });
+  });
+
+  await expect(pause).toBeVisible();
+  expect(await track.evaluate((element) => element.scrollLeft)).toBe(0);
+
+  await page.clock.runFor(12_000);
+  expect(await track.evaluate((element) => element.scrollLeft)).toBe(0);
+
+  await carousel.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(100);
+
+  await page.clock.runFor(7_000);
+  const automaticallyAdvanced = await track.evaluate(
+    (element) => element.scrollLeft,
+  );
+  expect(automaticallyAdvanced).toBeGreaterThan(0);
+
+  await page.locator("#hero-heading").scrollIntoViewIfNeeded();
+  await expect(carousel).not.toBeInViewport();
+  await page.evaluate(() => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  });
+  await page.clock.runFor(12_000);
+  expect(await track.evaluate((element) => element.scrollLeft)).toBeCloseTo(
+    automaticallyAdvanced,
+    0,
+  );
+
+  await carousel.scrollIntoViewIfNeeded();
+  await expect(carousel).toBeInViewport();
+  await page.waitForTimeout(100);
+
+  await carousel.hover();
+  await page.clock.runFor(12_000);
+  expect(await track.evaluate((element) => element.scrollLeft)).toBeCloseTo(
+    automaticallyAdvanced,
+    0,
+  );
+
+  await page.locator("#recognition-heading").hover();
+  const next = carousel.getByRole("button", {
+    name: "Next recognition highlight",
+  });
+  await next.focus();
+  await page.clock.runFor(12_000);
+  expect(await track.evaluate((element) => element.scrollLeft)).toBeCloseTo(
+    automaticallyAdvanced,
+    0,
+  );
+
+  await pause.click();
+  await expect(
+    carousel.getByRole("button", {
+      name: "Play recognition highlights autoplay",
+    }),
+  ).toBeFocused();
   browser.assertNone();
 });
 
@@ -364,7 +455,7 @@ test("supports mobile and desktop navigation with predictable keyboard focus", a
   browser.assertNone();
 });
 
-test("keeps project and recognition archives, filters, and disclosures usable", async ({
+test("keeps project archives and immediate recognition views usable", async ({
   page,
 }) => {
   const browser = monitorBrowserProblems(page);
@@ -395,8 +486,14 @@ test("keeps project and recognition archives, filters, and disclosures usable", 
     }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Software Engineer III" }),
+    page.getByRole("heading", { name: "Senior Software Engineer" }),
   ).toBeVisible();
+  const currentCareer = page.locator(
+    '[data-career-id="cisco-senior-software-engineer"]',
+  );
+  await expect(currentCareer).toContainText("Oct 2025 – Present");
+  await expect(currentCareer).toContainText("Model Context Protocol (MCP)");
+  await expect(currentCareer).toContainText("up to 5–6× per engineer");
 
   await expect(page.locator("[data-project-id]")).toHaveCount(4);
   await page.getByRole("button", { name: "View all 12 projects" }).click();
@@ -425,7 +522,38 @@ test("keeps project and recognition archives, filters, and disclosures usable", 
   await expect(projectCard.locator('p[id$="-details"]')).toBeVisible();
 
   await expect(page.locator("[data-recognition-id]")).toHaveCount(6);
-  await page.getByRole("button", { name: "View all 25 recognitions" }).click();
+  expect(
+    await page
+      .locator("[data-recognition-id]")
+      .evaluateAll((cards) => cards.map((card) => card.getAttribute("data-recognition-id"))),
+  ).toEqual([
+    "damo-211224",
+    "priyanka-181224",
+    "alfan-141124",
+    "srid-181024",
+    "rohi-171024",
+    "atul-180724",
+  ]);
+  await expect(
+    page.locator('[data-recognition-id="damo-211224"] time'),
+  ).toHaveAttribute("datetime", "2024-12-21");
+
+  await page.getByRole("button", { name: "Leadership (6)" }).click();
+  await expect(page.locator("[data-recognition-id]")).toHaveCount(6);
+  expect(
+    await page
+      .locator("[data-recognition-id]")
+      .evaluateAll((cards) => cards.map((card) => card.getAttribute("data-recognition-id"))),
+  ).toEqual([
+    "damo-211224",
+    "rohi-171024",
+    "rohi-110624",
+    "srid-010424",
+    "rohi-100324",
+    "ara-290923",
+  ]);
+
+  await page.getByRole("button", { name: "All (25)" }).click();
   await expect(page.locator("[data-recognition-id]")).toHaveCount(25);
   const archivedRecognition = page.locator(
     '[data-recognition-id="damo-211224"]',
@@ -506,6 +634,11 @@ test("honors reduced motion and stable anchor offsets", async ({ page }) => {
   expect(motion.scrollBehavior).toBe("auto");
   expect(Number.parseFloat(motion.animationDuration)).toBeLessThanOrEqual(0.00001);
   expect(Number.parseFloat(motion.transitionDuration)).toBeLessThanOrEqual(0.00001);
+  await expect(
+    page.getByRole("button", {
+      name: "Play recognition highlights autoplay",
+    }),
+  ).toBeVisible();
 
   for (const id of ["expertise", "experience", "projects", "recognition", "contact"]) {
     const scrollMargin = await page.locator(`#${id}`).evaluate((element) =>

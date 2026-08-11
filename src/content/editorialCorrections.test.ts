@@ -81,9 +81,10 @@ describe("approved editorial corrections", () => {
     );
   });
 
-  it("normalizes only the presentation of the four existing career periods", () => {
+  it("locks the approved current role and preserves the prior career history", () => {
     expect(careerEntries.map(({ period }) => period)).toEqual([
-      "Aug 2024 – Present",
+      "Oct 2025 – Present",
+      "Aug 2024 – Sep 2025",
       "Aug 2022 – Jul 2024",
       "Aug 2021 – Jul 2022",
       "Jan 2021 – Jul 2021",
@@ -93,6 +94,25 @@ describe("approved editorial corrections", () => {
       return unchangedEntry;
     });
     expect(entriesWithoutPeriods).toEqual([
+      {
+        id: "cisco-senior-software-engineer",
+        role: "Senior Software Engineer",
+        organization: "Cisco Systems",
+        location: "IN",
+        summary:
+          "Agentic engineering, developer automation, feature development, and bug resolution",
+        technologies: [
+          "AI Agents",
+          "Reusable Skills",
+          "Model Context Protocol (MCP)",
+          "LLMs",
+        ],
+        highlights: [
+          "Build multiple AI agents, reusable Skills, and Model Context Protocol (MCP) integrations to automate day-to-day engineering tasks",
+          "Drive feature development through agent-assisted workflows spanning implementation, validation, and delivery",
+          "Use AI agents to investigate and resolve software defects, increasing bug-resolution throughput by up to 5–6× per engineer and across the wider team",
+        ],
+      },
       {
         id: "cisco-software-engineer-iii",
         role: "Software Engineer III",

@@ -285,9 +285,27 @@ test("renders all career entries as one complete ordered timeline", async () => 
   const orderedTimeline = career.querySelector("ol");
   const expectedEntries = [
     {
+      id: "cisco-senior-software-engineer",
+      role: "Senior Software Engineer",
+      period: "Oct 2025 – Present",
+      summary:
+        "Agentic engineering, developer automation, feature development, and bug resolution",
+      technologies: [
+        "AI Agents",
+        "Reusable Skills",
+        "Model Context Protocol (MCP)",
+        "LLMs",
+      ],
+      highlights: [
+        "Build multiple AI agents, reusable Skills, and Model Context Protocol (MCP) integrations to automate day-to-day engineering tasks",
+        "Drive feature development through agent-assisted workflows spanning implementation, validation, and delivery",
+        "Use AI agents to investigate and resolve software defects, increasing bug-resolution throughput by up to 5–6× per engineer and across the wider team",
+      ],
+    },
+    {
       id: "cisco-software-engineer-iii",
       role: "Software Engineer III",
-      period: "Aug 2024 – Present",
+      period: "Aug 2024 – Sep 2025",
       summary:
         "Network Backend development, GenAI/LLM, Mentorship and Feature owner",
       technologies: [],
@@ -341,7 +359,7 @@ test("renders all career entries as one complete ordered timeline", async () => 
 
   expect(orderedTimeline).not.toBeNull();
   const entries = Array.from(orderedTimeline?.children ?? []);
-  expect(entries).toHaveLength(4);
+  expect(entries).toHaveLength(5);
   expect(entries.every((entry) => entry.tagName === "LI")).toBe(true);
   expect(entries.map((entry) => entry.getAttribute("data-career-id"))).toEqual(
     expectedEntries.map((entry) => entry.id),
@@ -398,7 +416,7 @@ test("renders all career entries as one complete ordered timeline", async () => 
   ).toBeInTheDocument();
 });
 
-test("keeps representative project and recognition content discoverable through archives", async () => {
+test("keeps representative project and recognition content discoverable through expanded views", async () => {
   await renderPortfolio();
 
   expect(
@@ -422,25 +440,25 @@ test("keeps representative project and recognition content discoverable through 
   );
 
   expect(
-    screen.queryByRole("heading", {
-      name: "Ownership towards NDO ESG triages",
-    }),
+    document.querySelector('[data-recognition-id="yogi-070422"]'),
   ).not.toBeInTheDocument();
-  fireEvent.click(
-    screen.getByRole("button", { name: "View all 25 recognitions" }),
-  );
+  fireEvent.click(screen.getByRole("button", { name: "All (25)" }));
 
   const archivedRecognition = document.querySelector<HTMLElement>(
-    '[data-recognition-id="damo-211224"]',
+    '[data-recognition-id="yogi-070422"]',
   );
   expect(archivedRecognition).not.toBeNull();
   expect(
     within(archivedRecognition!).getByRole("heading", {
-      name: "Ownership towards NDO ESG triages",
+      name: "Innovation: Internal Tool",
     }),
   ).toBeInTheDocument();
   expect(archivedRecognition).toHaveTextContent(
-    "You have been demonstrating ownership and responsibility triaging NDO ESG issues that saves QA cycle time. Keep up the good work.",
+    "Thank you so much for your contributions to Codeshift till date, with your invaluable efforts we have been able to take it from an Idea to a functional platform in very short time!",
+  );
+  expect(within(archivedRecognition!).getByText("7 April 2022")).toHaveAttribute(
+    "datetime",
+    "2022-04-07",
   );
 });
 

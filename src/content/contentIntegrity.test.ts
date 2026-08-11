@@ -82,6 +82,7 @@ const recognitionIds = [
 ] as const;
 
 const careerIds = [
+  "cisco-senior-software-engineer",
   "cisco-software-engineer-iii",
   "cisco-software-engineer-ii",
   "cisco-staff-engineer-intern",
@@ -198,7 +199,7 @@ describe("typed portfolio content", () => {
 
     expect(projects).toHaveLength(12);
     expect(recognitions).toHaveLength(25);
-    expect(careerEntries).toHaveLength(4);
+    expect(careerEntries).toHaveLength(5);
     expect(expertiseAreas).toHaveLength(4);
     expect(impactMetrics).toHaveLength(4);
 
@@ -620,14 +621,34 @@ describe("typed portfolio content", () => {
     ]);
   });
 
-  it("preserves the rendered career dates, employer, location, and 300+ hours claim", () => {
+  it("preserves the rendered career history, current agentic work, and 300+ hours claim", () => {
     expect(careerEntries).toEqual([
+      {
+        id: "cisco-senior-software-engineer",
+        role: "Senior Software Engineer",
+        organization: "Cisco Systems",
+        location: "IN",
+        period: "Oct 2025 – Present",
+        summary:
+          "Agentic engineering, developer automation, feature development, and bug resolution",
+        technologies: [
+          "AI Agents",
+          "Reusable Skills",
+          "Model Context Protocol (MCP)",
+          "LLMs",
+        ],
+        highlights: [
+          "Build multiple AI agents, reusable Skills, and Model Context Protocol (MCP) integrations to automate day-to-day engineering tasks",
+          "Drive feature development through agent-assisted workflows spanning implementation, validation, and delivery",
+          "Use AI agents to investigate and resolve software defects, increasing bug-resolution throughput by up to 5–6× per engineer and across the wider team",
+        ],
+      },
       {
         id: "cisco-software-engineer-iii",
         role: "Software Engineer III",
         organization: "Cisco Systems",
         location: "IN",
-        period: "Aug 2024 – Present",
+        period: "Aug 2024 – Sep 2025",
         summary: "Network Backend development, GenAI/LLM, Mentorship and Feature owner",
         technologies: [],
         highlights: [],

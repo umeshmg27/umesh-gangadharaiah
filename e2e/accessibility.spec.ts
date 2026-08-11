@@ -35,7 +35,7 @@ test("has no serious or critical Axe violations in dark and light themes", async
 }, testInfo) => {
   await openDeterministicPortfolio(page);
   await page.getByRole("button", { name: "View all 12 projects" }).click();
-  await page.getByRole("button", { name: "View all 25 recognitions" }).click();
+  await page.getByRole("button", { name: "All (25)" }).click();
   if ((page.viewportSize()?.width ?? 0) < 1024) {
     await page.getByRole("button", { name: "Open navigation" }).click();
   }
@@ -74,7 +74,7 @@ test("keeps every visible interactive target at least 44 pixels square", async (
 }) => {
   await openDeterministicPortfolio(page);
   await page.getByRole("button", { name: "View all 12 projects" }).click();
-  await page.getByRole("button", { name: "View all 25 recognitions" }).click();
+  await page.getByRole("button", { name: "All (25)" }).click();
   if ((page.viewportSize()?.width ?? 0) < 1024) {
     await page.getByRole("button", { name: "Open navigation" }).click();
   }
@@ -140,7 +140,7 @@ test("keeps a distinct focus layer on the selected recognition filter in both th
   page,
 }) => {
   await openDeterministicPortfolio(page);
-  await page.getByRole("button", { name: "View all 25 recognitions" }).click();
+  await page.getByRole("button", { name: "All (25)" }).click();
 
   const filter = page.getByRole("button", { name: /^Mentorship \(\d+\)$/u });
   await filter.focus();

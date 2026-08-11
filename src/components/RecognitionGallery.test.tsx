@@ -1,6 +1,12 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { vi } from "vitest";
+import { afterEach, beforeEach, vi } from "vitest";
 
 import { createWordBoundaryPreview } from "../content/createWordBoundaryPreview";
 import type { Recognition, RecognitionCategory } from "../content/models";
@@ -15,14 +21,67 @@ const categoryCounts = {
   Mentorship: 5,
   Leadership: 6,
 } as const satisfies Record<RecognitionCategory, number>;
-const highlightIds = recognitionRecords
-  .filter((recognition) => recognition.highlightOrder !== undefined)
-  .sort(
-    (left, right) =>
-      (left.highlightOrder ?? Number.POSITIVE_INFINITY) -
-      (right.highlightOrder ?? Number.POSITIVE_INFINITY),
-  )
-  .map(({ id }) => id);
+const chronologicalIds = [
+  "damo-211224",
+  "priyanka-181224",
+  "alfan-141124",
+  "srid-181024",
+  "rohi-171024",
+  "atul-180724",
+  "rohi-110624",
+  "srid-010424",
+  "rohi-100324",
+  "maru-181023",
+  "ara-290923",
+  "rohi-270923",
+  "moulie-120723",
+  "mou-120723",
+  "pal-050723",
+  "ara-020723",
+  "rohi-030523",
+  "pra-080323",
+  "rohi-240123",
+  "ash-290922",
+  "ana-230922",
+  "pra-140622",
+  "mad-260522",
+  "mad-230422",
+  "yogi-070422",
+] as const;
+const highlightIds = chronologicalIds.slice(0, 6);
+const chronologicalCategoryIds = {
+  Innovation: [
+    "alfan-141124",
+    "atul-180724",
+    "rohi-270923",
+    "mou-120723",
+    "pal-050723",
+    "ara-020723",
+    "rohi-030523",
+    "rohi-240123",
+    "ash-290922",
+    "ana-230922",
+    "pra-140622",
+    "mad-260522",
+    "mad-230422",
+    "yogi-070422",
+  ],
+  Mentorship: [
+    "priyanka-181224",
+    "srid-181024",
+    "maru-181023",
+    "moulie-120723",
+    "pra-080323",
+  ],
+  Leadership: [
+    "damo-211224",
+    "rohi-171024",
+    "rohi-110624",
+    "srid-010424",
+    "rohi-100324",
+    "ara-290923",
+  ],
+} as const satisfies Record<RecognitionCategory, readonly string[]>;
 const truncatedRecognitionRecords = recognitionRecords.filter(
   (recognition) =>
     createWordBoundaryPreview(recognition.description, 400) !==
@@ -33,6 +92,66 @@ const completeRecognitionRecords = recognitionRecords.filter(
     createWordBoundaryPreview(recognition.description, 400) ===
     recognition.description,
 );
+const autoplayDelayMilliseconds = 6_000;
+let intersectionObservers: ControllableIntersectionObserver[] = [];
+
+class ControllableIntersectionObserver {
+  readonly root = null;
+  readonly rootMargin = "0px";
+  readonly thresholds = [0];
+  readonly targets = new Set<Element>();
+  readonly disconnect = vi.fn(() => this.targets.clear());
+  readonly observe = vi.fn((target: Element) => this.targets.add(target));
+  readonly takeRecords = vi.fn(() => [] as IntersectionObserverEntry[]);
+  readonly unobserve = vi.fn((target: Element) => this.targets.delete(target));
+
+  constructor(
+    private readonly callback: IntersectionObserverCallback,
+  ) {
+    intersectionObservers.push(this);
+  }
+
+  trigger(isIntersecting: boolean): void {
+    const entries = Array.from(this.targets, (target) => ({
+      boundingClientRect: target.getBoundingClientRect(),
+      intersectionRatio: isIntersecting ? 1 : 0,
+      intersectionRect: target.getBoundingClientRect(),
+      isIntersecting,
+      rootBounds: null,
+      target,
+      time: 0,
+    })) as IntersectionObserverEntry[];
+
+    this.callback(entries, this as unknown as IntersectionObserver);
+  }
+}
+
+function setReducedMotion(matches: boolean): void {
+  Object.defineProperty(window, "matchMedia", {
+    configurable: true,
+    value: vi.fn((query: string) => ({
+      addEventListener: vi.fn(),
+      addListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+      matches,
+      media: query,
+      onchange: null,
+      removeEventListener: vi.fn(),
+      removeListener: vi.fn(),
+    })),
+  });
+}
+
+beforeEach(() => {
+  intersectionObservers = [];
+  vi.stubGlobal("IntersectionObserver", ControllableIntersectionObserver);
+  setReducedMotion(false);
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+  vi.restoreAllMocks();
+});
 
 function renderGallery() {
   const user = userEvent.setup();
@@ -63,6 +182,20 @@ function recognitionCard(gallery: HTMLElement, id: string): HTMLElement {
 
 function recognitionHighlightTrack(gallery: HTMLElement): HTMLElement {
   return within(gallery).getByLabelText("Scrollable recognition highlights");
+}
+
+function setLatestCarouselIntersection(isIntersecting: boolean): void {
+  const observer = intersectionObservers.at(-1);
+
+  if (!observer) throw new Error("Missing carousel IntersectionObserver");
+  act(() => observer.trigger(isIntersecting));
+}
+
+function recognitionIsoDate(id: string): string {
+  const dateSuffix = id.match(/-(\d{2})(\d{2})(\d{2})$/);
+
+  if (!dateSuffix) throw new Error(`Missing recognition date in ${id}`);
+  return `20${dateSuffix[3]}-${dateSuffix[2]}-${dateSuffix[1]}`;
 }
 
 function configureHorizontalScroll(
@@ -104,7 +237,7 @@ function expectOrdinaryCount(gallery: HTMLElement, text: string): void {
 }
 
 describe("RecognitionGallery", () => {
-  it("leads with the six approved highlights in highlight order", () => {
+  it("leads with the six newest highlights and an immediate view selector", () => {
     const { gallery } = renderGallery();
 
     expect(
@@ -114,24 +247,40 @@ describe("RecognitionGallery", () => {
       }),
     ).toBeInTheDocument();
     expect(highlightIds).toEqual([
-      "pal-050723",
-      "yogi-070422",
+      "damo-211224",
       "priyanka-181224",
-      "pra-080323",
+      "alfan-141124",
+      "srid-181024",
       "rohi-171024",
-      "ara-290923",
+      "atul-180724",
     ]);
     expect(recognitionIds(gallery)).toEqual(highlightIds);
+    const viewSelector = within(gallery).getByRole("group", {
+      name: "Choose recognition view",
+    });
+    const expectedViews = [
+      "Highlights (6)",
+      "Innovation (14)",
+      "Mentorship (5)",
+      "Leadership (6)",
+      "All (25)",
+    ];
+
     expect(
-      within(gallery).getByRole("button", {
-        name: "View all 25 recognitions",
-      }),
-    ).toHaveAttribute("aria-expanded", "false");
+      within(viewSelector)
+        .getAllByRole("button")
+        .map((button) => button.textContent),
+    ).toEqual(expectedViews);
     expect(
-      within(gallery).queryByRole("group", {
-        name: "Filter recognitions by category",
-      }),
-    ).not.toBeInTheDocument();
+      within(viewSelector).getByRole("button", { name: "Highlights (6)" }),
+    ).toHaveAttribute("aria-pressed", "true");
+
+    for (const viewName of expectedViews.slice(1)) {
+      expect(
+        within(viewSelector).getByRole("button", { name: viewName }),
+      ).toHaveAttribute("aria-pressed", "false");
+    }
+
     expectOrdinaryCount(gallery, "Showing 6 recognition highlights.");
   });
 
@@ -198,35 +347,28 @@ describe("RecognitionGallery", () => {
     expect(recognitionGalleryCss).toMatch(/scroll-snap-align:\s*start/);
   });
 
-  it("reveals all twenty-five recognitions in source order with exact filter counts", async () => {
+  it("shows all twenty-five recognitions directly with exact selector counts", async () => {
     const { gallery, user } = renderGallery();
 
     await user.click(
       within(gallery).getByRole("button", {
-        name: "View all 25 recognitions",
+        name: "All (25)",
       }),
     );
 
-    expect(recognitionIds(gallery)).toEqual(
-      recognitionRecords.map(({ id }) => id),
-    );
-    expect(
-      within(gallery).getByRole("button", {
-        name: "Show recognition highlights",
-      }),
-    ).toHaveAttribute("aria-expanded", "true");
+    expect(recognitionIds(gallery)).toEqual(chronologicalIds);
     expectOrdinaryCount(gallery, "Showing all 25 recognitions.");
 
-    const filterGroup = within(gallery).getByRole("group", {
-      name: "Filter recognitions by category",
+    const viewSelector = within(gallery).getByRole("group", {
+      name: "Choose recognition view",
     });
     expect(
-      within(filterGroup).getByRole("button", { name: "All (25)" }),
+      within(viewSelector).getByRole("button", { name: "All (25)" }),
     ).toHaveAttribute("aria-pressed", "true");
 
     for (const category of categories) {
       expect(
-        within(filterGroup).getByRole("button", {
+        within(viewSelector).getByRole("button", {
           name: `${category} (${categoryCounts[category]})`,
         }),
       ).toHaveAttribute("aria-pressed", "false");
@@ -238,14 +380,8 @@ describe("RecognitionGallery", () => {
     }
   });
 
-  it("filters by category without changing source order and exposes pressed state", async () => {
+  it("switches directly to each category in newest-first order", async () => {
     const { gallery, user } = renderGallery();
-
-    await user.click(
-      within(gallery).getByRole("button", {
-        name: "View all 25 recognitions",
-      }),
-    );
 
     for (const category of categories) {
       const filter = within(gallery).getByRole("button", {
@@ -258,9 +394,7 @@ describe("RecognitionGallery", () => {
         within(gallery).getByRole("button", { name: "All (25)" }),
       ).toHaveAttribute("aria-pressed", "false");
       expect(recognitionIds(gallery)).toEqual(
-        recognitionRecords
-          .filter((recognition) => recognition.category === category)
-          .map(({ id }) => id),
+        chronologicalCategoryIds[category],
       );
       expectOrdinaryCount(
         gallery,
@@ -271,9 +405,7 @@ describe("RecognitionGallery", () => {
     await user.click(
       within(gallery).getByRole("button", { name: "All (25)" }),
     );
-    expect(recognitionIds(gallery)).toEqual(
-      recognitionRecords.map(({ id }) => id),
-    );
+    expect(recognitionIds(gallery)).toEqual(chronologicalIds);
   });
 
   it("renders stable semantic cards without changing copy, categories, tags, or image metadata", async () => {
@@ -281,7 +413,7 @@ describe("RecognitionGallery", () => {
 
     await user.click(
       within(gallery).getByRole("button", {
-        name: "View all 25 recognitions",
+        name: "All (25)",
       }),
     );
 
@@ -300,6 +432,7 @@ describe("RecognitionGallery", () => {
       const image = within(card).getByRole("img", {
         name: recognition.image.alt,
       });
+      const date = card.querySelector("time");
 
       expect(card).toHaveAttribute("data-recognition-id", recognition.id);
       expect(card).toHaveAttribute(
@@ -315,6 +448,8 @@ describe("RecognitionGallery", () => {
         `${recognition.id}-recognition-heading`,
       );
       expect(category.textContent).toBe(recognition.category);
+      expect(date).toHaveAttribute("datetime", recognitionIsoDate(recognition.id));
+      expect(date).toHaveTextContent(/^\d{1,2} [A-Z][a-z]+ 20\d{2}$/);
       expect(
         within(tags).getAllByRole("listitem").map((item) => item.textContent),
       ).toEqual(recognition.tags);
@@ -334,7 +469,7 @@ describe("RecognitionGallery", () => {
 
     await user.click(
       within(gallery).getByRole("button", {
-        name: "View all 25 recognitions",
+        name: "All (25)",
       }),
     );
 
@@ -430,7 +565,7 @@ describe("RecognitionGallery", () => {
 
     await user.click(
       within(gallery).getByRole("button", {
-        name: "View all 25 recognitions",
+        name: "All (25)",
       }),
     );
 
@@ -460,65 +595,67 @@ describe("RecognitionGallery", () => {
     }
   });
 
-  it("moves focus before archive collapse hides content and resets the archive filter", async () => {
+  it("moves focus to the selected view before replacing focused carousel or grid content", async () => {
     const { gallery, user } = renderGallery();
-
-    await user.click(
-      within(gallery).getByRole("button", {
-        name: "View all 25 recognitions",
-      }),
-    );
-    const archiveOnlyTruncated = truncatedRecognitionRecords.find(
-      (recognition) => recognition.highlightOrder === undefined,
-    );
-
-    expect(archiveOnlyTruncated).toBeDefined();
-    if (!archiveOnlyTruncated) return;
-
-    await user.click(
-      within(gallery).getByRole("button", {
-        name: `${archiveOnlyTruncated.category} (${categoryCounts[archiveOnlyTruncated.category]})`,
-      }),
-    );
-
-    const hiddenCardButton = within(
-      recognitionCard(gallery, archiveOnlyTruncated.id),
-    ).getByRole("button", {
-      name: /Read Full Recognition/,
+    const innovationView = within(gallery).getByRole("button", {
+      name: "Innovation (14)",
     });
-    hiddenCardButton.focus();
-    expect(hiddenCardButton).toHaveFocus();
-
-    const collapseControl = within(gallery).getByRole("button", {
-      name: "Show recognition highlights",
+    const autoplayControl = within(gallery).getByRole("button", {
+      name: "Pause recognition highlights autoplay",
     });
-    fireEvent.click(collapseControl);
 
-    expect(collapseControl).toHaveFocus();
-    expect(collapseControl).toHaveAccessibleName("View all 25 recognitions");
-    expect(recognitionIds(gallery)).toEqual(highlightIds);
+    autoplayControl.focus();
+    expect(autoplayControl).toHaveFocus();
+    fireEvent.click(innovationView);
+
+    expect(innovationView).toHaveFocus();
     expect(
-      within(gallery).queryByRole("group", {
-        name: "Filter recognitions by category",
+      within(gallery).queryByRole("region", {
+        name: "Recognition highlights carousel",
       }),
     ).not.toBeInTheDocument();
+    expect(recognitionIds(gallery)).toEqual(chronologicalCategoryIds.Innovation);
 
-    await user.click(collapseControl);
-
-    expect(recognitionIds(gallery)).toEqual(
-      recognitionRecords.map(({ id }) => id),
+    const nonHighlightTruncated = truncatedRecognitionRecords.find(
+      (recognition) =>
+        recognition.category === "Innovation" &&
+        !highlightIds.includes(
+          recognition.id as (typeof highlightIds)[number],
+        ),
     );
+    expect(nonHighlightTruncated).toBeDefined();
+    if (!nonHighlightTruncated) return;
+
+    const hiddenCardButton = within(
+      recognitionCard(gallery, nonHighlightTruncated.id),
+    ).getByRole("button", { name: /Read Full Recognition/ });
+    hiddenCardButton.focus();
+
+    const highlightsView = within(gallery).getByRole("button", {
+      name: "Highlights (6)",
+    });
+    fireEvent.click(highlightsView);
+
+    expect(highlightsView).toHaveFocus();
+    expect(recognitionIds(gallery)).toEqual(highlightIds);
     expect(
+      within(gallery).getByRole("region", {
+        name: "Recognition highlights carousel",
+      }),
+    ).toBeInTheDocument();
+
+    await user.click(
       within(gallery).getByRole("button", { name: "All (25)" }),
-    ).toHaveAttribute("aria-pressed", "true");
+    );
+    expect(recognitionIds(gallery)).toEqual(chronologicalIds);
   });
 
-  it("moves focus to a new filter before it removes the focused card", async () => {
+  it("moves focus to a new category before it removes the focused card", async () => {
     const { gallery, user } = renderGallery();
 
     await user.click(
       within(gallery).getByRole("button", {
-        name: "View all 25 recognitions",
+        name: "All (25)",
       }),
     );
 
@@ -540,19 +677,257 @@ describe("RecognitionGallery", () => {
     ).toBeNull();
   });
 
-  it("renders no timer-driven autoplay affordance or modal", () => {
-    const intervalSpy = vi.spyOn(globalThis, "setInterval");
-    const timeoutSpy = vi.spyOn(globalThis, "setTimeout");
-    const { gallery } = renderGallery();
+  it("runs autoplay only while the highlights carousel intersects the viewport", () => {
+    vi.useFakeTimers();
+    const { unmount } = render(<RecognitionGallery />);
+    const observer = intersectionObservers.at(-1);
 
-    expect(intervalSpy).not.toHaveBeenCalled();
-    expect(timeoutSpy).not.toHaveBeenCalled();
-    expect(within(gallery).queryByRole("dialog")).not.toBeInTheDocument();
-    expect(
-      within(gallery).getByRole("region", {
+    expect(observer).toBeDefined();
+    expect(observer?.observe).toHaveBeenCalledWith(
+      screen.getByRole("region", {
         name: "Recognition highlights carousel",
       }),
-    ).toHaveAttribute("aria-roledescription", "carousel");
-    expect(gallery.querySelector("[data-autoplay]")).toBeNull();
+    );
+    expect(vi.getTimerCount()).toBe(0);
+
+    setLatestCarouselIntersection(true);
+    expect(vi.getTimerCount()).toBe(1);
+
+    setLatestCarouselIntersection(false);
+    expect(vi.getTimerCount()).toBe(0);
+
+    setLatestCarouselIntersection(true);
+    expect(vi.getTimerCount()).toBe(1);
+
+    unmount();
+    expect(observer?.disconnect).toHaveBeenCalledOnce();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it("autoplays within the finite track, wraps at the end, and uses no interval", () => {
+    vi.useFakeTimers();
+    const intervalSpy = vi.spyOn(globalThis, "setInterval");
+    const { gallery } = renderGallery();
+    const carousel = within(gallery).getByRole("region", {
+      name: "Recognition highlights carousel",
+    });
+    const track = recognitionHighlightTrack(gallery);
+    const { scrollBy, setScrollLeft } = configureHorizontalScroll(track, {
+      clientWidth: 320,
+      scrollWidth: 960,
+    });
+
+    setScrollLeft(0);
+
+    expect(recognitionIds(gallery)).toHaveLength(6);
+    expect(
+      within(carousel).getByRole("button", {
+        name: "Pause recognition highlights autoplay",
+      }),
+    ).toBeVisible();
+    expect(vi.getTimerCount()).toBe(0);
+    setLatestCarouselIntersection(true);
+    expect(vi.getTimerCount()).toBeGreaterThan(0);
+
+    act(() => vi.advanceTimersByTime(autoplayDelayMilliseconds));
+    expect(scrollBy).toHaveBeenLastCalledWith({
+      behavior: "smooth",
+      left: 320,
+    });
+
+    act(() => vi.advanceTimersByTime(autoplayDelayMilliseconds));
+    expect(scrollBy).toHaveBeenLastCalledWith({
+      behavior: "smooth",
+      left: 320,
+    });
+    expect(track.scrollLeft).toBe(640);
+
+    act(() => vi.advanceTimersByTime(autoplayDelayMilliseconds));
+    expect(scrollBy).toHaveBeenLastCalledWith({
+      behavior: "smooth",
+      left: -640,
+    });
+    expect(track.scrollLeft).toBe(0);
+
+    expect(intervalSpy).not.toHaveBeenCalled();
+    expect(within(gallery).queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("defaults to paused for reduced motion and permits an explicit play choice", () => {
+    setReducedMotion(true);
+    vi.useFakeTimers();
+    const { gallery } = renderGallery();
+    const track = recognitionHighlightTrack(gallery);
+    const { scrollBy } = configureHorizontalScroll(track, {
+      clientWidth: 320,
+      scrollWidth: 960,
+    });
+    const play = within(gallery).getByRole("button", {
+      name: "Play recognition highlights autoplay",
+    });
+
+    setLatestCarouselIntersection(true);
+    expect(play).toHaveTextContent("Play autoplay");
+    expect(vi.getTimerCount()).toBe(0);
+    act(() => vi.advanceTimersByTime(autoplayDelayMilliseconds));
+    expect(scrollBy).not.toHaveBeenCalled();
+
+    fireEvent.click(play);
+    expect(
+      within(gallery).getByRole("button", {
+        name: "Pause recognition highlights autoplay",
+      }),
+    ).toBeVisible();
+    expect(vi.getTimerCount()).toBe(1);
+
+    act(() => vi.advanceTimersByTime(autoplayDelayMilliseconds));
+    expect(scrollBy).toHaveBeenLastCalledWith({
+      behavior: "auto",
+      left: 320,
+    });
+  });
+
+  it("pauses for pointer hover and focus, then resumes unless explicitly paused", () => {
+    vi.useFakeTimers();
+    const { gallery } = renderGallery();
+    const carousel = within(gallery).getByRole("region", {
+      name: "Recognition highlights carousel",
+    });
+    const track = recognitionHighlightTrack(gallery);
+    const { scrollBy } = configureHorizontalScroll(track, {
+      clientWidth: 320,
+      scrollWidth: 960,
+    });
+
+    setLatestCarouselIntersection(true);
+    expect(vi.getTimerCount()).toBe(1);
+    fireEvent.pointerEnter(carousel);
+    expect(vi.getTimerCount()).toBe(0);
+    act(() => vi.advanceTimersByTime(autoplayDelayMilliseconds));
+    expect(scrollBy).not.toHaveBeenCalled();
+
+    fireEvent.pointerLeave(carousel);
+    expect(vi.getTimerCount()).toBe(1);
+
+    const next = within(carousel).getByRole("button", {
+      name: "Next recognition highlight",
+    });
+    fireEvent.focus(next);
+    expect(vi.getTimerCount()).toBe(0);
+
+    const highlightsView = within(gallery).getByRole("button", {
+      name: "Highlights (6)",
+    });
+    fireEvent.blur(next, { relatedTarget: highlightsView });
+    highlightsView.focus();
+    expect(vi.getTimerCount()).toBeGreaterThan(0);
+
+    const pause = within(carousel).getByRole("button", {
+      name: "Pause recognition highlights autoplay",
+    });
+    fireEvent.click(pause);
+    fireEvent.pointerEnter(carousel);
+    fireEvent.pointerLeave(carousel);
+    act(() => vi.advanceTimersByTime(autoplayDelayMilliseconds * 2));
+    expect(scrollBy).not.toHaveBeenCalled();
+    expect(
+      within(carousel).getByRole("button", {
+        name: "Play recognition highlights autoplay",
+      }),
+    ).toBeVisible();
+  });
+
+  it("preserves the autoplay choice while switching immediate views", () => {
+    vi.useFakeTimers();
+    const { gallery } = renderGallery();
+    const pause = within(gallery).getByRole("button", {
+      name: "Pause recognition highlights autoplay",
+    });
+
+    fireEvent.click(pause);
+    fireEvent.click(
+      within(gallery).getByRole("button", { name: "Mentorship (5)" }),
+    );
+    expect(recognitionIds(gallery)).toEqual(chronologicalCategoryIds.Mentorship);
+    expect(vi.getTimerCount()).toBe(0);
+
+    fireEvent.click(
+      within(gallery).getByRole("button", { name: "Highlights (6)" }),
+    );
+    setLatestCarouselIntersection(true);
+    expect(
+      within(gallery).getByRole("button", {
+        name: "Play recognition highlights autoplay",
+      }),
+    ).toBeVisible();
+    expect(vi.getTimerCount()).toBe(0);
+
+    fireEvent.click(
+      within(gallery).getByRole("button", {
+        name: "Play recognition highlights autoplay",
+      }),
+    );
+    expect(vi.getTimerCount()).toBe(1);
+
+    fireEvent.click(
+      within(gallery).getByRole("button", { name: "Leadership (6)" }),
+    );
+    expect(recognitionIds(gallery)).toEqual(chronologicalCategoryIds.Leadership);
+    expect(vi.getTimerCount()).toBe(0);
+
+    fireEvent.click(
+      within(gallery).getByRole("button", { name: "Highlights (6)" }),
+    );
+    expect(vi.getTimerCount()).toBe(0);
+    setLatestCarouselIntersection(true);
+    expect(
+      within(gallery).getByRole("button", {
+        name: "Pause recognition highlights autoplay",
+      }),
+    ).toBeVisible();
+    expect(vi.getTimerCount()).toBe(1);
+  });
+
+  it("suspends autoplay while the page is hidden and clears its timer on unmount", () => {
+    vi.useFakeTimers();
+    const originalVisibility = Object.getOwnPropertyDescriptor(
+      document,
+      "visibilityState",
+    );
+    Object.defineProperty(document, "visibilityState", {
+      configurable: true,
+      value: "visible",
+    });
+
+    const { unmount } = render(<RecognitionGallery />);
+    setLatestCarouselIntersection(true);
+    expect(vi.getTimerCount()).toBe(1);
+
+    Object.defineProperty(document, "visibilityState", {
+      configurable: true,
+      value: "hidden",
+    });
+    fireEvent(document, new Event("visibilitychange"));
+    expect(vi.getTimerCount()).toBe(0);
+
+    Object.defineProperty(document, "visibilityState", {
+      configurable: true,
+      value: "visible",
+    });
+    fireEvent(document, new Event("visibilitychange"));
+    expect(vi.getTimerCount()).toBe(1);
+
+    unmount();
+    expect(vi.getTimerCount()).toBe(0);
+
+    if (originalVisibility) {
+      Object.defineProperty(
+        document,
+        "visibilityState",
+        originalVisibility,
+      );
+    } else {
+      Reflect.deleteProperty(document, "visibilityState");
+    }
   });
 });
