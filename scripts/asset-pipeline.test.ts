@@ -51,6 +51,11 @@ const promotionArtifactPrefixes = [
   ".portfolio-backup-",
 ];
 const scriptNames = ["verify-assets.mjs", "optimize-images.mjs"] as const;
+// These tests execute complete Sharp pipelines in child processes. Hosted
+// runners are materially slower than developer machines, so retain bounded
+// per-test budgets with enough headroom for the measured CI runtime.
+const sourceMutationTestTimeoutMs = 30_000;
+const deterministicOptimizationTestTimeoutMs = 60_000;
 
 let fixture: ActiveAssetFixture;
 let externalRoot: string;
@@ -486,7 +491,7 @@ describe("active asset pipeline integrity", () => {
       expect(await listPromotionArtifacts()).toEqual([]);
       expect(await readFile(externalMarker)).toEqual(sentinel);
     },
-    10_000,
+    sourceMutationTestTimeoutMs,
   );
 
   it(
@@ -819,7 +824,7 @@ describe("active asset pipeline integrity", () => {
       expect(secondDigest).toBe(firstDigest);
       expect(await listPromotionArtifacts()).toEqual([]);
     },
-    15_000,
+    deterministicOptimizationTestTimeoutMs,
   );
 
   it("rejects a different same-dimension WebP instead of trusting metadata", async () => {
