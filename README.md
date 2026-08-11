@@ -1,86 +1,200 @@
-# Developer Portfolio Template 🚀
+# Umesh Gangadharaiah — Portfolio
 
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![Node.js](https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E) ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![Sass](https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white)
+Static React and TypeScript portfolio for Umesh Gangadharaiah, built with Vite
+and published at
+[umeshmg27.github.io/umesh-gangadharaiah](https://umeshmg27.github.io/umesh-gangadharaiah/).
+The site is a single responsive page with recruiter-focused summaries and
+keyboard-, touch-, and mouse-accessible project and recognition archives.
 
-## What is this?
+## Repository map
 
-This simple portfolio template is designed to showcase your past projects, career history, skill sets, and more.
+- `src/content/models.ts` defines the readonly content contracts.
+- `src/content/profile.ts`, `impact.ts`, `expertise.ts`, `career.ts`,
+  `projects.ts`, and `recognitions.ts` contain the build-time portfolio data.
+- `src/components/` contains presentation and interaction behavior.
+- `src/assets/portfolio/` contains the committed portrait, project, and
+  recognition fallbacks and responsive WebP variants.
+- `tests/fixtures/active-assets.json` locks the active asset inventory, hashes,
+  dimensions, variants, and the two approved remote project images.
+- `index.html` and `public/` contain the static metadata, manifest, icons,
+  robots policy, and social preview card.
 
-View the [Demo](https://yujisatojr.github.io/react-portfolio-template/).
+Content is imported into the bundle; there is no CMS, backend, database, or
+runtime content fetch. Runtime third-party requests are limited to the two
+approved Cisco-hosted project images and contact form submission through
+EmailJS. The site has no analytics, visitor or chat metrics, or telemetry
+upload. Its theme preference is stored only in the visitor's browser.
 
-**This template is free to use, and no attribution is required.** You can fork or download this repository to customize it for your own use. Please don't forget to leave a ⭐ if you like this portfolio!
+## Pinned development environment
 
-![screenshot](./src/assets//images/screenshot.png)
+Use exactly Node.js `24.14.0` and npm `11.3.0`. The versions are pinned in
+`.nvmrc`, `package.json`, and both GitHub Actions workflows.
 
-## Features
+```bash
+node --version
+npm --version
+npm ci
+npm run dev
+```
 
-✅ Open source (free to use, no attribution required)  
-✅ Responsive design & mobile-friendly  
-✅ Supports both dark and light modes  
-✅ Highly customizable multi-component layout  
-✅ Built with modern technologies (React, TypeScript, JavaScript, and SCSS)  
+The version commands must print `v24.14.0` and `11.3.0`. Open the repository
+subpath URL printed by Vite. Use `npm ci`, not `npm install`, for a frozen
+lockfile install.
 
-## Quick Setup
+Run the complete deterministic gate before review or publication:
 
-1. Ensure you have [Node.js](https://nodejs.org/) installed. Check your installation by running:
+```bash
+npm run check
+```
 
-    ```bash
-    node -v
-    ```
+`check` runs typed-content integrity, ESLint, unit tests, the Playwright/Axe
+suite across phone, tablet, laptop, and wide viewports, generated-asset
+verification, and a production build with distribution metadata checks.
 
-2. In the project directory, install dependencies:
+To inspect the production build locally:
 
-    ```bash
-    npm install
-    ```
+```bash
+npm run build
+npm run preview -- --host 127.0.0.1
+```
 
-3. Start the development server:
+The preview must be available at
+`http://127.0.0.1:4173/umesh-gangadharaiah/`. With that preview running,
+`npm run test:e2e` reuses it for browser acceptance.
 
-    ```bash
-    npm start
-    ```
+## Preserved content contract
 
-4. Open [http://localhost:3000](http://localhost:3000) to view the app in the browser.
+The integrity gate currently requires exactly 12 projects, 25 recognition
+records, four career entries, four expertise areas, and four impact metrics.
+The impact metrics are displayed in this order:
 
-5. Customize the template by navigating to the `/src/components` directory. Modify texts, pictures, and other information as needed.
+1. `50,000+` — policy objects indexed.
+2. `Sub-second` — policy retrieval.
+3. `300+ hours` — manual effort saved.
+4. `70%` — manual effort reduced.
 
-The page will reload if you make edits, and you will see any lint errors in the console.
+The initial featured projects are ordered by `featuredOrder`:
 
-If you are interested in creating a mockup image like the ones from the personal projects section, I recommend [Genmoo](https://gemoo.com/tools/browser-mockup-generator/). This website lets you generate sleek looking browser mockups for free.
+1. NDO - Search & Explore Feature.
+2. Unified Backup and Restore - Cisco Nexus Dashboard.
+3. Cisco NDO - Simplified L4L7 Service Chaining.
+4. Resource Allocation Manager (RAM).
 
-## Deployment
+The initial recognition highlights are ordered by `highlightOrder`:
 
-You can choose your preferred service (e.g., [Netlify](https://www.netlify.com/), [Render](https://render.com/), [Heroku](https://www.heroku.com/)) for deployment. One of the easiest ways to host this portfolio is using GitHub Pages. Follow the instructions below for a production deploy.
+1. `pal-050723` (Innovation) — Congratulations on winning 2023 Asia-Pacific
+   Stevie Bronze award.
+2. `yogi-070422` (Innovation) — Innovation: Internal Tool (Codeshift).
+3. `priyanka-181224` (Mentorship) — Cisco KT Sessions.
+4. `pra-080323` (Mentorship) — Training interns.
+5. `rohi-171024` (Leadership) — Feature Ownership.
+6. `ara-290923` (Leadership) — Root Cause Analysis and Release.
 
-1. **Set Up GitHub Repository**
+The full project and recognition archives preserve source order. Search and
+category filters do not re-rank records.
 
-    Create a new repository on GitHub for your portfolio app.
+## Maintaining content safely
 
-2. **Configure `package.json`**
+For a project, add or edit its typed record in `src/content/projects.ts` and
+keep its ID unique. Add `publicUrl` only after verifying a real public HTTPS
+destination. Omit it when a destination is missing or uncertain; never use
+`#` as a placeholder. A project without `publicUrl` deliberately renders as a
+non-link card. Assign `featuredOrder` only when intentionally changing the
+initial featured selection.
 
-    Edit the following properties in your `package.json` file:
+For a recognition, add or edit its typed record in
+`src/content/recognitions.ts`, keep the ID unique, and use one of the categories
+declared in `src/content/models.ts`. Assign `highlightOrder` only when
+intentionally changing the initial highlighted selection.
 
-    ```json
-    {
-        "homepage": "https://yourusername.github.io/your-repo-name",
-        "scripts": {
-            "predeploy": "npm run build",
-            "deploy": "gh-pages -d build",
-            ...
-        }
-    }
-    ```
+For local imagery, use imported relative asset references and update
+`tests/fixtures/active-assets.json` with the reviewed relative source and
+target paths, SHA-256, dimensions, and responsive widths. Do not embed
+`/umesh-gangadharaiah/` or any other deployment base path in content; Vite
+applies its configured base to imported assets. If an inventory change is
+intentional, update the exact count and ordering assertions with it rather
+than weakening them, then run `npm run check`.
 
-    Replace `yourusername` with your GitHub username and `your-repo-name` with the name of your GitHub repository.
+The normal post-cleanup asset gate is:
 
-3. **Deploy to GitHub Pages**
+```bash
+npm run verify:assets
+```
 
-    Run the following command to deploy your app:
+It validates the committed fallback originals and generated targets without
+the removed historical source tree. The fixture still records those historical
+source paths as a migration audit, but all 36 legacy originals were removed
+after their optimized targets were committed. Consequently, source mode and
+the optimizer are regeneration tools, not commands for a normal checkout.
 
-    ```bash
-    npm run deploy
-    ```
+Only after restoring every fixture-listed historical source at its recorded
+relative path may a maintainer run:
 
-4. **Access Your Deployed App**
+```bash
+node scripts/verify-assets.mjs --source
+node scripts/optimize-images.mjs
+npm run verify:assets
+```
 
-    After successfully deploying, you can access your app at `https://yourusername.github.io/your-repo-name`.
+Source mode verifies the restored source hashes and dimensions. The optimizer
+then copies byte-identical fallbacks and deterministically regenerates both
+WebP variants. It fails closed when any required historical source is absent
+or changed.
+
+EmailJS public client configuration lives in
+`src/contact/emailjsConfig.ts`. Keep the configuration centralized there; do
+not reproduce its values in documentation or logs. Contact input and provider
+details must not be logged, and failed submissions must leave the visitor's
+input available for retry.
+
+## External audit
+
+Run the bounded best-effort network audit separately from deterministic checks:
+
+```bash
+npm run audit:external
+```
+
+It reports status or a redacted `unavailable` result for the approved external
+destinations. It is intentionally fail-soft and exits successfully when a
+third party is unavailable, so review its output; an exit code of zero is not
+proof that every remote destination responded.
+
+## GitHub Pages publication
+
+`.github/workflows/deploy-pages.yml` is the production workflow. A push to
+`master` or a manual dispatch can start it, but every job has a
+`refs/heads/master` guard. It builds a verified `dist` artifact, deploys through
+the `github-pages` environment, and then runs the live smoke check. Pull-request
+validation in `.github/workflows/ci.yml` has read-only repository permission
+and cannot deploy.
+
+Configure GitHub once after the workflow is present on `master`:
+
+1. Open **Settings** → **Pages**.
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+3. Open **Settings** → **Environments** → **github-pages**.
+4. Restrict deployment branches and tags to the selected branch `master`.
+
+To rerun production from the GitHub web interface:
+
+1. Open **Actions** → **Deploy portfolio to Pages**.
+2. Select **Run workflow**, choose `master`, and select **Run workflow** again.
+3. Wait for **Build verified Pages artifact**, **Deploy verified Pages
+   artifact**, and **Verify published portfolio** to succeed.
+4. Open **Settings** → **Pages** → **Visit site**.
+
+Choosing any non-`master` ref results in skipped publishing jobs. Do not create
+or force-push a deployment branch.
+
+After publication, verify the canonical page and its built metadata/assets:
+
+```bash
+npm run smoke:pages
+```
+
+A smoke failure leaves the release handoff incomplete. Roll back with a normal
+revert of the source commit, land that revert on `master`, wait for the guarded
+workflow to deploy it (or manually rerun the workflow on `master`), and run
+`npm run smoke:pages` again. Git history is the rollback record; do not reset or
+rewrite it.
