@@ -210,51 +210,44 @@ test("renders every expertise area once as semantic source-ordered content", asy
   ).toBeInTheDocument();
   const expectedAreas = [
     {
-      id: "backend-systems",
-      title: "Backend Engineer - Distributed Systems & Infrastructure",
+      id: "generative-ai",
+      title: "Agentic Engineering & Applied AI",
       description:
-        " Experienced backend engineer with hands-on expertise in designing and managing microservices within large-scale distributed systems. I’ve built reliable workflows, implemented robust configuration validation logic, and optimized deployment dependency resolution using graph algorithms. My work emphasizes maintaining consistency and correctness across services, handling complex interactions in distributed environments to ensure stability and reliability. With a keen eye for identifying critical flaws in architecture, I deliver scalable, low-impact solutions that support high-availability systems.",
-      itemsLabel: "Tech stack:",
+        "I design AI-assisted engineering workflows with agents, reusable Skills, and Model Context Protocol (MCP) integrations. My focus is dependable orchestration: grounding work in traceable evidence, keeping people responsible for decisions, and turning complex engineering tasks into repeatable paths from investigation and planning through implementation and validation.",
+      itemsLabel: "Focus areas & publications:",
+      items: [
+        "AI Agents",
+        "Reusable Skills",
+        "Model Context Protocol",
+        "LLMs",
+        "Multi-Agent Orchestration",
+        "Small LLMs for Edge Computing",
+        "Multi-Stage Fine-Tuning Process",
+      ],
+    },
+    {
+      id: "backend-systems",
+      title: "Distributed Backend Systems",
+      description:
+        "I build backend services for distributed systems where consistency, recovery, and clear service boundaries matter. On NexusOne, I applied that approach to service integration, lifecycle reliability, automated validation, and release hardening as part of a broader engineering team.",
+      itemsLabel: "Core stack:",
       items: ["Golang", "Python", "C++", "MongoDB", "Redis"],
     },
     {
-      id: "generative-ai",
-      title: "Exploring Generative AI & LLMs",
-      description:
-        "I'm a big fan of Generative AI and Large Language Models (LLMs), and I've had the chance to dive deep into these technologies through research and experimentation. My work focuses on improving LLMs' language understanding and responsiveness, while also deploying smaller models for internal tools to test new possibilities. Right now, I'm working on a proof of concept (PoC) to bring these AI solutions to life in exciting, real-world applications!",
-      itemsLabel: "Tech stack & Papers:",
-      items: [
-        "SMALL LLMS FOR EDGE COMPUTING",
-        "MULTI-STAGE FINE-TUNING PROCESS",
-        "LangChain",
-        "RAG",
-        "Hugging Face",
-        "LlamaIndex",
-        "Streamlit",
-      ],
-    },
-    {
       id: "devops-automation",
-      title: "DevOps & Automation",
+      title: "Engineering Automation & Release Reliability",
       description:
-        "Beyond backend development, I bring a strong skill set in DevOps and internal automation. I’m skilled at building tools that boost team efficiency, like automating a custom Go-based code coverage framework to improve test visibility and streamline development workflows. I also write smart in-house scripts that bridge the gap between development and QA, handling tasks like upgrade, backup, and restore with zero manual hassle. My ability to think beyond just code—optimizing processes, reducing errors, and tightening release cycles—is a big part of how I help teams move faster and ship more reliably.",
-      itemsLabel: "Tech stack:",
-      items: ["SonarQube", "Docker", "Kubernetes", "Linux"],
+        "I automate the work around software delivery—from repeatable environments and test pipelines to release checks and recovery workflows. I use containers, Kubernetes, Linux, and CI/CD tooling to reduce manual steps, make failures easier to reproduce, and help teams ship changes with greater confidence.",
+      itemsLabel: "Core stack:",
+      items: ["Docker", "Kubernetes", "Linux", "CI/CD", "SonarQube"],
     },
     {
       id: "engineering-tools",
-      title: "Tools",
+      title: "Validation, Debugging & Performance",
       description:
-        "My approach with tools, services and platforms is hands-on, curiosity-driven, allowing me to be agile and adapt to the latest technology across development, automation and debugging workflows. I’ve used Docker and Kubernetes extensively for containerization and deployment, along with FastAPI, ReactJS, and HAProxy for building and managing robust microservices. For performance optimization, I’ve recently been leveraging Go’s pprof to profile and fine-tune services, leading to significant improvements in scale metrics. I’m also comfortable with databases like MongoDB, Redis, and ArangoDB, and often write internal scripts to improve developer productivity and system observability.",
-      itemsLabel: "Tech stack:",
-      items: [
-        "VS Code",
-        "Postman",
-        "pprof",
-        "Hugging Face",
-        "LlamaIndex",
-        "Streamlit",
-      ],
+        "I treat validation as part of feature design. I build automated tests, deterministic simulations, profiling, and debugging workflows that expose edge cases early and make complex behavior easier to understand. This approach helps me investigate defects, harden distributed features, and support reliable releases.",
+      itemsLabel: "Methods & tools:",
+      items: ["Automated Testing", "Simulation", "pprof", "Observability", "Postman"],
     },
   ] as const;
   const cards = within(expertise).getAllByRole("article");
@@ -269,15 +262,7 @@ test("renders every expertise area once as semantic source-ordered content", asy
       level: 3,
       name: area.title,
     });
-    const normalizedDescription = area.description.trimStart();
-    const sentenceEnd = normalizedDescription.search(/[.!?](?=\s|$)/u);
-    const lead =
-      sentenceEnd < 0
-        ? normalizedDescription
-        : normalizedDescription.slice(0, sentenceEnd + 1);
-    const description = card.querySelector("details p");
-    const disclosure = card.querySelector("details");
-    const disclosureSummary = disclosure?.querySelector("summary");
+    const description = card.querySelector("[data-expertise-description]");
     const icon = card.querySelector("svg[aria-hidden='true']");
     const itemLists = within(card).getAllByRole("list", {
       name: area.itemsLabel,
@@ -285,14 +270,10 @@ test("renders every expertise area once as semantic source-ordered content", asy
 
     expect(title).toHaveAttribute("id", `${area.id}-heading`);
     expect(icon).toHaveAttribute("focusable", "false");
-    expect(within(card).getByText(lead, { selector: "p" })).toBeVisible();
-    expect(
-      `${lead} ${description?.textContent ?? ""}`,
-    ).toBe(area.description.trimStart());
-    expect(disclosure).not.toHaveAttribute("open");
-    expect(disclosureSummary).toHaveAccessibleName(
-      `Read full description for ${area.title}`,
-    );
+    expect(description).toBeVisible();
+    expect(description).toHaveTextContent(area.description);
+    expect(within(card).getAllByText(area.description, { selector: "p" })).toHaveLength(1);
+    expect(card.querySelector("details, summary")).toBeNull();
     expect(itemLists).toHaveLength(1);
     expect(
       within(itemLists[0]).getAllByRole("listitem").map((item) => item.textContent),
@@ -301,11 +282,11 @@ test("renders every expertise area once as semantic source-ordered content", asy
 
   for (const [name, href] of [
     [
-      "SMALL LLMS FOR EDGE COMPUTING",
+      "Small LLMs for Edge Computing",
       "https://www.tdcommons.org/dpubs_series/7086/",
     ],
     [
-      "MULTI-STAGE FINE-TUNING PROCESS",
+      "Multi-Stage Fine-Tuning Process",
       "https://www.tdcommons.org/dpubs_series/7085/",
     ],
   ] as const) {

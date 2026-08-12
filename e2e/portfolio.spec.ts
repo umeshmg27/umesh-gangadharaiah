@@ -161,7 +161,7 @@ test("uses the approved aspect ratios and viewport layouts", async ({ page }) =>
   const viewportWidth = page.viewportSize()?.width ?? 0;
   const expectedProjectColumns = viewportWidth >= 768 ? 2 : 1;
   const expectedContactColumns = viewportWidth >= 768 ? 2 : 1;
-  const expectedExpertiseColumns = viewportWidth >= 768 ? 2 : 1;
+  const expectedExpertiseColumns = viewportWidth >= 1280 ? 2 : 1;
   const expectedHeroColumns = viewportWidth >= 1024 ? 2 : 1;
   const expectedAgenticSpotlightColumns = viewportWidth >= 1200 ? 2 : 1;
   const expectedAgenticFlowColumns = viewportWidth >= 768 ? 2 : 1;
@@ -307,6 +307,29 @@ test("uses the approved aspect ratios and viewport layouts", async ({ page }) =>
       .length;
   });
   expect(surnameLineFragments).toBe(1);
+  await expectNoHorizontalOverflow(page);
+  browser.assertNone();
+});
+
+test("shows every expertise description without requiring a disclosure", async ({
+  page,
+}) => {
+  const browser = monitorBrowserProblems(page);
+  await openPortfolio(page);
+
+  const expertise = page.locator("#expertise");
+  await expect(expertise.locator("[data-expertise-id]")).toHaveCount(4);
+  await expect(expertise.locator("details, summary")).toHaveCount(0);
+
+  for (const description of [
+    "I design AI-assisted engineering workflows with agents, reusable Skills, and Model Context Protocol (MCP) integrations. My focus is dependable orchestration: grounding work in traceable evidence, keeping people responsible for decisions, and turning complex engineering tasks into repeatable paths from investigation and planning through implementation and validation.",
+    "I build backend services for distributed systems where consistency, recovery, and clear service boundaries matter. On NexusOne, I applied that approach to service integration, lifecycle reliability, automated validation, and release hardening as part of a broader engineering team.",
+    "I automate the work around software delivery—from repeatable environments and test pipelines to release checks and recovery workflows. I use containers, Kubernetes, Linux, and CI/CD tooling to reduce manual steps, make failures easier to reproduce, and help teams ship changes with greater confidence.",
+    "I treat validation as part of feature design. I build automated tests, deterministic simulations, profiling, and debugging workflows that expose edge cases early and make complex behavior easier to understand. This approach helps me investigate defects, harden distributed features, and support reliable releases.",
+  ]) {
+    await expect(expertise.getByText(description, { exact: true })).toBeVisible();
+  }
+
   await expectNoHorizontalOverflow(page);
   browser.assertNone();
 });
@@ -593,7 +616,7 @@ test("keeps project archives and immediate recognition views usable", async ({
   await expect(page.getByText("50,000+", { exact: true })).toBeVisible();
   await expect(
     page.getByRole("heading", {
-      name: "Backend Engineer - Distributed Systems & Infrastructure",
+      name: "Agentic Engineering & Applied AI",
     }),
   ).toBeVisible();
   await expect(
@@ -818,6 +841,8 @@ test("reflows after 200 percent text resizing without horizontal scrolling", asy
   });
 
   await expectNoHorizontalOverflow(page);
+  expect(await gridColumnCount(page, "#expertise > div")).toBe(1);
+  await expect(page.locator("#expertise [data-expertise-description]")).toHaveCount(4);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   if ((page.viewportSize()?.width ?? 0) < 1024) {
     await expect(page.getByRole("button", { name: /navigation/u })).toBeVisible();

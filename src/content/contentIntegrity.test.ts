@@ -103,8 +103,8 @@ const careerIds = [
 ] as const;
 
 const expertiseIds = [
-  "backend-systems",
   "generative-ai",
+  "backend-systems",
   "devops-automation",
   "engineering-tools",
 ] as const;
@@ -668,9 +668,12 @@ describe("typed portfolio content", () => {
   });
 
   it("preserves expertise copy, labels, and both publication URLs", () => {
+    for (const area of expertiseAreas) {
+      expect(area.description).toBe(area.description.trim());
+    }
     expect(
       sha256(expertiseAreas.map(({ title, description }) => ({ title, description }))),
-    ).toBe("d02711c59aeebcc51a363899fe2470596dbfd8e1a425db83745acf629256106c");
+    ).toBe("eedc3ddd086eb5ba1e2c63ef8fdd44f0302a5bffb0f432c9f14ad9ad26c21515");
 
     const publicationUrls = expertiseAreas.flatMap(({ items }) =>
       items.flatMap((item) => ("url" in item ? [item.url] : [])),
@@ -691,9 +694,29 @@ describe("typed portfolio content", () => {
       })),
     ).toEqual([
       {
+        id: "generative-ai",
+        title: "Agentic Engineering & Applied AI",
+        itemsLabel: "Focus areas & publications:",
+        items: [
+          { label: "AI Agents", url: null },
+          { label: "Reusable Skills", url: null },
+          { label: "Model Context Protocol", url: null },
+          { label: "LLMs", url: null },
+          { label: "Multi-Agent Orchestration", url: null },
+          {
+            label: "Small LLMs for Edge Computing",
+            url: "https://www.tdcommons.org/dpubs_series/7086/",
+          },
+          {
+            label: "Multi-Stage Fine-Tuning Process",
+            url: "https://www.tdcommons.org/dpubs_series/7085/",
+          },
+        ],
+      },
+      {
         id: "backend-systems",
-        title: "Backend Engineer - Distributed Systems & Infrastructure",
-        itemsLabel: "Tech stack:",
+        title: "Distributed Backend Systems",
+        itemsLabel: "Core stack:",
         items: [
           { label: "Golang", url: null },
           { label: "Python", url: null },
@@ -703,47 +726,27 @@ describe("typed portfolio content", () => {
         ],
       },
       {
-        id: "generative-ai",
-        title: "Exploring Generative AI & LLMs",
-        itemsLabel: "Tech stack & Papers:",
-        items: [
-          {
-            label: "SMALL LLMS FOR EDGE COMPUTING",
-            url: "https://www.tdcommons.org/dpubs_series/7086/",
-          },
-          {
-            label: "MULTI-STAGE FINE-TUNING PROCESS",
-            url: "https://www.tdcommons.org/dpubs_series/7085/",
-          },
-          { label: "LangChain", url: null },
-          { label: "RAG", url: null },
-          { label: "Hugging Face", url: null },
-          { label: "LlamaIndex", url: null },
-          { label: "Streamlit", url: null },
-        ],
-      },
-      {
         id: "devops-automation",
-        title: "DevOps & Automation",
-        itemsLabel: "Tech stack:",
+        title: "Engineering Automation & Release Reliability",
+        itemsLabel: "Core stack:",
         items: [
-          { label: "SonarQube", url: null },
           { label: "Docker", url: null },
           { label: "Kubernetes", url: null },
           { label: "Linux", url: null },
+          { label: "CI/CD", url: null },
+          { label: "SonarQube", url: null },
         ],
       },
       {
         id: "engineering-tools",
-        title: "Tools",
-        itemsLabel: "Tech stack:",
+        title: "Validation, Debugging & Performance",
+        itemsLabel: "Methods & tools:",
         items: [
-          { label: "VS Code", url: null },
-          { label: "Postman", url: null },
+          { label: "Automated Testing", url: null },
+          { label: "Simulation", url: null },
           { label: "pprof", url: null },
-          { label: "Hugging Face", url: null },
-          { label: "LlamaIndex", url: null },
-          { label: "Streamlit", url: null },
+          { label: "Observability", url: null },
+          { label: "Postman", url: null },
         ],
       },
     ]);

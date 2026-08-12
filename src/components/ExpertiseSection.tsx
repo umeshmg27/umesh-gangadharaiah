@@ -10,19 +10,6 @@ const expertiseIcons = {
   "engineering-tools": Wrench,
 } as const;
 
-function firstSentence(description: string): string {
-  const normalizedDescription = description.trimStart();
-  const sentenceEnd = normalizedDescription.search(/[.!?](?=\s|$)/u);
-
-  return sentenceEnd < 0
-    ? normalizedDescription
-    : normalizedDescription.slice(0, sentenceEnd + 1);
-}
-
-function remainingDescription(description: string, lead: string): string {
-  return description.trimStart().slice(lead.length).trimStart();
-}
-
 export default function ExpertiseSection() {
   return (
     <section
@@ -37,8 +24,6 @@ export default function ExpertiseSection() {
       <div className={styles.grid}>
         {expertiseAreas.map((area) => {
           const Icon = expertiseIcons[area.id];
-          const lead = firstSentence(area.description);
-          const details = remainingDescription(area.description, lead);
 
           return (
             <article
@@ -61,7 +46,12 @@ export default function ExpertiseSection() {
                   {area.title}
                 </h3>
               </div>
-              <p className={styles.lead}>{lead}</p>
+              <p
+                className={styles.description}
+                data-expertise-description
+              >
+                {area.description}
+              </p>
               <p
                 className={styles.itemsLabel}
                 id={`${area.id}-items-label`}
@@ -90,15 +80,6 @@ export default function ExpertiseSection() {
                   </li>
                 ))}
               </ul>
-              <details className={styles.details}>
-                <summary
-                  aria-label={`Read full description for ${area.title}`}
-                  className={styles.detailsSummary}
-                >
-                  Read full description
-                </summary>
-                <p className={styles.description}>{details}</p>
-              </details>
             </article>
           );
         })}

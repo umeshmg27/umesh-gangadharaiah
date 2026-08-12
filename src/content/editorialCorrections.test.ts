@@ -54,27 +54,27 @@ describe("approved editorial corrections", () => {
 
   it("uses only the approved tool-label capitalization", () => {
     expect(expertiseAreas.map(({ items }) => items.map(({ label }) => label))).toEqual([
-      ["Golang", "Python", "C++", "MongoDB", "Redis"],
       [
-        "SMALL LLMS FOR EDGE COMPUTING",
-        "MULTI-STAGE FINE-TUNING PROCESS",
-        "LangChain",
-        "RAG",
-        "Hugging Face",
-        "LlamaIndex",
-        "Streamlit",
+        "AI Agents",
+        "Reusable Skills",
+        "Model Context Protocol",
+        "LLMs",
+        "Multi-Agent Orchestration",
+        "Small LLMs for Edge Computing",
+        "Multi-Stage Fine-Tuning Process",
       ],
-      ["SonarQube", "Docker", "Kubernetes", "Linux"],
-      ["VS Code", "Postman", "pprof", "Hugging Face", "LlamaIndex", "Streamlit"],
+      ["Golang", "Python", "C++", "MongoDB", "Redis"],
+      ["Docker", "Kubernetes", "Linux", "CI/CD", "SonarQube"],
+      ["Automated Testing", "Simulation", "pprof", "Observability", "Postman"],
     ]);
   });
 
   it("locks the approved expertise and public-safe NexusOne copy exactly", () => {
     expect(expertiseAreas.map(({ description }) => description)).toEqual([
-      " Experienced backend engineer with hands-on expertise in designing and managing microservices within large-scale distributed systems. I’ve built reliable workflows, implemented robust configuration validation logic, and optimized deployment dependency resolution using graph algorithms. My work emphasizes maintaining consistency and correctness across services, handling complex interactions in distributed environments to ensure stability and reliability. With a keen eye for identifying critical flaws in architecture, I deliver scalable, low-impact solutions that support high-availability systems.",
-      "I'm a big fan of Generative AI and Large Language Models (LLMs), and I've had the chance to dive deep into these technologies through research and experimentation. My work focuses on improving LLMs' language understanding and responsiveness, while also deploying smaller models for internal tools to test new possibilities. Right now, I'm working on a proof of concept (PoC) to bring these AI solutions to life in exciting, real-world applications!",
-      "Beyond backend development, I bring a strong skill set in DevOps and internal automation. I’m skilled at building tools that boost team efficiency, like automating a custom Go-based code coverage framework to improve test visibility and streamline development workflows. I also write smart in-house scripts that bridge the gap between development and QA, handling tasks like upgrade, backup, and restore with zero manual hassle. My ability to think beyond just code—optimizing processes, reducing errors, and tightening release cycles—is a big part of how I help teams move faster and ship more reliably.",
-      "My approach with tools, services and platforms is hands-on, curiosity-driven, allowing me to be agile and adapt to the latest technology across development, automation and debugging workflows. I’ve used Docker and Kubernetes extensively for containerization and deployment, along with FastAPI, ReactJS, and HAProxy for building and managing robust microservices. For performance optimization, I’ve recently been leveraging Go’s pprof to profile and fine-tune services, leading to significant improvements in scale metrics. I’m also comfortable with databases like MongoDB, Redis, and ArangoDB, and often write internal scripts to improve developer productivity and system observability.",
+      "I design AI-assisted engineering workflows with agents, reusable Skills, and Model Context Protocol (MCP) integrations. My focus is dependable orchestration: grounding work in traceable evidence, keeping people responsible for decisions, and turning complex engineering tasks into repeatable paths from investigation and planning through implementation and validation.",
+      "I build backend services for distributed systems where consistency, recovery, and clear service boundaries matter. On NexusOne, I applied that approach to service integration, lifecycle reliability, automated validation, and release hardening as part of a broader engineering team.",
+      "I automate the work around software delivery—from repeatable environments and test pipelines to release checks and recovery workflows. I use containers, Kubernetes, Linux, and CI/CD tooling to reduce manual steps, make failures easier to reproduce, and help teams ship changes with greater confidence.",
+      "I treat validation as part of feature design. I build automated tests, deterministic simulations, profiling, and debugging workflows that expose edge cases early and make complex behavior easier to understand. This approach helps me investigate defects, harden distributed features, and support reliable releases.",
     ]);
     expect(projects.find(({ id }) => id === "nd-nexusone")).toMatchObject({
       title: "ND — NexusOne",
@@ -318,30 +318,30 @@ describe("approved editorial corrections", () => {
       })),
     ).toEqual([
       {
-        id: "backend-systems",
-        title: "Backend Engineer - Distributed Systems & Infrastructure",
-        itemsLabel: "Tech stack:",
-        publicationUrls: [],
-      },
-      {
         id: "generative-ai",
-        title: "Exploring Generative AI & LLMs",
-        itemsLabel: "Tech stack & Papers:",
+        title: "Agentic Engineering & Applied AI",
+        itemsLabel: "Focus areas & publications:",
         publicationUrls: [
           "https://www.tdcommons.org/dpubs_series/7086/",
           "https://www.tdcommons.org/dpubs_series/7085/",
         ],
       },
       {
+        id: "backend-systems",
+        title: "Distributed Backend Systems",
+        itemsLabel: "Core stack:",
+        publicationUrls: [],
+      },
+      {
         id: "devops-automation",
-        title: "DevOps & Automation",
-        itemsLabel: "Tech stack:",
+        title: "Engineering Automation & Release Reliability",
+        itemsLabel: "Core stack:",
         publicationUrls: [],
       },
       {
         id: "engineering-tools",
-        title: "Tools",
-        itemsLabel: "Tech stack:",
+        title: "Validation, Debugging & Performance",
+        itemsLabel: "Methods & tools:",
         publicationUrls: [],
       },
     ]);

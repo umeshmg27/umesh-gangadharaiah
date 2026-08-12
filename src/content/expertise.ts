@@ -2,11 +2,33 @@ import type { ExpertiseArea } from "./models";
 
 export const expertiseAreas = [
   {
-    id: "backend-systems",
-    title: "Backend Engineer - Distributed Systems & Infrastructure",
+    id: "generative-ai",
+    title: "Agentic Engineering & Applied AI",
     description:
-      " Experienced backend engineer with hands-on expertise in designing and managing microservices within large-scale distributed systems. I’ve built reliable workflows, implemented robust configuration validation logic, and optimized deployment dependency resolution using graph algorithms. My work emphasizes maintaining consistency and correctness across services, handling complex interactions in distributed environments to ensure stability and reliability. With a keen eye for identifying critical flaws in architecture, I deliver scalable, low-impact solutions that support high-availability systems.",
-    itemsLabel: "Tech stack:",
+      "I design AI-assisted engineering workflows with agents, reusable Skills, and Model Context Protocol (MCP) integrations. My focus is dependable orchestration: grounding work in traceable evidence, keeping people responsible for decisions, and turning complex engineering tasks into repeatable paths from investigation and planning through implementation and validation.",
+    itemsLabel: "Focus areas & publications:",
+    items: [
+      { label: "AI Agents" },
+      { label: "Reusable Skills" },
+      { label: "Model Context Protocol" },
+      { label: "LLMs" },
+      { label: "Multi-Agent Orchestration" },
+      {
+        label: "Small LLMs for Edge Computing",
+        url: "https://www.tdcommons.org/dpubs_series/7086/",
+      },
+      {
+        label: "Multi-Stage Fine-Tuning Process",
+        url: "https://www.tdcommons.org/dpubs_series/7085/",
+      },
+    ],
+  },
+  {
+    id: "backend-systems",
+    title: "Distributed Backend Systems",
+    description:
+      "I build backend services for distributed systems where consistency, recovery, and clear service boundaries matter. On NexusOne, I applied that approach to service integration, lifecycle reliability, automated validation, and release hardening as part of a broader engineering team.",
+    itemsLabel: "Core stack:",
     items: [
       { label: "Golang" },
       { label: "Python" },
@@ -16,53 +38,31 @@ export const expertiseAreas = [
     ],
   },
   {
-    id: "generative-ai",
-    title: "Exploring Generative AI & LLMs",
-    description:
-      "I'm a big fan of Generative AI and Large Language Models (LLMs), and I've had the chance to dive deep into these technologies through research and experimentation. My work focuses on improving LLMs' language understanding and responsiveness, while also deploying smaller models for internal tools to test new possibilities. Right now, I'm working on a proof of concept (PoC) to bring these AI solutions to life in exciting, real-world applications!",
-    itemsLabel: "Tech stack & Papers:",
-    items: [
-      {
-        label: "SMALL LLMS FOR EDGE COMPUTING",
-        url: "https://www.tdcommons.org/dpubs_series/7086/",
-      },
-      {
-        label: "MULTI-STAGE FINE-TUNING PROCESS",
-        url: "https://www.tdcommons.org/dpubs_series/7085/",
-      },
-      { label: "LangChain" },
-      { label: "RAG" },
-      { label: "Hugging Face" },
-      { label: "LlamaIndex" },
-      { label: "Streamlit" },
-    ],
-  },
-  {
     id: "devops-automation",
-    title: "DevOps & Automation",
+    title: "Engineering Automation & Release Reliability",
     description:
-      "Beyond backend development, I bring a strong skill set in DevOps and internal automation. I’m skilled at building tools that boost team efficiency, like automating a custom Go-based code coverage framework to improve test visibility and streamline development workflows. I also write smart in-house scripts that bridge the gap between development and QA, handling tasks like upgrade, backup, and restore with zero manual hassle. My ability to think beyond just code—optimizing processes, reducing errors, and tightening release cycles—is a big part of how I help teams move faster and ship more reliably.",
-    itemsLabel: "Tech stack:",
+      "I automate the work around software delivery—from repeatable environments and test pipelines to release checks and recovery workflows. I use containers, Kubernetes, Linux, and CI/CD tooling to reduce manual steps, make failures easier to reproduce, and help teams ship changes with greater confidence.",
+    itemsLabel: "Core stack:",
     items: [
-      { label: "SonarQube" },
       { label: "Docker" },
       { label: "Kubernetes" },
       { label: "Linux" },
+      { label: "CI/CD" },
+      { label: "SonarQube" },
     ],
   },
   {
     id: "engineering-tools",
-    title: "Tools",
+    title: "Validation, Debugging & Performance",
     description:
-      "My approach with tools, services and platforms is hands-on, curiosity-driven, allowing me to be agile and adapt to the latest technology across development, automation and debugging workflows. I’ve used Docker and Kubernetes extensively for containerization and deployment, along with FastAPI, ReactJS, and HAProxy for building and managing robust microservices. For performance optimization, I’ve recently been leveraging Go’s pprof to profile and fine-tune services, leading to significant improvements in scale metrics. I’m also comfortable with databases like MongoDB, Redis, and ArangoDB, and often write internal scripts to improve developer productivity and system observability.",
-    itemsLabel: "Tech stack:",
+      "I treat validation as part of feature design. I build automated tests, deterministic simulations, profiling, and debugging workflows that expose edge cases early and make complex behavior easier to understand. This approach helps me investigate defects, harden distributed features, and support reliable releases.",
+    itemsLabel: "Methods & tools:",
     items: [
-      { label: "VS Code" },
-      { label: "Postman" },
+      { label: "Automated Testing" },
+      { label: "Simulation" },
       { label: "pprof" },
-      { label: "Hugging Face" },
-      { label: "LlamaIndex" },
-      { label: "Streamlit" },
+      { label: "Observability" },
+      { label: "Postman" },
     ],
   },
 ] as const satisfies readonly ExpertiseArea[];
