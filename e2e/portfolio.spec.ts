@@ -605,6 +605,16 @@ test("keeps project archives and immediate recognition views usable", async ({
   await expect(currentCareer).toContainText("Oct 2025 – Present");
   await expect(currentCareer).toContainText("Model Context Protocol (MCP)");
   await expect(currentCareer).toContainText("up to 5–6× per engineer");
+  const softwareEngineerIII = page.locator(
+    '[data-career-id="cisco-software-engineer-iii"]',
+  );
+  await expect(softwareEngineerIII).toContainText("NexusOne");
+  await expect(softwareEngineerIII).toContainText(
+    "distributed systems integration, automated validation, and release readiness",
+  );
+  await expect(softwareEngineerIII).toContainText(
+    "broad automated test coverage and engineering documentation",
+  );
 
   await expect(page.locator("[data-project-id]")).toHaveCount(4);
   const nexusOne = page.locator('[data-project-id="nd-nexusone"]');

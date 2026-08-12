@@ -128,9 +128,21 @@ describe("approved editorial corrections", () => {
         role: "Software Engineer III",
         organization: "Cisco Systems",
         location: "IN",
-        summary: "Network Backend development, GenAI/LLM, Mentorship and Feature owner",
-        technologies: [],
-        highlights: [],
+        summary:
+          "Backend feature ownership for NexusOne across distributed systems integration, automated validation, and release readiness",
+        technologies: [
+          "Golang",
+          "Microservices",
+          "Distributed Systems",
+          "Network Automation",
+          "Automated Testing",
+        ],
+        highlights: [
+          "I helped deliver a major NexusOne networking capability with a broader engineering team and owned substantial backend work through implementation and release integration",
+          "I contributed to distributed workflows and service integration across the capability’s lifecycle, with an emphasis on consistent state and reliable behavior",
+          "I strengthened reliability across lifecycle and topology scenarios through recovery-focused engineering, integration fixes, and hands-on validation",
+          "I built broad automated test coverage and engineering documentation to support release readiness and continued hardening",
+        ],
       },
       {
         id: "cisco-software-engineer-ii",

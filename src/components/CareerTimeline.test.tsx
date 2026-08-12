@@ -70,3 +70,36 @@ test("renders the current senior role and its agentic engineering outcomes", () 
     ),
   ).toBeInTheDocument();
 });
+
+test("renders the abstracted NexusOne work under Software Engineer III", () => {
+  render(<CareerTimeline />);
+
+  const entryElement = document.getElementById(
+    "career-cisco-software-engineer-iii",
+  );
+  expect(entryElement).not.toBeNull();
+  const entry = within(entryElement as HTMLElement);
+
+  expect(entry.getByText("Aug 2024 – Sep 2025")).toBeInTheDocument();
+  expect(
+    entry.getByText(
+      "Backend feature ownership for NexusOne across distributed systems integration, automated validation, and release readiness",
+    ),
+  ).toBeInTheDocument();
+  expect(entry.getByText("Distributed Systems")).toBeInTheDocument();
+  expect(
+    entry.getByText(
+      "I helped deliver a major NexusOne networking capability with a broader engineering team and owned substantial backend work through implementation and release integration",
+    ),
+  ).toBeInTheDocument();
+  expect(
+    entry.getByText(
+      "I strengthened reliability across lifecycle and topology scenarios through recovery-focused engineering, integration fixes, and hands-on validation",
+    ),
+  ).toBeInTheDocument();
+  expect(
+    entry.getByText(
+      "I built broad automated test coverage and engineering documentation to support release readiness and continued hardening",
+    ),
+  ).toBeInTheDocument();
+});
