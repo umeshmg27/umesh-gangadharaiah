@@ -56,17 +56,22 @@ test("renders the current senior role and its agentic engineering outcomes", () 
   expect(entry.getByText("Oct 2025 – Present")).toBeInTheDocument();
   expect(
     entry.getByText(
-      "Build multiple AI agents, reusable Skills, and Model Context Protocol (MCP) integrations to automate day-to-day engineering tasks",
+      "My role has grown from delivering backend features to improving how engineers across the team approach feature delivery and defect resolution",
     ),
   ).toBeInTheDocument();
   expect(
     entry.getByText(
-      "Drive feature development through agent-assisted workflows spanning implementation, validation, and delivery",
+      "I build reusable agents, Skills, and MCP integrations around recurring day-to-day engineering work, then refine them through hands-on use",
     ),
   ).toBeInTheDocument();
   expect(
     entry.getByText(
-      "Use AI agents to investigate and resolve software defects, increasing bug-resolution throughput by up to 5–6× per engineer and across the wider team",
+      "I help engineers adopt these workflows while keeping technical judgment, code review, and release decisions firmly human-owned",
+    ),
+  ).toBeInTheDocument();
+  expect(
+    entry.getByText(
+      "Engineers using these workflows have reported up to 5–6× higher defect-resolution throughput, both individually and across their teams",
     ),
   ).toBeInTheDocument();
 });

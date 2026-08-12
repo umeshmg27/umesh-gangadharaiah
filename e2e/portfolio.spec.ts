@@ -627,7 +627,15 @@ test("keeps project archives and immediate recognition views usable", async ({
   );
   await expect(currentCareer).toContainText("Oct 2025 – Present");
   await expect(currentCareer).toContainText("Model Context Protocol (MCP)");
-  await expect(currentCareer).toContainText("up to 5–6× per engineer");
+  await expect(currentCareer).toContainText(
+    "improving how engineers across the team approach feature delivery and defect resolution",
+  );
+  await expect(currentCareer).toContainText(
+    "technical judgment, code review, and release decisions firmly human-owned",
+  );
+  await expect(currentCareer).toContainText(
+    "reported up to 5–6× higher defect-resolution throughput",
+  );
   const softwareEngineerIII = page.locator(
     '[data-career-id="cisco-software-engineer-iii"]',
   );

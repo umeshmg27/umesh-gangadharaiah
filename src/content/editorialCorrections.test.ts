@@ -110,17 +110,18 @@ describe("approved editorial corrections", () => {
         organization: "Cisco Systems",
         location: "IN",
         summary:
-          "Agentic engineering, developer automation, feature development, and bug resolution",
+          "Helping engineers plan, build, validate, and support software with reusable AI-assisted workflows",
         technologies: [
           "AI Agents",
           "Reusable Skills",
           "Model Context Protocol (MCP)",
-          "LLMs",
+          "Developer Automation",
         ],
         highlights: [
-          "Build multiple AI agents, reusable Skills, and Model Context Protocol (MCP) integrations to automate day-to-day engineering tasks",
-          "Drive feature development through agent-assisted workflows spanning implementation, validation, and delivery",
-          "Use AI agents to investigate and resolve software defects, increasing bug-resolution throughput by up to 5–6× per engineer and across the wider team",
+          "My role has grown from delivering backend features to improving how engineers across the team approach feature delivery and defect resolution",
+          "I build reusable agents, Skills, and MCP integrations around recurring day-to-day engineering work, then refine them through hands-on use",
+          "I help engineers adopt these workflows while keeping technical judgment, code review, and release decisions firmly human-owned",
+          "Engineers using these workflows have reported up to 5–6× higher defect-resolution throughput, both individually and across their teams",
         ],
       },
       {
