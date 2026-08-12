@@ -68,10 +68,10 @@ const establishedOutcomes: readonly EstablishedOutcome[] = [
     id: "configuration-automation",
     title: "Multi-server configuration automation",
     summary:
-      "I automated repeatable server setup during my Staff Engineer internship, saving more than 300 hours of manual work.",
+      "As a Software Engineer I, I automated repeatable server setup, saving more than 300 hours of manual work.",
     metricIds: ["manual-hours-saved"],
     linkLabel: "See the career milestone",
-    href: "#career-cisco-staff-engineer-intern",
+    href: "#career-cisco-software-engineer-i",
     icon: Clock3,
   },
   {

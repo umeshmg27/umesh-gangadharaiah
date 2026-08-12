@@ -160,8 +160,8 @@ describe("approved editorial corrections", () => {
         ],
       },
       {
-        id: "cisco-staff-engineer-intern",
-        role: "Staff Engineer Intern",
+        id: "cisco-software-engineer-i",
+        role: "Software Engineer I",
         organization: "Cisco Systems",
         location: "IN",
         technologies: ["React", "Python", "FastAPI", "Docker"],
@@ -301,7 +301,7 @@ describe("approved editorial corrections", () => {
         id: "manual-hours-saved",
         value: "300+ hours",
         label: "manual effort saved",
-        sourceRecordId: "cisco-staff-engineer-intern",
+        sourceRecordId: "cisco-software-engineer-i",
       },
       {
         id: "manual-effort-reduced",

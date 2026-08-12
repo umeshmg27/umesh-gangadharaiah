@@ -646,6 +646,12 @@ test("keeps project archives and immediate recognition views usable", async ({
   await expect(softwareEngineerIII).toContainText(
     "broad automated test coverage and engineering documentation",
   );
+  const softwareEngineerI = page.locator(
+    '[data-career-id="cisco-software-engineer-i"]',
+  );
+  await expect(softwareEngineerI).toContainText("Software Engineer I");
+  await expect(softwareEngineerI).toContainText("Aug 2021 – Jul 2022");
+  await expect(softwareEngineerI).not.toContainText("Staff Engineer Intern");
 
   await expect(page.locator("[data-project-id]")).toHaveCount(4);
   const nexusOne = page.locator('[data-project-id="nd-nexusone"]');
@@ -750,6 +756,25 @@ test("keeps project archives and immediate recognition views usable", async ({
   ).toHaveAttribute("aria-expanded", "true");
   await expect(page.locator("#priyanka-181224-recognition-details")).toBeVisible();
   await expectNoHorizontalOverflow(page);
+  browser.assertNone();
+});
+
+test("preserves the former Staff Engineer career link as Software Engineer I", async ({
+  page,
+}) => {
+  const browser = monitorBrowserProblems(page);
+  await page.goto(
+    "/umesh-gangadharaiah/#career-cisco-staff-engineer-intern",
+  );
+
+  await expect(page).toHaveURL(/#career-cisco-software-engineer-i$/);
+  const entry = page.locator('[data-career-id="cisco-software-engineer-i"]');
+  await expect(
+    entry.getByRole("heading", { name: "Software Engineer I" }),
+  ).toBeFocused();
+  await expect(entry).toContainText("Aug 2021 – Jul 2022");
+  await expect(entry).not.toContainText("Staff Engineer Intern");
+
   browser.assertNone();
 });
 

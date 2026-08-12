@@ -60,8 +60,8 @@ export const careerEntries = [
     ],
   },
   {
-    id: "cisco-staff-engineer-intern",
-    role: "Staff Engineer Intern",
+    id: "cisco-software-engineer-i",
+    role: "Software Engineer I",
     organization: "Cisco Systems",
     location: "IN",
     period: "Aug 2021 – Jul 2022",

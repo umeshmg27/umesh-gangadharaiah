@@ -1,7 +1,35 @@
+import { useEffect } from "react";
+
 import { careerEntries } from "../content/career";
 import styles from "./CareerTimeline.module.css";
 
+const legacySoftwareEngineerIHash = "#career-cisco-staff-engineer-intern";
+const softwareEngineerIHash = "#career-cisco-software-engineer-i";
+
 export default function CareerTimeline() {
+  useEffect(() => {
+    function canonicalizeFormerRoleHash(): void {
+      if (window.location.hash !== legacySoftwareEngineerIHash) return;
+
+      window.history.replaceState(null, "", softwareEngineerIHash);
+      const target = document.getElementById(softwareEngineerIHash.slice(1));
+      if (!target) return;
+
+      target.scrollIntoView({ block: "start" });
+      const heading = target.querySelector<HTMLElement>("h3");
+      if (heading) {
+        heading.tabIndex = -1;
+        heading.focus({ preventScroll: true });
+      }
+    }
+
+    canonicalizeFormerRoleHash();
+    window.addEventListener("hashchange", canonicalizeFormerRoleHash);
+
+    return () =>
+      window.removeEventListener("hashchange", canonicalizeFormerRoleHash);
+  }, []);
+
   return (
     <section
       aria-labelledby="career-heading"

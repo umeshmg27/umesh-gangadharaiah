@@ -23,7 +23,7 @@ export const impactMetrics = [
     id: "manual-hours-saved",
     value: "300+ hours",
     label: "manual effort saved",
-    sourceRecordId: "cisco-staff-engineer-intern",
+    sourceRecordId: "cisco-software-engineer-i",
   },
   {
     id: "manual-effort-reduced",

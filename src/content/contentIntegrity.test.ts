@@ -98,7 +98,7 @@ const careerIds = [
   "cisco-senior-software-engineer",
   "cisco-software-engineer-iii",
   "cisco-software-engineer-ii",
-  "cisco-staff-engineer-intern",
+  "cisco-software-engineer-i",
   "cisco-intern",
 ] as const;
 
@@ -247,7 +247,7 @@ describe("typed portfolio content", () => {
         id: "manual-hours-saved",
         value: "300+ hours",
         label: "manual effort saved",
-        sourceRecordId: "cisco-staff-engineer-intern",
+        sourceRecordId: "cisco-software-engineer-i",
       },
       {
         id: "manual-effort-reduced",
@@ -813,8 +813,8 @@ describe("typed portfolio content", () => {
         ],
       },
       {
-        id: "cisco-staff-engineer-intern",
-        role: "Staff Engineer Intern",
+        id: "cisco-software-engineer-i",
+        role: "Software Engineer I",
         organization: "Cisco Systems",
         location: "IN",
         period: "Aug 2021 – Jul 2022",
@@ -843,7 +843,7 @@ describe("typed portfolio content", () => {
       },
     ]);
     expect(
-      careerEntries.find(({ id }) => id === "cisco-staff-engineer-intern")?.highlights,
+      careerEntries.find(({ id }) => id === "cisco-software-engineer-i")?.highlights,
     ).toContain("Automated multiserver configurations saving 300+ hours");
   });
 

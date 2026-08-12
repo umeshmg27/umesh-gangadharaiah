@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 
 import { careerEntries } from "../content/career";
 import CareerTimeline from "./CareerTimeline";
@@ -107,4 +107,45 @@ test("renders the abstracted NexusOne work under Software Engineer III", () => {
       "I built broad automated test coverage and engineering documentation to support release readiness and continued hardening",
     ),
   ).toBeInTheDocument();
+});
+
+test("renders the Aug 2021 role as Software Engineer I", () => {
+  render(<CareerTimeline />);
+
+  const entryElement = document.getElementById(
+    "career-cisco-software-engineer-i",
+  );
+  expect(entryElement).not.toBeNull();
+  const entry = within(entryElement as HTMLElement);
+
+  expect(
+    entry.getByRole("heading", { level: 3, name: "Software Engineer I" }),
+  ).toBeInTheDocument();
+  expect(entry.getByText("Aug 2021 – Jul 2022")).toBeInTheDocument();
+  expect(entry.queryByText("Staff Engineer Intern")).not.toBeInTheDocument();
+});
+
+test("canonicalizes the former Staff Engineer fragment to Software Engineer I", async () => {
+  const scrollIntoView = vi.fn();
+  Element.prototype.scrollIntoView = scrollIntoView;
+  window.history.replaceState(
+    null,
+    "",
+    "#career-cisco-staff-engineer-intern",
+  );
+
+  render(<CareerTimeline />);
+
+  await waitFor(() =>
+    expect(window.location.hash).toBe("#career-cisco-software-engineer-i"),
+  );
+  const target = document.getElementById("career-cisco-software-engineer-i");
+  expect(target).not.toBeNull();
+  expect(scrollIntoView).toHaveBeenCalledWith({ block: "start" });
+  expect(document.activeElement).toBe(
+    within(target as HTMLElement).getByRole("heading", {
+      level: 3,
+      name: "Software Engineer I",
+    }),
+  );
 });

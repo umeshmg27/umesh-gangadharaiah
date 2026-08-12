@@ -178,7 +178,7 @@ test("leads Impact with four agentic workflows before established outcomes", asy
   );
   expect(establishedOutcomes[1]).toHaveTextContent("300+ hours");
   expect(establishedOutcomes[1]).toHaveTextContent(
-    "I automated repeatable server setup during my Staff Engineer internship, saving more than 300 hours of manual work.",
+    "As a Software Engineer I, I automated repeatable server setup, saving more than 300 hours of manual work.",
   );
   expect(establishedOutcomes[2]).toHaveTextContent("Self-service delivery platform");
   expect(establishedOutcomes[2]).toHaveTextContent("70%");
@@ -192,7 +192,7 @@ test("leads Impact with four agentic workflows before established outcomes", asy
       "#project-agentic-engineering-automation",
     ],
     ["See Search & Explore", "#project-ndo-search-explore"],
-    ["See the career milestone", "#career-cisco-staff-engineer-intern"],
+    ["See the career milestone", "#career-cisco-software-engineer-i"],
     ["See the delivery platform", "#project-codeshift-cicd-platform"],
   ] as const) {
     expect(within(impact).getByRole("link", { name })).toHaveAttribute(
@@ -370,8 +370,8 @@ test("renders all career entries as one complete ordered timeline", async () => 
       ],
     },
     {
-      id: "cisco-staff-engineer-intern",
-      role: "Staff Engineer Intern",
+      id: "cisco-software-engineer-i",
+      role: "Software Engineer I",
       period: "Aug 2021 – Jul 2022",
       technologies: ["React", "Python", "FastAPI", "Docker"],
       highlights: [
