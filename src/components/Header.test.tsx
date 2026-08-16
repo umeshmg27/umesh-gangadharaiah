@@ -10,6 +10,7 @@ const navigationItems = [
   ["Expertise", "#expertise"],
   ["Career", "#experience"],
   ["Projects", "#projects"],
+  ["Blog", "#blog"],
   ["Recognition", "#recognition"],
   ["Contact", "#contact"],
 ] as const;
@@ -37,7 +38,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-test("provides one named primary navigation with the five stable destinations", () => {
+test("provides one named primary navigation with the six stable destinations", () => {
   render(<Header />);
 
   expect(screen.getByRole("banner")).toBeInTheDocument();
@@ -52,7 +53,7 @@ test("provides one named primary navigation with the five stable destinations", 
   expect(navigation).toHaveAttribute("aria-label", "Primary navigation");
   const links = within(navigation).getAllByRole("link", { hidden: true });
 
-  expect(links).toHaveLength(5);
+  expect(links).toHaveLength(6);
   expect(
     links.map((link) => [link.textContent, link.getAttribute("href")]),
   ).toEqual(navigationItems);
@@ -92,10 +93,13 @@ test("exposes named menu and theme controls with 44px CSS targets", () => {
     /\.controls\s*\{[^}]*grid-column:\s*2;[^}]*grid-row:\s*1;/s,
   );
   expect(headerCss).toMatch(
-    /@media \(min-width: 64rem\)[\s\S]*\.navigation,\s*\.navigation\[data-open="false"\]\s*\{[^}]*grid-column:\s*2;[^}]*grid-row:\s*1;/,
+    /@container header-shell \(min-width: 80em\)[\s\S]*\.navigation,\s*\.navigation\[data-open="false"\]\s*\{[^}]*grid-column:\s*2;[^}]*grid-row:\s*1;/,
   );
   expect(headerCss).toMatch(
-    /@media \(min-width: 64rem\)[\s\S]*\.controls\s*\{[^}]*grid-column:\s*3;/,
+    /@container header-shell \(min-width: 80em\)[\s\S]*\.controls\s*\{[^}]*grid-column:\s*3;/,
+  );
+  expect(headerCss).toMatch(
+    /\.header\s*\{[^}]*container-name:\s*header-shell;[^}]*container-type:\s*inline-size;/s,
   );
   expect(headerCss).toMatch(
     /\.navigation\[data-open="false"\]\s*\{[^}]*display:\s*none;/s,

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 2,
+  "updatedAt": "2026-08-16T12:00:00Z",
+  "posts": [
+    {
+      "slug": "replace-with-a-public-slug",
+      "title": "Replace with the note title",
+      "summary": "Replace with one concise, public-safe summary of the note.",
+      "category": "ongoing-projects",
+      "publishedOn": "2026-08-16",
+      "tags": ["Engineering"],
+      "format": "markdown",
+      "file": "2026-08-16-replace-with-a-public-slug.md",
+      "readingMinutes": 3
+    }
+  ]
+}

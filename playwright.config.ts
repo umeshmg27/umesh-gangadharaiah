@@ -32,7 +32,10 @@ export default defineConfig({
   ],
   webServer: {
     command: "npm run build && npm run preview -- --host 127.0.0.1",
-    reuseExistingServer: !process.env.CI,
+    env: {
+      VITE_BLOG_GIST_ID: "0123456789abcdef0123456789abcdef",
+    },
+    reuseExistingServer: false,
     timeout: 120_000,
     url: baseURL,
   },

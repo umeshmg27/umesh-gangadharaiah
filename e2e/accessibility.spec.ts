@@ -3,6 +3,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
+import { blogGistFixtureForUrl } from "./blogGistFixture";
+
 const localOrigin = "http://127.0.0.1:4173";
 const transparentPixel = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
@@ -12,9 +14,17 @@ const transparentPixel = Buffer.from(
 async function openDeterministicPortfolio(page: Page): Promise<void> {
   await page.route(/^https?:\/\//u, async (route) => {
     const requestUrl = new URL(route.request().url());
+    const blogFixture = blogGistFixtureForUrl(requestUrl);
 
     if (requestUrl.origin === localOrigin) {
       await route.fallback();
+    } else if (blogFixture) {
+      await route.fulfill({
+        body: blogFixture.body,
+        contentType: blogFixture.contentType,
+        headers: { "access-control-allow-origin": "*" },
+        status: 200,
+      });
     } else if (route.request().resourceType() === "image") {
       await route.fulfill({
         body: transparentPixel,
@@ -36,7 +46,9 @@ test("has no serious or critical Axe violations in dark and light themes", async
   await openDeterministicPortfolio(page);
   await page.getByRole("button", { name: "View all 13 projects" }).click();
   await page.getByRole("button", { name: "All (25)" }).click();
-  if ((page.viewportSize()?.width ?? 0) < 1024) {
+  await page.locator("#blog").getByRole("link", { name: "Read post" }).first().click();
+  await expect(page.locator("#blog [data-blog-post]")).toBeVisible();
+  if ((page.viewportSize()?.width ?? 0) < 1280) {
     await page.getByRole("button", { name: "Open navigation" }).click();
   }
 
@@ -75,7 +87,9 @@ test("keeps every visible interactive target at least 44 pixels square", async (
   await openDeterministicPortfolio(page);
   await page.getByRole("button", { name: "View all 13 projects" }).click();
   await page.getByRole("button", { name: "All (25)" }).click();
-  if ((page.viewportSize()?.width ?? 0) < 1024) {
+  await page.locator("#blog").getByRole("link", { name: "Read post" }).first().click();
+  await expect(page.locator("#blog [data-blog-post]")).toBeVisible();
+  if ((page.viewportSize()?.width ?? 0) < 1280) {
     await page.getByRole("button", { name: "Open navigation" }).click();
   }
 

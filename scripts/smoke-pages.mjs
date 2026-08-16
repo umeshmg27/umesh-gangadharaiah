@@ -195,7 +195,7 @@ function assertPageLocation(pageUrl, expectedCanonicalUrl) {
 }
 
 function assertSectionHashContract(bundle) {
-  for (const section of ["projects", "contact"]) {
+  for (const section of ["projects", "blog", "contact"]) {
     const linkPattern = new RegExp(
       `href\\s*:\\s*["'\`]#${section}["'\`]`,
     );
@@ -384,7 +384,7 @@ async function main() {
     console.log(
       `Published-site smoke passed after ${result.attempts} ${attemptLabel}: ${result.finalUrl}`,
     );
-    console.log("Validated section hash contract: #projects, #contact");
+    console.log("Validated section hash contract: #projects, #blog, #contact");
   } catch (error) {
     const message = error instanceof Error ? error.message : "unknown smoke failure";
     console.error(message);

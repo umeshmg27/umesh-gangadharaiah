@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "dompurify": "3.4.13",
     "lucide-react": "1.27.0",
+    "marked": "18.0.9",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },

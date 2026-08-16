@@ -1,3 +1,4 @@
+import BlogSection from "./components/BlogSection";
 import CareerTimeline from "./components/CareerTimeline";
 import ContactForm from "./components/ContactForm";
 import ExpertiseSection from "./components/ExpertiseSection";
@@ -7,10 +8,15 @@ import Hero from "./components/Hero";
 import ImpactSummary from "./components/ImpactSummary";
 import ProjectExplorer from "./components/ProjectExplorer";
 import RecognitionGallery from "./components/RecognitionGallery";
+import type { BlogSource } from "./blog/blogSource";
 import "./styles/tokens.css";
 import "./styles/global.css";
 
-export default function App() {
+type AppProps = {
+  readonly blogSource?: BlogSource | null;
+};
+
+export default function App({ blogSource }: AppProps = {}) {
   return (
     <>
       <Header />
@@ -20,6 +26,7 @@ export default function App() {
         <ExpertiseSection />
         <CareerTimeline />
         <ProjectExplorer />
+        <BlogSection source={blogSource} />
         <RecognitionGallery />
         <ContactForm />
       </main>

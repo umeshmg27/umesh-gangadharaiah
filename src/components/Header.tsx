@@ -13,6 +13,7 @@ const navigationItems = [
   { label: "Expertise", href: "#expertise" },
   { label: "Career", href: "#experience" },
   { label: "Projects", href: "#projects" },
+  { label: "Blog", href: "#blog" },
   { label: "Recognition", href: "#recognition" },
   { label: "Contact", href: "#contact" },
 ] as const;

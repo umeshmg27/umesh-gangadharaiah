@@ -2,6 +2,11 @@
 
 import { expect, test, type Page } from "@playwright/test";
 
+import {
+  blogGistFixtureForUrl,
+  e2eBlogGistId,
+} from "./blogGistFixture";
+
 const localOrigin = "http://127.0.0.1:4173";
 const transparentPixel = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
@@ -39,6 +44,17 @@ async function makeRequestsDeterministic(page: Page): Promise<void> {
 
     if (requestUrl.origin === localOrigin) {
       await route.fallback();
+      return;
+    }
+
+    const blogFixture = blogGistFixtureForUrl(requestUrl);
+    if (blogFixture) {
+      await route.fulfill({
+        body: blogFixture.body,
+        contentType: blogFixture.contentType,
+        headers: { "access-control-allow-origin": "*" },
+        status: 200,
+      });
       return;
     }
 
@@ -167,6 +183,7 @@ test("uses the approved aspect ratios and viewport layouts", async ({ page }) =>
   const expectedAgenticFlowColumns = viewportWidth >= 768 ? 2 : 1;
   const expectedEstablishedImpactColumns = viewportWidth >= 768 ? 3 : 1;
   const expectedRecognitionColumns = viewportWidth >= 1024 ? 3 : 1;
+  const expectedBlogColumns = viewportWidth >= 1024 ? 3 : viewportWidth >= 768 ? 2 : 1;
   const expectedTimelineColumns = viewportWidth >= 768 ? 3 : 2;
 
   expect(await gridColumnCount(page, "#project-results > div")).toBe(
@@ -176,6 +193,7 @@ test("uses the approved aspect ratios and viewport layouts", async ({ page }) =>
     await gridColumnCount(page, 'section[aria-labelledby="hero-heading"]'),
   ).toBe(expectedHeroColumns);
   expect(await gridColumnCount(page, "#contact")).toBe(expectedContactColumns);
+  expect(await gridColumnCount(page, "#blog-post-list")).toBe(expectedBlogColumns);
   expect(await gridColumnCount(page, "#expertise > div")).toBe(
     expectedExpertiseColumns,
   );
@@ -564,7 +582,7 @@ test("supports mobile and desktop navigation with predictable keyboard focus", a
 
   const menuButton = page.getByRole("button", { name: "Open navigation" });
   const expertiseLink = page.getByRole("link", { name: "Expertise", exact: true });
-  const isCompactNavigation = (page.viewportSize()?.width ?? 0) < 1024;
+  const isCompactNavigation = (page.viewportSize()?.width ?? 0) < 1280;
 
   await page.keyboard.press("Tab");
   const skipLink = page.getByRole("link", { name: "Skip to main content" });
@@ -589,6 +607,37 @@ test("supports mobile and desktop navigation with predictable keyboard focus", a
   browser.assertNone();
 });
 
+test("keeps navigation legible at the desktop boundary with 200 percent text", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "phone-390x844", "one boundary probe is enough");
+  await page.setViewportSize({ height: 900, width: 1024 });
+  await openPortfolio(page);
+  await page.evaluate(() => {
+    document.documentElement.style.fontSize = "200%";
+  });
+
+  const menuButton = page.getByRole("button", { name: "Open navigation" });
+  await expect(menuButton).toBeVisible();
+  await menuButton.click();
+
+  const fragmentedLinks = await page
+    .locator('nav[aria-label="Primary navigation"] a')
+    .evaluateAll((links) =>
+      links.flatMap((link) => {
+        const range = document.createRange();
+        range.selectNodeContents(link);
+        const lineCount = range.getClientRects().length;
+        return lineCount === 1
+          ? []
+          : [{ label: link.textContent?.trim() ?? "", lineCount }];
+      }),
+    );
+
+  expect(fragmentedLinks).toEqual([]);
+  await expectNoHorizontalOverflow(page);
+});
+
 test("keeps project archives and immediate recognition views usable", async ({
   page,
 }) => {
@@ -601,7 +650,7 @@ test("keeps project archives and immediate recognition views usable", async ({
   const primaryLinks = page.locator(
     'nav[aria-label="Primary navigation"] a[href^="#"]',
   );
-  await expect(primaryLinks).toHaveCount(5);
+  await expect(primaryLinks).toHaveCount(6);
   expect(
     await primaryLinks.evaluateAll((links) =>
       links.map((link) => link.getAttribute("href")),
@@ -610,6 +659,7 @@ test("keeps project archives and immediate recognition views usable", async ({
     "#expertise",
     "#experience",
     "#projects",
+    "#blog",
     "#recognition",
     "#contact",
   ]);
@@ -759,6 +809,80 @@ test("keeps project archives and immediate recognition views usable", async ({
   browser.assertNone();
 });
 
+test("loads clean Blog routes without putting the public Gist ID in the URL", async ({
+  page,
+}) => {
+  const browser = monitorBrowserProblems(page);
+  const blogRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes(e2eBlogGistId)) blogRequests.push(request.url());
+  });
+  await openPortfolio(page);
+
+  const blog = page.locator("#blog");
+  await expect(blog.getByRole("heading", { level: 2, name: "Blog" })).toBeVisible();
+  await expect(blog.locator("[data-blog-slug]")).toHaveCount(3);
+  await expect(blog.locator("[data-blog-slug]").first()).toHaveAttribute(
+    "data-blog-slug",
+    "agent-assisted-debugging",
+  );
+  await expect(blogRequests).toHaveLength(1);
+
+  const categories = blog.getByRole("navigation", { name: "Blog categories" });
+  await expect(categories.getByRole("link", { name: "All Notes (4)" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await expect(
+    categories.getByRole("link", { name: "Ongoing Projects (1)" }),
+  ).toBeVisible();
+  const technicalReports = categories.getByRole("link", {
+    name: "Technical Reports (2)",
+  });
+  await expect(
+    categories.getByRole("link", { name: "Notes & Experiments (1)" }),
+  ).toBeVisible();
+
+  await technicalReports.click();
+  await expect(page).toHaveURL(/#\/blog\/category\/technical-reports$/u);
+  await expect(technicalReports).toHaveAttribute("aria-current", "page");
+  await expect(blog.locator("[data-blog-slug]")).toHaveCount(2);
+  await expect(blog.locator("[data-blog-slug]").first()).toHaveAttribute(
+    "data-blog-slug",
+    "agent-assisted-debugging",
+  );
+  await expect(blogRequests).toHaveLength(1);
+
+  const newestCard = blog.locator('[data-blog-slug="agent-assisted-debugging"]');
+  await newestCard.getByRole("link", { name: "Read post" }).click();
+  await expect(page).toHaveURL(
+    /#\/blog\/category\/technical-reports\/agent-assisted-debugging$/u,
+  );
+  expect(page.url()).not.toContain(e2eBlogGistId);
+  await expect(blog.locator('[data-blog-post="agent-assisted-debugging"]')).toBeVisible();
+  await expect(
+    blog.getByRole("heading", { level: 3, name: "Agent-assisted debugging" }),
+  ).toBeFocused();
+  await expect(blog.getByRole("heading", { name: "The approach" })).toBeVisible();
+  await expect(blog).toContainText("kept the final decision human-owned");
+  await expect(blogRequests).toHaveLength(2);
+  expect(await blog.textContent()).not.toContain(e2eBlogGistId);
+
+  await blog.getByRole("link", { name: "Back to Technical Reports" }).click();
+  await expect(page).toHaveURL(/#\/blog\/category\/technical-reports$/u);
+  await expect(
+    categories.getByRole("link", { name: "Technical Reports (2)" }),
+  ).toBeFocused();
+
+  await categories.getByRole("link", { name: "All Notes (4)" }).click();
+  await expect(page).toHaveURL(/#\/blog$/u);
+  await expect(blog.locator("[data-blog-slug]")).toHaveCount(3);
+  await blog.getByRole("button", { name: "View all 4 posts" }).click();
+  await expect(blog.locator("[data-blog-slug]")).toHaveCount(4);
+  await expectNoHorizontalOverflow(page);
+  browser.assertNone();
+});
+
 test("preserves the former Staff Engineer career link as Software Engineer I", async ({
   page,
 }) => {
@@ -832,7 +956,14 @@ test("honors reduced motion and stable anchor offsets", async ({ page }) => {
     }),
   ).toBeVisible();
 
-  for (const id of ["expertise", "experience", "projects", "recognition", "contact"]) {
+  for (const id of [
+    "expertise",
+    "experience",
+    "projects",
+    "blog",
+    "recognition",
+    "contact",
+  ]) {
     const scrollMargin = await page.locator(`#${id}`).evaluate((element) =>
       Number.parseFloat(getComputedStyle(element).scrollMarginTop),
     );
@@ -877,11 +1008,7 @@ test("reflows after 200 percent text resizing without horizontal scrolling", asy
   expect(await gridColumnCount(page, "#expertise > div")).toBe(1);
   await expect(page.locator("#expertise [data-expertise-description]")).toHaveCount(4);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  if ((page.viewportSize()?.width ?? 0) < 1024) {
-    await expect(page.getByRole("button", { name: /navigation/u })).toBeVisible();
-  } else {
-    await expect(page.getByRole("button", { name: /Switch to/u })).toBeVisible();
-  }
+  await expect(page.getByRole("button", { name: /navigation/u })).toBeVisible();
   browser.assertNone();
 });
 
@@ -910,6 +1037,8 @@ test("reflows at a 200 percent browser zoom equivalent without horizontal scroll
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.locator("#projects")).toBeVisible();
   await expect(page.locator("[data-project-id]")).toHaveCount(4);
+  await expect(page.locator("#blog")).toBeVisible();
+  await expect(page.locator("[data-blog-slug]")).toHaveCount(3);
   await expect(page.locator("#recognition")).toBeVisible();
   await expect(page.locator("[data-recognition-id]")).toHaveCount(6);
   await expect(page.getByRole("form", { name: "Contact Umesh" })).toBeVisible();

@@ -134,7 +134,7 @@ describe("published Pages smoke", () => {
         response
           .writeHead(200, { "content-type": "text/javascript" })
           .end(
-            'const links=[{href:"#projects"},{href:"#contact"}];const sections=[{id:"projects"},{id:"contact"}];',
+            'const links=[{href:"#projects"},{href:"#blog"},{href:"#contact"}];const sections=[{id:"projects"},{id:"blog"},{id:"contact"}];',
           );
         return;
       }
@@ -156,7 +156,7 @@ describe("published Pages smoke", () => {
     expect(result.status, result.stderr).toBe(0);
     expect(result.stdout).toContain("Published-site smoke passed after 1 attempt");
     expect(result.stdout).toContain(`${baseUrl}${pagePath}`);
-    expect(result.stdout).toContain("section hash contract: #projects, #contact");
+    expect(result.stdout).toContain("section hash contract: #projects, #blog, #contact");
     expect(result.stderr).toBe("");
   });
 
@@ -179,7 +179,7 @@ describe("published Pages smoke", () => {
         response
           .writeHead(200, { "content-type": "text/javascript" })
           .end(
-            'const nav=[{href:"#projects"},{href:"#contact"}];const targets=[{id:"projects"},{id:"contact"}];',
+            'const nav=[{href:"#projects"},{href:"#blog"},{href:"#contact"}];const targets=[{id:"projects"},{id:"blog"},{id:"contact"}];',
           );
         return;
       }
@@ -221,7 +221,7 @@ describe("published Pages smoke", () => {
         response
           .writeHead(200, { "content-type": "text/javascript" })
           .end(
-            'const nav=[{href:"#projects"},{href:"#contact"}];const targets=[{id:"projects"},{id:"contact"}];',
+            'const nav=[{href:"#projects"},{href:"#blog"},{href:"#contact"}];const targets=[{id:"projects"},{id:"blog"},{id:"contact"}];',
           );
         return;
       }
@@ -254,7 +254,7 @@ describe("published Pages smoke", () => {
       redirectedPath: "/redirected-entry.js",
       contentType: "text/javascript",
       responseBody:
-        'const nav=[{href:"#projects"},{href:"#contact"}];const targets=[{id:"projects"},{id:"contact"}];',
+        'const nav=[{href:"#projects"},{href:"#blog"},{href:"#contact"}];const targets=[{id:"projects"},{id:"blog"},{id:"contact"}];',
     },
     {
       assetLabel: "Open Graph image",
@@ -300,7 +300,7 @@ describe("published Pages smoke", () => {
           response
             .writeHead(200, { "content-type": "text/javascript" })
             .end(
-              'const nav=[{href:"#projects"},{href:"#contact"}];const targets=[{id:"projects"},{id:"contact"}];',
+              'const nav=[{href:"#projects"},{href:"#blog"},{href:"#contact"}];const targets=[{id:"projects"},{id:"blog"},{id:"contact"}];',
             );
           return;
         }
@@ -346,7 +346,7 @@ describe("published Pages smoke", () => {
         response
           .writeHead(200, { "content-type": "text/javascript" })
           .end(
-            'const nav=[{href:"#projects"},{href:"#contact"}];const targets=[{id:"projects"},{id:"contact"}];',
+            'const nav=[{href:"#projects"},{href:"#blog"},{href:"#contact"}];const targets=[{id:"projects"},{id:"blog"},{id:"contact"}];',
           );
         return;
       }
@@ -399,7 +399,7 @@ describe("published Pages smoke", () => {
         response
           .writeHead(200, { "content-type": "text/javascript" })
           .end(
-            'const nav=[{href:"#projects"},{href:"#contact"}];const targets=[{id:"projects"},{id:"contact"}];',
+            'const nav=[{href:"#projects"},{href:"#blog"},{href:"#contact"}];const targets=[{id:"projects"},{id:"blog"},{id:"contact"}];',
           );
         return;
       }

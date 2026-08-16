@@ -3,8 +3,9 @@
 Static React and TypeScript portfolio for Umesh Gangadharaiah, built with Vite
 and published at
 [umeshmg27.github.io/umesh-gangadharaiah](https://umeshmg27.github.io/umesh-gangadharaiah/).
-The site is a single responsive page with recruiter-focused summaries and
-keyboard-, touch-, and mouse-accessible project and recognition archives.
+The site is a single responsive page with recruiter-focused summaries,
+keyboard-, touch-, and mouse-accessible archives, and an optional public-Gist
+Blog presented through clean same-page routes.
 
 ## Repository map
 
@@ -12,6 +13,8 @@ keyboard-, touch-, and mouse-accessible project and recognition archives.
 - `src/content/profile.ts`, `impact.ts`, `expertise.ts`, `career.ts`,
   `projects.ts`, and `recognitions.ts` contain the build-time portfolio data.
 - `src/components/` contains presentation and interaction behavior.
+- `src/blog/` validates, fetches, and safely renders the optional Blog source.
+- `content/blog/` contains the public Gist manifest and post templates.
 - `src/assets/portfolio/` contains the committed portrait, project, and
   recognition fallbacks and responsive WebP variants.
 - `tests/fixtures/active-assets.json` locks the active asset inventory, hashes,
@@ -19,11 +22,13 @@ keyboard-, touch-, and mouse-accessible project and recognition archives.
 - `index.html` and `public/` contain the static metadata, manifest, icons,
   robots policy, and social preview card.
 
-Content is imported into the bundle; there is no CMS, backend, database, or
-runtime content fetch. Runtime third-party requests are limited to the two
-approved Cisco-hosted project images and contact form submission through
-EmailJS. The site has no analytics, visitor or chat metrics, or telemetry
-upload. Its theme preference is stored only in the visitor's browser.
+Portfolio content is imported into the bundle; there is no CMS, backend, or
+database. If configured, the Blog reads a public manifest and selected post
+from `gist.githubusercontent.com` at runtime. Other third-party requests are
+limited to the two approved Cisco-hosted project images and contact form
+submission through EmailJS. The site has no analytics, visitor or chat metrics,
+or telemetry upload. Its theme preference is stored only in the visitor's
+browser.
 
 ## Pinned development environment
 
@@ -168,6 +173,56 @@ not reproduce its values in documentation or logs. Contact input and provider
 details must not be logged, and failed submissions must leave the visitor's
 input available for retry.
 
+## Publishing Blog notes
+
+The Blog is optional. With no configured Gist it renders an honest empty state
+and makes no request. To enable it, create one **public** GitHub Gist owned by
+`umeshmg27`, using the templates in `content/blog/`, and add its public ID to a
+local ignored file:
+
+```text
+# .env.local
+VITE_BLOG_GIST_ID=replace-with-the-public-gist-id
+```
+
+The published site reads `blog-index.json` and referenced Markdown or HTML
+fragments from the fixed raw Gist origin. It never ships a GitHub token, sends
+cookies, or sends the portfolio referrer. The ID is visible in built JavaScript
+and the browser Network panel by design; it is not a secret. Visitor-facing
+links use only clean routes such as `#/blog/agent-assisted-debugging`, so the
+Gist ID never appears in the address bar.
+
+For GitHub Pages, add `BLOG_GIST_ID` under **Settings** → **Secrets and
+variables** → **Actions** → **Variables**. The deployment workflow maps the
+public repository variable to the build-time `VITE_BLOG_GIST_ID` value. Leave
+the variable unset to keep the empty state. Never place a PAT, cookie, EmailJS
+value, or any other credential in a `VITE_` variable because Vite publishes it
+to the browser.
+
+The schema-version-2 manifest supports at most 200 newest-first posts. Every
+post has one primary category: **Ongoing Projects**, **Technical Reports**, or
+**Notes & Experiments**. Tags are secondary and can connect multiple dated
+entries to the same public project or topic. Ongoing Projects is a daily
+engineering journal: publish each update as its own dated file so readers can
+follow progress chronologically rather than watching one page get overwritten.
+
+A post also uses a unique lowercase slug, public title and summary, real ISO
+date, one to four tags, reading time, format, and safe lowercase filename.
+Markdown is rendered and sanitized; HTML must be a fragment and is rejected if
+sanitization would remove anything. Scripts, styles, forms, frames, images,
+SVG, media, handlers, unsafe links, Gist links, and known local or internal
+destinations are not allowed. The browser cannot prove that every HTTPS
+hostname is public, so every external link still requires author review. A
+note is public as soon as it is placed in a public Gist, whether or not the
+manifest lists it.
+
+Before every daily update, abstract internal systems, repository and service
+names, issue identifiers, hosts, logs, customer information, payloads,
+architecture, and unreleased work. Update the manifest timestamp when adding or
+editing a post; raw Gist caching means a change can take a few minutes to
+appear. Full authoring steps and both formats are documented in
+`content/blog/README.md`.
+
 ## External audit
 
 Run the bounded best-effort network audit separately from deterministic checks:
@@ -192,10 +247,12 @@ and cannot deploy.
 
 Configure GitHub once after the workflow is present on `master`:
 
-1. Open **Settings** → **Pages**.
-2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
-3. Open **Settings** → **Environments** → **github-pages**.
-4. Restrict deployment branches and tags to the selected branch `master`.
+1. Optionally add the public `BLOG_GIST_ID` Actions repository variable as
+   described above.
+2. Open **Settings** → **Pages**.
+3. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+4. Open **Settings** → **Environments** → **github-pages**.
+5. Restrict deployment branches and tags to the selected branch `master`.
 
 To rerun production from the GitHub web interface:
 

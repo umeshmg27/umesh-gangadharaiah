@@ -27,13 +27,13 @@ async function renderPortfolio() {
   );
 
   await act(async () => {
-    render(<App />);
+    render(<App blogSource={null} />);
   });
 
   return fetchSpy;
 }
 
-test("renders the semantic shell with all five primary sections", async () => {
+test("renders the semantic shell with all six primary sections", async () => {
   const fetchSpy = await renderPortfolio();
 
   expect(screen.getByRole("banner")).toBeInTheDocument();
@@ -56,6 +56,7 @@ test("renders the semantic shell with all five primary sections", async () => {
     "Expertise",
     "Career",
     "Projects",
+    "Blog",
     "Recognition",
     "Contact Me",
   ]) {
@@ -66,11 +67,23 @@ test("renders the semantic shell with all five primary sections", async () => {
   expect(
     Array.from(
       main.querySelectorAll(
-        "#expertise, #experience, #projects, #recognition, #contact",
+        "#expertise, #experience, #projects, #blog, #recognition, #contact",
       ),
       (section) => section.id,
     ),
-  ).toEqual(["expertise", "experience", "projects", "recognition", "contact"]);
+  ).toEqual([
+    "expertise",
+    "experience",
+    "projects",
+    "blog",
+    "recognition",
+    "contact",
+  ]);
+  expect(
+    screen.getByText(
+      "I’m working on the first note. This is where I’ll share practical lessons from building, debugging, and automating software.",
+    ),
+  ).toBeInTheDocument();
   expect(fetchSpy).not.toHaveBeenCalled();
 });
 
@@ -501,7 +514,7 @@ test("keeps representative project and recognition content discoverable through 
   );
 });
 
-test("keeps all five navigation destinations as real anchors", async () => {
+test("keeps all six navigation destinations as real anchors", async () => {
   await renderPortfolio();
   const navigation = screen.getByRole("navigation", { hidden: true });
   expect(navigation).toHaveAttribute("aria-label", "Primary navigation");
@@ -514,6 +527,7 @@ test("keeps all five navigation destinations as real anchors", async () => {
     "#expertise",
     "#experience",
     "#projects",
+    "#blog",
     "#recognition",
     "#contact",
   ]);

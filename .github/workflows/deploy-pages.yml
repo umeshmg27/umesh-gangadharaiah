@@ -47,6 +47,11 @@ jobs:
       - name: Audit external links
         run: npm run audit:external
 
+      - name: Build configured Pages artifact
+        env:
+          VITE_BLOG_GIST_ID: ${{ vars.BLOG_GIST_ID }}
+        run: npm run build
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
